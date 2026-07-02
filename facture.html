@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Factures & Devis | Rachid DevWorks Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07101d;--card:#0e1b30;--line:rgba(148,197,253,.12);
+  --accent:#38bdf8;--accent2:#f7941d;--grad:linear-gradient(120deg,#38bdf8,#2f6fed);
+  --tx:#eef4fb;--mut:#93a7c2;--tr:.25s ease;
+  --ink:#111827;--ink2:#4b5563;--paper-line:#e5e7eb;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;padding:24px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1300px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:1.3rem;font-weight:900}
+.top h1 span{color:var(--accent)}
+.top .back{color:var(--mut);font-weight:700;font-size:.9rem;border:1px solid var(--line);padding:8px 16px;border-radius:12px;transition:var(--tr)}
+.top .back:hover{color:var(--accent);border-color:var(--accent)}
+
+.layout{display:grid;grid-template-columns:400px 1fr;gap:22px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* ── Panel ── */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:16px}
+.panel h2{font-size:1rem;font-weight:800;color:var(--accent)}
+.field label{display:block;font-weight:700;font-size:.85rem;margin-bottom:5px;color:var(--mut)}
+.field input,.field select,.field textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.93rem;padding:10px 12px;transition:var(--tr)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{flex:1;background:none;border:none;color:var(--mut);font-family:inherit;font-weight:800;font-size:.95rem;padding:10px;cursor:pointer;transition:var(--tr)}
+.seg button.on{background:var(--grad);color:#06121a}
+
+.items-head{display:flex;align-items:center;justify-content:space-between}
+.item-row{display:grid;grid-template-columns:20px 1fr 56px 84px 26px;gap:7px;align-items:center;margin-bottom:8px}
+.item-row .i-free{width:17px;height:17px;accent-color:var(--accent);cursor:pointer;justify-self:center}
+.item-row input{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:9px 10px}
+.item-row input:focus{outline:none;border-color:var(--accent)}
+.item-row .del{background:none;border:none;color:#f87171;font-size:1.1rem;cursor:pointer;font-family:inherit}
+.add-btn{background:rgba(56,189,248,.1);border:1px dashed rgba(56,189,248,.4);color:var(--accent);font-family:inherit;font-weight:700;font-size:.88rem;padding:9px;border-radius:10px;cursor:pointer;width:100%;transition:var(--tr)}
+.add-btn:hover{background:rgba(56,189,248,.18)}
+.print-btn{background:var(--grad);border:none;color:#06121a;font-family:inherit;font-weight:900;font-size:1rem;padding:14px;border-radius:14px;cursor:pointer;transition:var(--tr)}
+.print-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(56,189,248,.35)}
+.hint{font-size:.78rem;color:var(--mut);text-align:center}
+
+/* ── Paper (A4 preview) ── */
+.paper-holder{overflow-x:auto}
+.paper{background:#fff;color:var(--ink);width:210mm;min-height:297mm;margin:0 auto;padding:16mm 15mm;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:flex;flex-direction:column;font-size:10.5pt}
+@media(max-width:980px){.paper{width:100%;min-height:auto;padding:24px}}
+
+.p-head{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;border-bottom:3px solid #1e50a2;padding-bottom:12px}
+.p-logo-c{text-align:center}
+.p-logo-c svg{width:138px;height:auto;display:inline-block}
+.p-brand b{font-size:13pt;font-weight:900;color:#1e50a2;display:block;line-height:1.3}
+.p-brand small{color:var(--ink2);font-size:8.5pt;display:block}
+.p-doc{text-align:right}
+.p-doc .doc-type{font-size:20pt;font-weight:900;color:#1e50a2;letter-spacing:1px}
+.p-doc div{font-size:9.5pt;color:var(--ink2)}
+.p-doc div b{color:var(--ink)}
+
+.p-parties{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.p-box{border:1px solid var(--paper-line);border-radius:8px;padding:10px 14px;font-size:9.5pt}
+.p-box h4{font-size:8pt;text-transform:uppercase;letter-spacing:1px;color:#1e50a2;margin-bottom:4px}
+.p-box .who{font-weight:800;font-size:10.5pt}
+.p-box div{color:var(--ink2)}
+
+table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
+.p-items th{background:#1e50a2;color:#fff;font-size:9pt;text-align:left;padding:8px 10px;font-weight:800}
+.p-items th:nth-child(2),.p-items td:nth-child(2){text-align:center;width:56px}
+.p-items th:nth-child(3),.p-items td:nth-child(3),
+.p-items th:nth-child(4),.p-items td:nth-child(4){text-align:right;width:100px}
+.p-items td{border-bottom:1px solid var(--paper-line);padding:8px 10px;font-size:9.5pt}
+
+.p-total-row{display:flex;justify-content:flex-end;margin-top:12px}
+.p-total{min-width:240px;font-size:10pt}
+.p-total .line{display:flex;justify-content:space-between;padding:5px 10px;color:var(--ink2)}
+.p-total .grand{display:flex;justify-content:space-between;padding:9px 10px;background:#1e50a2;color:#fff;font-weight:900;font-size:11.5pt;border-radius:6px;margin-top:4px}
+
+.p-words{margin-top:14px;font-size:9.5pt;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 14px;color:#1e3a8a}
+.p-tva{margin-top:8px;font-size:8.5pt;color:var(--ink2);font-style:italic}
+.p-valid{margin-top:8px;font-size:9pt;color:var(--ink2)}
+
+.p-pay{margin-top:14px;border:1px solid #bfdbfe;background:#f8fafc;border-radius:8px;padding:10px 14px;font-size:9.5pt}
+.p-pay h4{font-size:8pt;text-transform:uppercase;letter-spacing:1px;color:#1e50a2;margin-bottom:4px}
+.p-pay .bank{font-weight:800;color:#111827}
+.p-pay div{color:#374151}
+.p-pay b{font-family:'Courier New',monospace;font-size:9.5pt;letter-spacing:.5px}
+.p-sign{margin-top:26px;display:flex;justify-content:flex-end}
+.p-sign .sig{text-align:center;font-size:9pt;color:var(--ink2)}
+.p-sign .sig .line-sig{width:180px;border-bottom:1px solid var(--ink2);height:52px;margin-bottom:4px}
+
+.p-foot{margin-top:auto;border-top:2px solid #1e50a2;padding-top:8px;font-size:7.8pt;color:var(--ink2);text-align:center;line-height:1.6}
+
+/* ── Print ── */
+@media print{
+  body{background:#fff;padding:0}
+  .top,.panel,.hint{display:none!important}
+  .layout{display:block}
+  .paper-holder{overflow:visible}
+  .paper{width:auto;min-height:auto;box-shadow:none;border-radius:0;padding:10mm 12mm;margin:0}
+  @page{size:A4;margin:8mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>📄 Factures & <span>Devis</span> — Rachid DevWorks Pro</h1>
+    <a class="back" href="index.html">← Retour au portfolio | العودة</a>
+  </div>
+
+  <div class="layout">
+
+    <!-- ══ Control panel ══ -->
+    <div class="panel">
+      <h2>Type de document</h2>
+      <div class="seg">
+        <button type="button" id="segFac" class="on">FACTURE</button>
+        <button type="button" id="segDev">DEVIS</button>
+      </div>
+
+      <div class="row2">
+        <div class="field"><label>N° du document</label><input id="docNum" type="text" value=""/></div>
+        <div class="field"><label>Date</label><input id="docDate" type="date"/></div>
+      </div>
+
+      <h2>Client</h2>
+      <div class="field"><label>Nom / Société</label><input id="cName" type="text" placeholder="Nom du client ou société"/></div>
+      <div class="field"><label>Adresse</label><input id="cAddr" type="text" placeholder="Ville, adresse (optionnel)"/></div>
+      <div class="row2">
+        <div class="field"><label>ICE / IF client (optionnel)</label><input id="cIce" type="text" placeholder="ICE ou IF"/></div>
+        <div class="field"><label>Téléphone (optionnel)</label><input id="cTel" type="text" placeholder="06XXXXXXXX"/></div>
+      </div>
+
+      <div class="items-head"><h2>Prestations</h2><span style="font-size:.75rem;color:var(--mut)">☑ = offert (gratuit)</span></div>
+      <div id="items"></div>
+      <button type="button" class="add-btn" id="addItem">+ Ajouter une ligne</button>
+
+      <div class="field"><label>Remarques (optionnel)</label><textarea id="notes" rows="2" placeholder="Conditions de paiement, acompte, délai de livraison..."></textarea></div>
+
+      <button type="button" class="print-btn" onclick="window.print()">🖨️ Imprimer / Enregistrer en PDF</button>
+      <p class="hint">Le document s'imprime au format A4. Choisissez « Enregistrer en PDF » dans la fenêtre d'impression.</p>
+    </div>
+
+    <!-- ══ A4 preview ══ -->
+    <div class="paper-holder">
+      <div class="paper" id="paper">
+
+        <div class="p-head">
+          <div class="p-brand">
+            <b>Rachid DevWorks Pro</b>
+            <small>RACHID ACHERKOUK — Auto-entrepreneur</small>
+            <small>Création de sites web · Landing pages · Design & Publicité</small>
+            <small>Complex Fadl Allah imm. 21 appt. 119, Tanger 90000</small>
+            <small>Tél : 06 28 53 76 49 · E-mail : dotcom0725@gmail.com</small>
+          </div>
+          <div class="p-logo-c">
+            <svg viewBox="0 0 300 200" aria-hidden="true">
+              <defs>
+                <linearGradient id="gB2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5db4ff"/><stop offset="1" stop-color="#1a56c4"/></linearGradient>
+                <linearGradient id="gO2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb62e"/><stop offset="1" stop-color="#f7941d"/></linearGradient>
+                <linearGradient id="gN2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a63c4"/><stop offset="1" stop-color="#123a7a"/></linearGradient>
+              </defs>
+              <g transform="translate(75,8)">
+                <text x="78" y="76" text-anchor="middle" font-size="64" font-weight="900" fill="#123a7a" font-family="Tajawal,sans-serif" transform="translate(2.5,2)">RD</text>
+                <text x="78" y="76" text-anchor="middle" font-size="64" font-weight="900" fill="url(#gB2)" font-family="Tajawal,sans-serif">RD</text>
+                <path d="M8 68 C24 100 118 104 138 58" stroke="#fff" stroke-width="12" fill="none"/>
+                <path d="M8 68 C24 100 118 104 138 58" stroke="url(#gB2)" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+                <path d="M138 58 C146 36 130 16 104 10" stroke="#fff" stroke-width="12" fill="none"/>
+                <path d="M138 58 C146 36 130 16 104 10" stroke="url(#gO2)" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+                <g stroke-width="2.5" fill="none">
+                  <path d="M102 18 L116 8" stroke="#f7941d"/><circle cx="119" cy="7" r="3" fill="#f7941d" stroke="none"/>
+                  <path d="M110 26 L128 17" stroke="#2f6fed"/><circle cx="131" cy="16" r="3" fill="#2f6fed" stroke="none"/>
+                  <path d="M118 33 L136 28" stroke="#f7941d"/><circle cx="139" cy="27" r="3" fill="#f7941d" stroke="none"/>
+                </g>
+              </g>
+              <text x="150" y="155" text-anchor="middle" font-size="36" font-weight="900" fill="url(#gN2)" letter-spacing="1" font-family="Tajawal,sans-serif">RACHID</text>
+              <line x1="40" y1="173" x2="76" y2="173" stroke="#123a7a" stroke-width="2.5"/>
+              <text x="150" y="183" text-anchor="middle" font-size="19" font-weight="800" fill="#f7941d" letter-spacing="7" font-family="Tajawal,sans-serif">DEVWORKS</text>
+              <line x1="224" y1="173" x2="260" y2="173" stroke="#123a7a" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div class="p-doc">
+            <div class="doc-type" id="pType">FACTURE</div>
+            <div>N° : <b id="pNum">—</b></div>
+            <div>Date : <b id="pDate">—</b></div>
+          </div>
+        </div>
+
+        <div class="p-parties">
+          <div class="p-box">
+            <h4>Émetteur</h4>
+            <div class="who">RACHID ACHERKOUK</div>
+            <div>Auto-entrepreneur N° 003981262000065</div>
+            <div>IF : 97661297 — TP : 57144379</div>
+            <div>Tanger — Maroc</div>
+          </div>
+          <div class="p-box">
+            <h4>Client</h4>
+            <div class="who" id="pcName">—</div>
+            <div id="pcAddr"></div>
+            <div id="pcIce"></div>
+            <div id="pcTel"></div>
+          </div>
+        </div>
+
+        <table class="p-items">
+          <thead><tr><th>Désignation</th><th>Qté</th><th>P.U. (DH)</th><th>Total (DH)</th></tr></thead>
+          <tbody id="pItems"></tbody>
+        </table>
+
+        <div class="p-total-row">
+          <div class="p-total">
+            <div class="grand"><span>TOTAL</span><span id="pTotal">0,00 DH</span></div>
+          </div>
+        </div>
+
+        <div class="p-words" id="pWords"></div>
+        <p class="p-tva">TVA non applicable — régime de l'auto-entrepreneur (loi n° 114-13).</p>
+        <p class="p-valid" id="pValid" style="display:none">Devis valable 30 jours à compter de la date d'émission.</p>
+        <p class="p-valid" id="pNotes" style="display:none"></p>
+
+        <div class="p-pay" id="pPay">
+          <h4>Modalités de paiement</h4>
+          <div>Merci de bien vouloir virer le montant de la présente facture sur le compte bancaire suivant :</div>
+          <div class="bank">Al Barid Bank — Titulaire : RACHID ACHERKOUK</div>
+          <div>RIB : <b>350 810 0000000014025353 95</b></div>
+          <div>IBAN : <b>MA64 350 810 0000000014025353 95</b></div>
+        </div>
+
+        <div class="p-sign">
+          <div class="sig"><div class="line-sig"></div>Signature & cachet</div>
+        </div>
+
+        <div class="p-foot">
+          RACHID ACHERKOUK — Auto-entrepreneur N° 003981262000065 · Identifiant fiscal : 97661297 · Taxe professionnelle : 57144379<br/>
+          Complex Fadl Allah imm. 21 appt. 119, Tanger 90000 — Maroc · Tél : 06 28 53 76 49 · dotcom0725@gmail.com
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<datalist id="prestaList">
+  <option value="Création site web"></option>
+  <option value="Création landing page"></option>
+  <option value="Création photos publicitaires"></option>
+  <option value="Création vidéos publicitaires"></option>
+  <option value="Création et lancement d'une campagne publicitaire"></option>
+  <option value="Gestion de campagne publicitaire"></option>
+  <option value="Refonte de site web"></option>
+  <option value="Maintenance de site web"></option>
+  <option value="Nom de domaine + hébergement (1 an)"></option>
+  <option value="Création de logo / identité visuelle"></option>
+</datalist>
+
+<script>
+/* ─────────── State ─────────── */
+let docType = 'FACTURE';
+const $ = id => document.getElementById(id);
+
+/* Doc number: auto-suggest FAC/DEV-YYYY-NNN using a localStorage counter */
+function suggestNum() {
+  const y = new Date().getFullYear();
+  const key = 'rdw-counter-' + docType + '-' + y;
+  const n = (parseInt(localStorage.getItem(key)) || 0) + 1;
+  return (docType === 'FACTURE' ? 'FAC' : 'DEV') + '-' + y + '-' + String(n).padStart(3, '0');
+}
+
+/* ─────────── Items ─────────── */
+function addRow(desc = '', qty = 1, pu = '') {
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="checkbox" class="i-free" title="Prestation offerte (gratuite)"/>
+    <input type="text" class="i-desc" list="prestaList" placeholder="Désignation de la prestation" value="${desc}"/>
+    <input type="number" class="i-qty" min="1" value="${qty}"/>
+    <input type="number" class="i-pu" min="0" step="0.01" placeholder="Prix" value="${pu}"/>
+    <button type="button" class="del" title="Supprimer">✕</button>`;
+  row.querySelector('.del').onclick = () => { row.remove(); render(); };
+  row.querySelectorAll('input').forEach(i => { i.addEventListener('input', render); i.addEventListener('change', render); });
+  $('items').appendChild(row);
+}
+
+/* ─────────── Montant en lettres (FR) ─────────── */
+const U = ['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'];
+const T = ['','dix','vingt','trente','quarante','cinquante','soixante','soixante','quatre-vingt','quatre-vingt'];
+function below100(n){
+  if(n<20) return U[n];
+  let t=Math.floor(n/10), u=n%10;
+  if(t===7||t===9){ u+=10; t--; }
+  let s=T[t];
+  if((u===1||u===11)&&t<8) s+=' et '+U[u];
+  else if(u>0) s+='-'+U[u];
+  else if(t===8) s+='s';
+  return s;
+}
+function below1000(n){
+  const c=Math.floor(n/100), r=n%100;
+  let s='';
+  if(c===1) s='cent'; else if(c>1) s=U[c]+' cent'+(r===0?'s':'');
+  if(r) s+=(s?' ':'')+below100(r);
+  return s||U[0];
+}
+function numWords(n){
+  if(n===0) return 'zéro';
+  const M=Math.floor(n/1e6), K=Math.floor(n%1e6/1000), H=n%1000;
+  const parts=[];
+  if(M) parts.push(M===1?'un million':below1000(M)+(M>1?' millions':''));
+  if(K) parts.push(K===1?'mille':below1000(K).replace(/(vingts|cents)$/,m=>m.slice(0,-1))+' mille');
+  if(H) parts.push(below1000(H));
+  return parts.join(' ');
+}
+
+/* ─────────── Render ─────────── */
+const fmt = n => n.toLocaleString('fr-MA',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' DH';
+
+function render(){
+  $('pType').textContent = docType;
+  $('pNum').textContent = $('docNum').value || '—';
+  $('pDate').textContent = $('docDate').value ? new Date($('docDate').value+'T00:00:00').toLocaleDateString('fr-FR') : '—';
+
+  $('pcName').textContent = $('cName').value || '—';
+  $('pcAddr').textContent = $('cAddr').value;
+  $('pcIce').textContent = $('cIce').value ? 'ICE/IF : ' + $('cIce').value : '';
+  $('pcTel').textContent = $('cTel').value ? 'Tél : ' + $('cTel').value : '';
+
+  let total = 0, html = '';
+  document.querySelectorAll('.item-row').forEach(r => {
+    const d = r.querySelector('.i-desc').value;
+    const q = parseFloat(r.querySelector('.i-qty').value) || 0;
+    const p = parseFloat(r.querySelector('.i-pu').value) || 0;
+    const free = r.querySelector('.i-free').checked;
+    if(!d && !p) return;
+    if(free){
+      html += `<tr><td>${d} <b style="color:#f7941d">(offerts)</b></td><td>${q}</td><td>—</td><td style="color:#f7941d;font-weight:800">Offert</td></tr>`;
+      return;
+    }
+    const t = q * p; total += t;
+    html += `<tr><td>${d}</td><td>${q}</td><td>${p.toLocaleString('fr-MA',{minimumFractionDigits:2})}</td><td>${t.toLocaleString('fr-MA',{minimumFractionDigits:2})}</td></tr>`;
+  });
+  $('pItems').innerHTML = html || '<tr><td colspan="4" style="color:#9ca3af;text-align:center">Aucune prestation ajoutée</td></tr>';
+  $('pTotal').textContent = fmt(total);
+
+  const dh = Math.floor(total), cts = Math.round((total-dh)*100);
+  const label = docType === 'FACTURE' ? 'la présente facture' : 'le présent devis';
+  $('pWords').textContent = (docType==='FACTURE'?'Arrêtée ':'Arrêté ') + label + ' à la somme de : ' +
+    numWords(dh) + ' dirhams' + (cts ? ' et ' + numWords(cts) + ' centimes' : '') + '.';
+
+  $('pValid').style.display = docType === 'DEVIS' ? 'block' : 'none';
+  $('pPay').style.display = docType === 'FACTURE' ? 'block' : 'none';
+  const notes = $('notes').value.trim();
+  $('pNotes').style.display = notes ? 'block' : 'none';
+  $('pNotes').textContent = notes ? 'Remarques : ' + notes : '';
+}
+
+/* ─────────── Type switch ─────────── */
+function setType(t){
+  docType = t;
+  $('segFac').classList.toggle('on', t==='FACTURE');
+  $('segDev').classList.toggle('on', t==='DEVIS');
+  $('docNum').value = suggestNum();
+  render();
+}
+$('segFac').onclick = () => setType('FACTURE');
+$('segDev').onclick = () => setType('DEVIS');
+
+/* Increment counter when printing, so the next number is fresh */
+addEventListener('afterprint', () => {
+  const m = $('docNum').value.match(/^(FAC|DEV)-(\d{4})-(\d+)$/);
+  if(m){
+    const key = 'rdw-counter-' + (m[1]==='FAC'?'FACTURE':'DEVIS') + '-' + m[2];
+    const cur = parseInt(localStorage.getItem(key)) || 0;
+    localStorage.setItem(key, Math.max(cur, parseInt(m[3])));
+  }
+});
+
+/* ─────────── Init ─────────── */
+$('docDate').valueAsDate = new Date();
+$('docNum').value = suggestNum();
+addRow();
+document.querySelectorAll('#docNum,#docDate,#cName,#cAddr,#cIce,#cTel,#notes').forEach(el => el.addEventListener('input', render));
+$('addItem').onclick = () => addRow();
+render();
+</script>
+</body>
+</html>
