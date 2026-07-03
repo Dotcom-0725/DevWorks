@@ -19,20 +19,20 @@
   --accent2:#f7941d;
   --grad:linear-gradient(120deg,#38bdf8,#2f6fed);
   --grad2:linear-gradient(110deg,#4aa8ff 30%,#f7941d);
-  --tx:#eef4fb;
-  --mut:#93a7c2;
+  --tx:#f4f8fd;
+  --mut:#b3c5de;
   --r:16px;
   --tr:.25s ease;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;overflow-x:hidden}
+body{font-family:'Tajawal',sans-serif;font-weight:500;background:var(--bg);color:var(--tx);line-height:1.8;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
 .container{max-width:1080px;margin:0 auto;padding:0 22px}
 section{padding:90px 0}
 h2.sec-title{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;text-align:center}
-.sec-sub{color:var(--mut);text-align:center;max-width:560px;margin:12px auto 48px;font-size:1.02rem}
+.sec-sub{color:var(--mut);text-align:center;max-width:560px;margin:12px auto 48px;font-size:1.02rem;font-weight:700}
 .grad-text{background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 
 /* ── Navbar ── */
@@ -73,7 +73,7 @@ nav.scrolled{border-color:var(--line)}
 .badge{display:inline-flex;width:fit-content;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--mut);font-size:.85rem;font-weight:700;padding:7px 16px;border-radius:999px}
 .badge::before{content:"";width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 12px #34d399}
 .hero h1{font-size:clamp(2rem,6vw,3.3rem);font-weight:900;line-height:1.35}
-.hero p.lead{color:var(--mut);font-size:clamp(1rem,2.5vw,1.15rem);max-width:620px}
+.hero p.lead{color:var(--mut);font-size:clamp(1rem,2.5vw,1.15rem);max-width:620px;font-weight:700}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
 .btn{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:1rem;padding:14px 28px;border-radius:14px;transition:var(--tr);cursor:pointer;border:none;font-family:inherit}
 .btn-primary{background:var(--grad);color:#06121a}
@@ -172,7 +172,7 @@ html[dir="ltr"] .field select{background-position:right 15px center}
 /* ── Footer ── */
 footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--mut);font-size:.9rem}
 footer b{color:var(--tx)}
-footer .legal{font-size:.78rem;margin-top:8px;color:#64789a}
+footer .legal{font-size:.78rem;margin-top:8px;color:#8ba0bf}
 footer .billing-link{display:inline-block;margin-top:12px;font-size:.85rem;font-weight:700;color:var(--accent);border:1px solid rgba(56,189,248,.3);padding:6px 16px;border-radius:999px;transition:var(--tr)}
 footer .billing-link:hover{background:rgba(56,189,248,.1)}
 
