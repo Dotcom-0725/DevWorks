@@ -551,11 +551,28 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-/* ─────────── Brief form → WhatsApp ─────────── */
+/* ─────────── Brief form → Google Sheet + WhatsApp ─────────── */
 const WA_NUMBER = '212628537649';
+// رابط الـ Web App ديال Google Apps Script (خطوة النشر في google-sheet/README)
+const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYxWZgopSI74uKt-gOCxsAN_Ht0ZRgf6qrBPri7S6b70J_zt5v_zfsC3/exec';
+
+function sendToSheet(f) {
+  if (!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.startsWith('PASTE')) return;
+  const data = new URLSearchParams({
+    name: f.name.value.trim(),
+    phone: f.phone.value.trim(),
+    service: f.service.value,
+    budget: f.budget.value,
+    desc: f.desc.value.trim()
+  });
+  // fire-and-forget: ما نوقفوش فتح الواتساب حتى إلا تعطل الشيت
+  fetch(SHEET_WEBAPP_URL, { method: 'POST', mode: 'no-cors', body: data }).catch(() => {});
+}
+
 document.getElementById('brief').addEventListener('submit', e => {
   e.preventDefault();
   const t = I18N[lang], f = e.target;
+  sendToSheet(f);
   const lines = [
     t['wa.head'], '',
     t['wa.name'] + f.name.value.trim(),
