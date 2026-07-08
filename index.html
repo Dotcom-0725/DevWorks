@@ -121,9 +121,9 @@ nav.scrolled{border-color:var(--line)}
 .w-body p{color:var(--mut);font-size:.88rem;margin-top:3px}
 
 /* ── Pricing ── */
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;align-items:stretch}
-.price-card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:36px 28px 30px;position:relative;display:flex;flex-direction:column;transition:var(--tr)}
-.price-card:hover{transform:translateY(-7px);border-color:rgba(56,189,248,.5);box-shadow:0 22px 50px rgba(0,0,0,.45)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;align-items:stretch;perspective:1200px}
+.price-card{--tiltX:0deg;--tiltY:0deg;background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:36px 28px 30px;position:relative;display:flex;flex-direction:column;transition:box-shadow .25s ease,border-color .25s ease,transform .25s ease;transform-style:preserve-3d;will-change:transform;transform:translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX))}
+.pricing-grid .price-card:hover{transform:translateY(-13px) rotateX(var(--tiltY)) rotateY(var(--tiltX)) scale(1.03);border-color:rgba(56,189,248,.5);box-shadow:0 26px 55px rgba(0,0,0,.5)}
 .price-card .plan{font-size:1.08rem;font-weight:900;color:var(--tx);margin-bottom:4px}
 .price-card .plan-desc{color:var(--mut);font-size:.9rem;margin-bottom:20px}
 .price-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:5px}
@@ -139,7 +139,10 @@ nav.scrolled{border-color:var(--line)}
 .price-card.featured{background:linear-gradient(rgba(14,27,48,.9),rgba(14,27,48,.9)) padding-box,var(--grad2) border-box;border:2px solid transparent;box-shadow:0 24px 60px rgba(47,111,237,.3)}
 .pop-badge{position:absolute;top:-16px;right:50%;transform:translateX(50%);background:var(--grad2);color:#0b1220;font-size:.8rem;font-weight:900;padding:6px 20px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 22px rgba(247,148,29,.4)}
 html[dir="ltr"] .pop-badge{right:auto;left:50%;transform:translateX(-50%)}
-@media(min-width:960px){.price-card.featured{transform:scale(1.05)}.price-card.featured:hover{transform:scale(1.05) translateY(-7px)}}
+@media(min-width:960px){
+  .pricing-grid .price-card.featured{transform:translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX)) scale(1.05)}
+  .pricing-grid .price-card.featured:hover{transform:translateY(-13px) rotateX(var(--tiltY)) rotateY(var(--tiltX)) scale(1.08)}
+}
 
 /* ── Process ── */
 #process{background:var(--bg2)}
@@ -249,6 +252,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <div class="hero-actions">
         <a class="btn btn-primary" href="#request" data-i18n="hero.cta1"></a>
         <a class="btn btn-primary" href="#services" data-i18n="hero.cta2"></a>
+        <a class="btn btn-primary" href="#works" data-i18n="hero.cta4"></a>
         <a class="btn btn-primary" href="#pricing" data-i18n="hero.cta3"></a>
       </div>
       <div class="hero-stats">
@@ -322,13 +326,13 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w1.c"></span>
-        <div class="w-media tall"><img src="images/portfolio/lp-piscine.webp" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/lp-piscine-v2.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w1.t"></h3><p data-i18n="w1.d"></p></div>
       </div>
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w2.c"></span>
-        <div class="w-media"><img src="images/portfolio/post-piscine.png" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/restaurant-amira.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w2.t"></h3><p data-i18n="w2.d"></p></div>
       </div>
 
@@ -340,19 +344,19 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w4.c"></span>
-        <div class="w-media tall"><img src="images/portfolio/lp-giordani.jpg" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/lp-giordani-v2.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w4.t"></h3><p data-i18n="w4.d"></p></div>
       </div>
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w5.c"></span>
-        <div class="w-media tall"><img src="images/portfolio/infographie-piscine.webp" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/rougamar.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w5.t"></h3><p data-i18n="w5.d"></p></div>
       </div>
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w6.c"></span>
-        <div class="w-media"><img src="images/portfolio/site-rdw.png" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/velox-car.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w6.t"></h3><p data-i18n="w6.d"></p></div>
       </div>
 
@@ -408,7 +412,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
         <p class="plan-desc" data-i18n="pr3.desc"></p>
         <p class="price-from" data-i18n="price.from"></p>
         <div class="price-line">
-          <span class="price-now">1500<span style="-webkit-text-fill-color:#f7941d">+</span></span><span class="price-unit" data-i18n="price.unit"></span>
+          <span class="price-now">2000<span style="-webkit-text-fill-color:#f7941d">+</span></span><span class="price-unit" data-i18n="price.unit"></span>
         </div>
         <span class="save-badge" data-i18n="pr3.save"></span>
         <ul class="price-feats">
@@ -528,7 +532,7 @@ const I18N = {
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
     "hero.title":"مواقع و صفحات هبوط <span class='grad-text'>تحوّل الزوار إلى عملاء</span>",
     "hero.lead":"أطوّر مواقع إلكترونية وصفحات هبوط احترافية، وأصمم إعلانات (صور وفيديو) وأطلق حملات إعلانية تحقق نتائج حقيقية لمشروعك.",
-    "hero.cta1":"اطلب مشروعك الآن","hero.cta2":"تصفح الخدمات","hero.cta3":"شاهد الأسعار",
+    "hero.cta1":"اطلب مشروعك الآن","hero.cta2":"تصفح الخدمات","hero.cta3":"شاهد الأسعار","hero.cta4":"شاهد نماذج الأعمال",
     "stat.1":"سنوات خبرة","stat.2":"خدمات متكاملة","stat.3":"سرعة الرد",
     "services.title2":"خدمات <span>متكاملة</span> لمشروعك",
     "services.sub":"كل ما يحتاجه مشروعك للظهور والبيع أونلاين، من التصميم إلى الإعلان.",
@@ -543,11 +547,11 @@ const I18N = {
     "works.title":"نماذج من <span>أعمالي</span>",
     "works.sub":"أمثلة حقيقية من مشاريع أنجزتها لعملائي — مرّر فوق التصاميم الطويلة لتصفحها.",
     "w1.c":"صفحة هبوط","w1.t":"صفحة هبوط — منتجات المسابح","w1.d":"صفحة بيع كاملة بالفرنسية لمنتج كلور احترافي، مصممة للتحويل.",
-    "w2.c":"إعلان فيسبوك","w2.t":"منشور إعلاني — Globale Pool","w2.d":"تصميم إعلان منتج مع عرض ترويجي واضح ودعوة للاتصال.",
+    "w2.c":"موقع إلكتروني","w2.t":"موقع مطعم Amira","w2.d":"موقع تعريفي لمطعم بتصميم دافئ يعرض الأطباق والقائمة وطرق التواصل.",
     "w3.c":"بوستر إعلاني","w3.t":"بوستر — عطر Giordani Gold","w3.d":"تصميم إعلاني فاخر بالعربية لمنتج تجميلي مع عرض خاص.",
     "w4.c":"صفحة هبوط","w4.t":"صفحة هبوط — Giordani Gold Essenza","w4.d":"صفحة بيع بالدارجة المغربية لعطر فاخر، مع طلب مباشر عبر الواتساب.",
-    "w5.c":"إنفوغرافيك","w5.t":"إنفوغرافيك تسويقي — SA Globale Pool","w5.d":"تصميم معلوماتي طويل يشرح مزايا المنتج بطريقة مقنعة.",
-    "w6.c":"موقع إلكتروني","w6.t":"موقع Rachid DevWorks Pro","w6.d":"تصميم وتطوير موقع خدمات متكامل بلغتين مع نظام طلبات.",
+    "w5.c":"موقع إلكتروني","w5.t":"موقع ROUGAMAR Logistique","w5.d":"موقع تعريفي لشركة نقل ولوجستيك، بتصميم احترافي يعرض الخدمات وطرق التواصل.",
+    "w6.c":"موقع إلكتروني","w6.t":"موقع VELOX CAR","w6.d":"موقع لتأجير السيارات في طنجة، مع حجز مباشر عبر الواتساب وعرض الأسطول والأسعار.",
     "pricing.title":"الأسعار","pricing.sub":"باقات واضحة بأسعار تنافسية — عرض خاص لفترة محدودة.",
     "price.unit":"درهم","price.cta":"اطلب الآن","price.popular":"⭐ الأكثر طلباً","price.from":"ابتداءً من",
     "pr1.name":"باقة البداية","pr1.desc":"مثالية لإطلاق منتج أو عرض بسرعة.","pr1.save":"وفّر 62%",
@@ -580,7 +584,7 @@ const I18N = {
     "hero.badge":"Disponible pour de nouveaux projets",
     "hero.title":"Des sites web & landing pages <span class='grad-text'>qui convertissent vos visiteurs en clients</span>",
     "hero.lead":"Je développe des sites web et landing pages professionnels, je crée des visuels et vidéos publicitaires et je lance des campagnes qui génèrent de vrais résultats pour votre business.",
-    "hero.cta1":"Démarrer votre projet","hero.cta2":"Voir les services","hero.cta3":"Voir les tarifs",
+    "hero.cta1":"Démarrer votre projet","hero.cta2":"Voir les services","hero.cta3":"Voir les tarifs","hero.cta4":"Voir mes réalisations",
     "stat.1":"Ans d'expérience","stat.2":"Services complets","stat.3":"Délai de réponse",
     "services.title2":"Des services <span>complets</span> pour votre projet",
     "services.sub":"Tout ce qu'il faut pour vendre en ligne, du design à la publicité.",
@@ -595,11 +599,11 @@ const I18N = {
     "works.title":"Mes <span>réalisations</span>",
     "works.sub":"Des exemples réels de projets livrés à mes clients — survolez les designs longs pour les parcourir.",
     "w1.c":"Landing page","w1.t":"Landing page — Produits piscine","w1.d":"Page de vente complète en français pour un chlore professionnel, conçue pour convertir.",
-    "w2.c":"Pub Facebook","w2.t":"Visuel publicitaire — Globale Pool","w2.d":"Design produit avec offre promotionnelle claire et appel à l'action.",
+    "w2.c":"Site web","w2.t":"Site Restaurant Amira","w2.d":"Site vitrine chaleureux pour un restaurant, présentant les plats, le menu et les contacts.",
     "w3.c":"Affiche pub","w3.t":"Affiche — Parfum Giordani Gold","w3.d":"Visuel publicitaire luxueux en arabe pour un produit cosmétique.",
     "w4.c":"Landing page","w4.t":"Landing page — Giordani Gold Essenza","w4.d":"Page de vente en darija marocaine pour un parfum de luxe, avec commande directe via WhatsApp.",
-    "w5.c":"Infographie","w5.t":"Infographie marketing — SA Globale Pool","w5.d":"Design informatif long qui présente le produit de façon convaincante.",
-    "w6.c":"Site web","w6.t":"Site Rachid DevWorks Pro","w6.d":"Conception et développement d'un site de services bilingue avec système de commandes.",
+    "w5.c":"Site web","w5.t":"Site ROUGAMAR Logistique","w5.d":"Site vitrine pour une société de transport et logistique, présentant services et contacts avec un design professionnel.",
+    "w6.c":"Site web","w6.t":"Site VELOX CAR","w6.d":"Site de location de voitures à Tanger, réservation directe via WhatsApp avec flotte et tarifs.",
     "pricing.title":"Tarifs","pricing.sub":"Des packs clairs à prix compétitifs — offre spéciale à durée limitée.",
     "price.unit":"DH","price.cta":"Commander","price.popular":"⭐ Le plus demandé","price.from":"À partir de",
     "pr1.name":"Pack Starter","pr1.desc":"Idéal pour lancer un produit ou une offre rapidement.","pr1.save":"Économisez 62%",
@@ -652,6 +656,21 @@ const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
 }, { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ─────────── Pricing cards tilt-on-hover ─────────── */
+document.querySelectorAll('.price-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    card.style.setProperty('--tiltX', ((px - .5) * 14).toFixed(2) + 'deg');
+    card.style.setProperty('--tiltY', ((.5 - py) * 14).toFixed(2) + 'deg');
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.setProperty('--tiltX', '0deg');
+    card.style.setProperty('--tiltY', '0deg');
+  });
+});
 
 /* ─────────── Brief form → Google Sheet + WhatsApp ─────────── */
 const WA_NUMBER = '212628537649';
