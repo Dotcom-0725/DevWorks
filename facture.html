@@ -114,14 +114,46 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
   .paper{width:auto;min-height:auto;box-shadow:none;border-radius:0;padding:10mm 12mm;margin:0}
   @page{size:A4;margin:8mm}
 }
+
+/* ── Gate (accès protégé) ── */
+.wrap{display:none}
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+#gate .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px 30px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+#gate .lock{font-size:2.2rem;margin-bottom:10px}
+#gate h2{font-size:1.1rem;font-weight:900;margin-bottom:6px}
+#gate p{color:var(--mut);font-size:.85rem;margin-bottom:18px}
+#gate input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:1rem;padding:12px 14px;text-align:center;transition:var(--tr)}
+#gate input:focus{outline:none;border-color:var(--accent)}
+#gate button{width:100%;margin-top:12px;background:var(--grad);color:#06121a;border:none;border-radius:10px;font-family:inherit;font-weight:800;font-size:.95rem;padding:12px;cursor:pointer;transition:var(--tr)}
+#gate button:hover{filter:brightness(1.08)}
+#gate .err{color:#f87171;font-size:.85rem;margin-top:10px;min-height:1.2em}
+#gate.shake .box{animation:shakeBox .35s}
+@keyframes shakeBox{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.logout-link{color:var(--mut);font-size:.8rem;border:1px solid var(--line);padding:6px 12px;border-radius:10px;transition:var(--tr)}
+.logout-link:hover{color:var(--accent);border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div id="gate">
+  <div class="box">
+    <div class="lock">🔒</div>
+    <h2>Espace protégé</h2>
+    <p>Entrez le mot de passe pour accéder aux factures & devis.</p>
+    <input type="password" id="gatePass" placeholder="Mot de passe" autocomplete="off"/>
+    <button type="button" id="gateBtn">Accéder</button>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="wrap-el">
 
   <div class="top">
     <h1>📄 Factures & <span>Devis</span> — Rachid DevWorks Pro</h1>
-    <a class="back" href="index.html">← Retour au portfolio | العودة</a>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="logout-link" href="#" id="lockBtn">🔒 Verrouiller</a>
+      <a class="back" href="index.html">← Retour au portfolio | العودة</a>
+    </div>
   </div>
 
   <div class="layout">
@@ -166,7 +198,7 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
             <b>Rachid DevWorks Pro</b>
             <small>RACHID ACHERKOUK — Auto-entrepreneur</small>
             <small>Création de sites web · Landing pages · Design & Publicité</small>
-            <small>Complex Fadl Allah imm. 21 appt. 119, Tanger 90000</small>
+            <small>Ahlan, Tanger-Maroc</small>
             <small>Tél : 06 28 53 76 49 · E-mail : dotcom0725@gmail.com</small>
           </div>
           <div class="p-logo-c">
@@ -249,7 +281,7 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
 
         <div class="p-foot">
           RACHID ACHERKOUK — Auto-entrepreneur N° 003981262000065 · Identifiant fiscal : 97661297 · Taxe professionnelle : 57144379<br/>
-          Complex Fadl Allah imm. 21 appt. 119, Tanger 90000 — Maroc · Tél : 06 28 53 76 49 · dotcom0725@gmail.com
+          Ahlan, Tanger-Maroc · Tél : 06 28 53 76 49 · dotcom0725@gmail.com
         </div>
 
       </div>
@@ -275,6 +307,33 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
 /* ─────────── State ─────────── */
 let docType = 'FACTURE';
 const $ = id => document.getElementById(id);
+
+/* ─────────── Accès protégé ─────────── */
+const GATE_PASS = '472Rachid$';
+const GATE_KEY = 'rdw-invoice-auth';
+
+function unlock() {
+  $('gate').style.display = 'none';
+  $('wrap-el').style.display = 'block';
+}
+function tryUnlock() {
+  const val = $('gatePass').value;
+  if (val === GATE_PASS) {
+    localStorage.setItem(GATE_KEY, '1');
+    unlock();
+  } else {
+    $('gateErr').textContent = 'Mot de passe incorrect.';
+    $('gate').classList.remove('shake'); void $('gate').offsetWidth; $('gate').classList.add('shake');
+    $('gatePass').value = '';
+    $('gatePass').focus();
+  }
+}
+$('gateBtn').onclick = tryUnlock;
+$('gatePass').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+$('lockBtn').onclick = e => { e.preventDefault(); localStorage.removeItem(GATE_KEY); location.reload(); };
+
+if (localStorage.getItem(GATE_KEY) === '1') unlock();
+else $('gatePass').focus();
 
 /* Doc number: auto-suggest FAC/DEV-YYYY-NNN using a localStorage counter */
 function suggestNum() {
