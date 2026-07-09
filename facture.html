@@ -40,9 +40,15 @@ a{color:inherit;text-decoration:none}
 .seg button.on{background:var(--grad);color:#06121a}
 
 .items-head{display:flex;align-items:center;justify-content:space-between}
-.item-row{display:grid;grid-template-columns:20px 1fr 56px 84px 26px;gap:7px;align-items:center;margin-bottom:8px}
+.item-row{display:grid;grid-template-columns:20px 1fr 46px 78px 58px 26px;gap:7px;align-items:center;margin-bottom:8px}
 .item-row .i-free{width:17px;height:17px;accent-color:var(--accent);cursor:pointer;justify-self:center}
-.item-row input{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:9px 10px}
+.item-row input{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:9px 8px;min-width:0}
+.item-row .i-disc{position:relative}
+.item-row .i-disc-wrap{position:relative;display:flex;align-items:center}
+.item-row .i-disc-wrap::after{content:"%";position:absolute;right:8px;color:var(--mut);font-size:.8rem;pointer-events:none}
+html[dir="ltr"] .item-row .i-disc-wrap::after{right:auto;left:8px}
+.item-row .i-disc-wrap input{padding-right:20px;width:100%}
+html[dir="ltr"] .item-row .i-disc-wrap input{padding-right:8px;padding-left:20px}
 .item-row input:focus{outline:none;border-color:var(--accent)}
 .item-row .del{background:none;border:none;color:#f87171;font-size:1.1rem;cursor:pointer;font-family:inherit}
 .add-btn{background:rgba(56,189,248,.1);border:1px dashed rgba(56,189,248,.4);color:var(--accent);font-family:inherit;font-weight:700;font-size:.88rem;padding:9px;border-radius:10px;cursor:pointer;width:100%;transition:var(--tr)}
@@ -141,7 +147,7 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
         <div class="field"><label>Téléphone (optionnel)</label><input id="cTel" type="text" placeholder="06XXXXXXXX"/></div>
       </div>
 
-      <div class="items-head"><h2>Prestations</h2><span style="font-size:.75rem;color:var(--mut)">☑ = offert (gratuit)</span></div>
+      <div class="items-head"><h2>Prestations</h2><span style="font-size:.75rem;color:var(--mut)">☑ = offert (gratuit) · % = remise</span></div>
       <div id="items"></div>
       <button type="button" class="add-btn" id="addItem">+ Ajouter une ligne</button>
 
@@ -279,7 +285,7 @@ function suggestNum() {
 }
 
 /* ─────────── Items ─────────── */
-function addRow(desc = '', qty = 1, pu = '') {
+function addRow(desc = '', qty = 1, pu = '', disc = '') {
   const row = document.createElement('div');
   row.className = 'item-row';
   row.innerHTML = `
@@ -287,6 +293,7 @@ function addRow(desc = '', qty = 1, pu = '') {
     <input type="text" class="i-desc" list="prestaList" placeholder="Désignation de la prestation" value="${desc}"/>
     <input type="number" class="i-qty" min="1" value="${qty}"/>
     <input type="number" class="i-pu" min="0" step="0.01" placeholder="Prix" value="${pu}"/>
+    <span class="i-disc-wrap"><input type="number" class="i-disc" min="0" max="100" step="1" placeholder="0" title="Remise %" value="${disc}"/></span>
     <button type="button" class="del" title="Supprimer">✕</button>`;
   row.querySelector('.del').onclick = () => { row.remove(); render(); };
   row.querySelectorAll('input').forEach(i => { i.addEventListener('input', render); i.addEventListener('change', render); });
@@ -342,9 +349,23 @@ function render(){
     const q = parseFloat(r.querySelector('.i-qty').value) || 0;
     const p = parseFloat(r.querySelector('.i-pu').value) || 0;
     const free = r.querySelector('.i-free').checked;
+    let disc = parseFloat(r.querySelector('.i-disc').value) || 0;
+    disc = Math.max(0, Math.min(100, disc));
     if(!d && !p) return;
     if(free){
-      html += `<tr><td>${d} <b style="color:#f7941d">(offerts)</b></td><td>${q}</td><td>—</td><td style="color:#f7941d;font-weight:800">Offert</td></tr>`;
+      const tf = q * p;
+      const puStruck = p ? `<s style="color:#9ca3af">${p.toLocaleString('fr-MA',{minimumFractionDigits:2})}</s>` : '—';
+      const totStruck = p ? `<s style="color:#9ca3af">${tf.toLocaleString('fr-MA',{minimumFractionDigits:2})}</s> <b style="color:#f7941d">Offert</b>` : `<b style="color:#f7941d">Offert</b>`;
+      html += `<tr><td>${d} <b style="color:#f7941d">(offert)</b></td><td>${q}</td><td>${puStruck}</td><td>${totStruck}</td></tr>`;
+      return;
+    }
+    if(disc > 0){
+      const puNet = p * (1 - disc/100);
+      const gross = q * p, net = q * puNet;
+      total += net;
+      const puCell = `<s style="color:#9ca3af">${p.toLocaleString('fr-MA',{minimumFractionDigits:2})}</s> ${puNet.toLocaleString('fr-MA',{minimumFractionDigits:2})}`;
+      const totCell = `<s style="color:#9ca3af">${gross.toLocaleString('fr-MA',{minimumFractionDigits:2})}</s> <b style="color:#16a34a">${net.toLocaleString('fr-MA',{minimumFractionDigits:2})}</b>`;
+      html += `<tr><td>${d} <b style="color:#16a34a">(-${disc}%)</b></td><td>${q}</td><td>${puCell}</td><td>${totCell}</td></tr>`;
       return;
     }
     const t = q * p; total += t;

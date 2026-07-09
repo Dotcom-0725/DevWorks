@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "static-server",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "http-server", "-p", "8080"],
-      "port": 8080
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/static-server.js"],
+      "autoPort": true
     }
   ]
 }

@@ -3,9 +3,73 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="description" content="Rachid DevWorks Pro — Création de sites web, landing pages, visuels & vidéos publicitaires, campagnes | تطوير وتصميم مواقع، صفحات هبوط، إعلانات وحملات."/>
-<meta name="author" content="Rachid DevWorks Pro"/>
-<title>Rachid DevWorks Pro | Web Developer & Designer</title>
+
+<!-- ═══════════ SEO — remplacez https://rachiddevworks.ma par VOTRE domaine exact partout ci-dessous ═══════════ -->
+<title>Création de sites web & landing pages à Tanger | Rachid DevWorks Pro</title>
+<meta name="description" content="Développeur & designer web à Tanger : création de sites web, landing pages qui convertissent, visuels et vidéos publicitaires, campagnes Facebook & Instagram. Devis gratuit, paiement après satisfaction. تطوير مواقع وصفحات هبوط بالمغرب."/>
+<meta name="keywords" content="création site web Tanger, développeur web Maroc, landing page Maroc, صفحة هبوط, تصميم موقع, site web Maroc, page de vente WhatsApp, publicité Facebook Maroc, création site e-commerce Tanger, freelance web Maroc, Rachid DevWorks"/>
+<meta name="author" content="Rachid DevWorks Pro — Rachid Acherkouk"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+<meta name="language" content="French, Arabic"/>
+<link rel="canonical" href="https://rachiddevworks.ma/"/>
+
+<!-- Géolocalisation (SEO local Maroc / Tanger) -->
+<meta name="geo.region" content="MA-01"/>
+<meta name="geo.placename" content="Tanger, Maroc"/>
+<meta name="geo.position" content="35.7595;-5.8340"/>
+<meta name="ICBM" content="35.7595, -5.8340"/>
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Rachid DevWorks Pro"/>
+<meta property="og:title" content="Création de sites web & landing pages à Tanger | Rachid DevWorks Pro"/>
+<meta property="og:description" content="Sites web, landing pages qui convertissent, visuels & vidéos publicitaires et campagnes. Devis gratuit — vous voyez votre site avant de payer."/>
+<meta property="og:url" content="https://rachiddevworks.ma/"/>
+<meta property="og:image" content="https://rachiddevworks.ma/images/og-image.jpg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="ar_MA"/>
+<meta property="og:locale:alternate" content="fr_MA"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Création de sites web & landing pages à Tanger | Rachid DevWorks Pro"/>
+<meta name="twitter:description" content="Sites web, landing pages, visuels & vidéos publicitaires, campagnes. Devis gratuit — paiement après satisfaction."/>
+<meta name="twitter:image" content="https://rachiddevworks.ma/images/og-image.jpg"/>
+
+<meta name="theme-color" content="#050d1a"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23050d1a'/%3E%3Ctext x='50' y='68' font-family='Arial,sans-serif' font-size='52' font-weight='900' text-anchor='middle' fill='%2338bdf8'%3ERD%3C/text%3E%3C/svg%3E"/>
+
+<!-- Données structurées Schema.org — aide Google à comprendre l'entreprise -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Rachid DevWorks Pro",
+  "image": "https://rachiddevworks.ma/images/og-image.jpg",
+  "url": "https://rachiddevworks.ma/",
+  "description": "Création de sites web, landing pages, visuels et vidéos publicitaires, et campagnes publicitaires à Tanger, Maroc.",
+  "founder": { "@type": "Person", "name": "Rachid Acherkouk" },
+  "priceRange": "300 - 7000 DH",
+  "areaServed": { "@type": "Country", "name": "Maroc" },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Tanger",
+    "addressCountry": "MA"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 35.7595, "longitude": -5.8340 },
+  "sameAs": [],
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Création de sites web" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Landing pages" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Visuels publicitaires" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vidéos publicitaires" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Campagnes publicitaires" } }
+  ]
+}
+</script>
+<!-- ═══════════ Fin SEO ═══════════ -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
@@ -112,9 +176,9 @@ nav.scrolled{border-color:var(--line)}
 .w-media{position:relative;height:360px;overflow:hidden;background:#0a1526}
 .w-media img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .5s ease}
 .w-card:hover .w-media img{transform:scale(1.04)}
-/* التصاميم الطويلة: تمرير تلقائي عند التمرير فوقها */
-.w-media.tall img{height:auto;min-height:100%;object-fit:unset;transition:transform 7s ease-in-out}
-.w-card:hover .w-media.tall img{transform:translateY(calc(-100% + 360px))}
+/* التصاميم الطويلة: تمرير تلقائي بطيء عند التمرير فوقها (المدة تُحسب بالـ JS حسب طول الصورة) */
+.w-media.tall img{height:auto;min-height:100%;object-fit:unset;transition:transform var(--scrollDur,20s) linear}
+.w-card:hover .w-media.tall img{transform:translateY(var(--scrollEnd,calc(-100% + 360px)))}
 .w-cat{position:absolute;top:14px;inset-inline-start:14px;z-index:2;font-size:.75rem;font-weight:800;color:#7dd3fc;border:1px solid rgba(56,189,248,.4);background:rgba(5,13,26,.8);backdrop-filter:blur(8px);padding:5px 14px;border-radius:999px}
 .w-body{padding:18px 22px 20px;border-top:1px solid var(--line)}
 .w-body h3{font-size:1.05rem;font-weight:900}
@@ -656,6 +720,20 @@ const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
 }, { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ─────────── Works: constant-speed slow auto-scroll on hover ─────────── */
+const WORK_SCROLL_SPEED = 90; // بكسل في الثانية — كل ما نقص الرقم، بطّأ التمرير أكثر
+document.querySelectorAll('.w-media.tall').forEach(media => {
+  const img = media.querySelector('img');
+  const setDur = () => {
+    const dist = img.offsetHeight - media.offsetHeight;      // المسافة اللي غادي يتحرّكها
+    if (dist <= 0) return;
+    media.style.setProperty('--scrollEnd', '-' + dist + 'px');
+    media.style.setProperty('--scrollDur', (dist / WORK_SCROLL_SPEED).toFixed(1) + 's');
+  };
+  if (img.complete) setDur(); else img.addEventListener('load', setDur);
+  addEventListener('resize', setDur);
+});
 
 /* ─────────── Pricing cards tilt-on-hover ─────────── */
 document.querySelectorAll('.price-card').forEach(card => {

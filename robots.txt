@@ -1,0 +1,6 @@
+# robots.txt — Rachid DevWorks Pro
+# Remplacez rachiddevworks.ma par votre domaine exact.
+User-agent: *
+Allow: /
+
+Sitemap: https://rachiddevworks.ma/sitemap.xml
