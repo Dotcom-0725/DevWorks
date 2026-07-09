@@ -99,9 +99,11 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
 .p-pay .bank{font-weight:800;color:#111827}
 .p-pay div{color:#374151}
 .p-pay b{font-family:'Courier New',monospace;font-size:9.5pt;letter-spacing:.5px}
-.p-sign{margin-top:26px;display:flex;justify-content:flex-end}
-.p-sign .sig{text-align:center;font-size:9pt;color:var(--ink2)}
+.p-sign{margin-top:58px;display:flex;justify-content:flex-end}
+.p-sign .sig{text-align:center;font-size:9pt;color:var(--ink2);position:relative}
 .p-sign .sig .line-sig{width:180px;border-bottom:1px solid var(--ink2);height:52px;margin-bottom:4px}
+.p-sign .stamp-img{position:absolute;z-index:2;width:150px;height:150px;object-fit:contain;right:-6px;top:-40px;transform:rotate(-8deg);pointer-events:none}
+@media print{.p-sign .stamp-img{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
 .p-foot{margin-top:auto;border-top:2px solid #1e50a2;padding-top:8px;font-size:7.8pt;color:var(--ink2);text-align:center;line-height:1.6}
 
@@ -276,7 +278,11 @@ table.p-items{width:100%;border-collapse:collapse;margin-top:4px}
         </div>
 
         <div class="p-sign">
-          <div class="sig"><div class="line-sig"></div>Signature & cachet</div>
+          <div class="sig">
+            <div class="line-sig"></div>
+            Signature & cachet
+            <img src="images/cachet-rd.png" class="stamp-img" alt="Cachet Rachid DevWorks Pro"/>
+          </div>
         </div>
 
         <div class="p-foot">
