@@ -110,9 +110,8 @@ h2.sec-title span{background:var(--grad2);-webkit-background-clip:text;backgroun
 nav{position:fixed;inset-inline:0;top:0;z-index:50;background:rgba(5,13,26,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid transparent;transition:var(--tr)}
 nav.scrolled{border-color:var(--line)}
 .nav-inner{max-width:1120px;margin:0 auto;padding:0 22px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo{font-weight:900;font-size:1.15rem;white-space:nowrap;display:flex;align-items:center;gap:9px}
-.logo svg{width:40px;height:auto;flex-shrink:0}
-.logo b{color:var(--accent)}
+.logo{display:flex;align-items:center}
+.logo img{height:38px;width:auto;display:block}
 .nav-links{display:flex;gap:4px;list-style:none}
 .nav-links a{font-size:.93rem;font-weight:700;color:var(--mut);padding:8px 14px;border-radius:12px;transition:var(--tr)}
 .nav-links a:hover{color:var(--tx);background:rgba(255,255,255,.07)}
@@ -273,24 +272,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 <nav id="nav">
   <div class="nav-inner">
     <a class="logo" href="#top">
-      <svg viewBox="0 0 150 115" aria-hidden="true">
-        <defs>
-          <linearGradient id="gB1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5db4ff"/><stop offset="1" stop-color="#1a56c4"/></linearGradient>
-          <linearGradient id="gO1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb62e"/><stop offset="1" stop-color="#f7941d"/></linearGradient>
-        </defs>
-        <text x="78" y="76" text-anchor="middle" font-size="64" font-weight="900" fill="#0c2d5e" font-family="Tajawal,sans-serif" transform="translate(2.5,2)">RD</text>
-        <text x="78" y="76" text-anchor="middle" font-size="64" font-weight="900" fill="url(#gB1)" font-family="Tajawal,sans-serif">RD</text>
-        <path d="M8 68 C24 100 118 104 138 58" stroke="#050d1a" stroke-width="12" fill="none"/>
-        <path d="M8 68 C24 100 118 104 138 58" stroke="url(#gB1)" stroke-width="6.5" fill="none" stroke-linecap="round"/>
-        <path d="M138 58 C146 36 130 16 104 10" stroke="#050d1a" stroke-width="12" fill="none"/>
-        <path d="M138 58 C146 36 130 16 104 10" stroke="url(#gO1)" stroke-width="6.5" fill="none" stroke-linecap="round"/>
-        <g stroke-width="2.5" fill="none">
-          <path d="M102 18 L116 8" stroke="#f7941d"/><circle cx="119" cy="7" r="3" fill="#f7941d" stroke="none"/>
-          <path d="M110 26 L128 17" stroke="#2f6fed"/><circle cx="131" cy="16" r="3" fill="#2f6fed" stroke="none"/>
-          <path d="M118 33 L136 28" stroke="#f7941d"/><circle cx="139" cy="27" r="3" fill="#f7941d" stroke="none"/>
-        </g>
-      </svg>
-      <span>Rachid <b>DevWorks</b> Pro</span>
+      <img src="images/nav-logo-full.png" alt="Rachid DevWorks Pro"/>
     </a>
     <ul class="nav-links">
       <li><a href="#services" data-i18n="nav.services"></a></li>
@@ -593,6 +575,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 const I18N = {
   ar: {
     "nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"تواصل واتساب",
+    "logo.tag":"إبنِ • حلّ • ارتقِ",
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
     "hero.title":"مواقع و صفحات هبوط <span class='grad-text'>تحوّل الزوار إلى عملاء</span>",
     "hero.lead":"أطوّر مواقع إلكترونية وصفحات هبوط احترافية، وأصمم إعلانات (صور وفيديو) وأطلق حملات إعلانية تحقق نتائج حقيقية لمشروعك.",
@@ -645,6 +628,7 @@ const I18N = {
   },
   fr: {
     "nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"WhatsApp",
+    "logo.tag":"BÂTIR • RÉSOUDRE • ÉLEVER",
     "hero.badge":"Disponible pour de nouveaux projets",
     "hero.title":"Des sites web & landing pages <span class='grad-text'>qui convertissent vos visiteurs en clients</span>",
     "hero.lead":"Je développe des sites web et landing pages professionnels, je crée des visuels et vidéos publicitaires et je lance des campagnes qui génèrent de vrais résultats pour votre business.",
