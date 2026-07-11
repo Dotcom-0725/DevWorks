@@ -140,6 +140,14 @@ nav.scrolled{border-color:var(--line)}
 .hero p.lead{color:#d7e3f4;font-size:clamp(1.02rem,2.5vw,1.2rem);max-width:640px;font-weight:700;text-shadow:0 2px 14px rgba(0,0,0,.55)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:1rem;padding:15px 30px;border-radius:15px;transition:var(--tr);cursor:pointer;border:none;font-family:inherit}
+@media(max-width:640px){
+  .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .hero-actions .btn{width:100%;padding:14px 8px;font-size:.86rem;line-height:1.25;text-align:center;white-space:normal;min-height:56px}
+  .hero-actions .btn:active{transform:scale(.96)}
+}
+@media(max-width:360px){
+  .hero-actions .btn{font-size:.8rem;padding:12px 6px}
+}
 .btn-primary{background:var(--grad);color:#06121a;box-shadow:0 10px 34px rgba(56,189,248,.35)}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(56,189,248,.5)}
 .btn-ghost{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);backdrop-filter:blur(10px);color:var(--tx)}
@@ -297,9 +305,9 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <p class="lead" data-i18n="hero.lead"></p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#request" data-i18n="hero.cta1"></a>
-        <a class="btn btn-primary" href="#services" data-i18n="hero.cta2"></a>
-        <a class="btn btn-primary" href="#works" data-i18n="hero.cta4"></a>
-        <a class="btn btn-primary" href="#pricing" data-i18n="hero.cta3"></a>
+        <a class="btn btn-ghost" href="#services" data-i18n="hero.cta2"></a>
+        <a class="btn btn-ghost" href="#works" data-i18n="hero.cta4"></a>
+        <a class="btn btn-ghost" href="#pricing" data-i18n="hero.cta3"></a>
       </div>
       <div class="hero-stats">
         <div class="stat"><b>+3</b><span data-i18n="stat.1"></span></div>
@@ -396,7 +404,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w5.c"></span>
-        <div class="w-media tall"><img src="images/portfolio/rougamar.jpg" alt="" loading="lazy"/></div>
+        <div class="w-media tall"><img src="images/portfolio/rougamar-fr.jpg" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w5.t"></h3><p data-i18n="w5.d"></p></div>
       </div>
 
