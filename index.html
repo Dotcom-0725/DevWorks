@@ -152,6 +152,9 @@ nav.scrolled{border-color:var(--line)}
 }
 .btn-primary{background:var(--grad);color:#06121a;box-shadow:0 10px 34px rgba(56,189,248,.35)}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(56,189,248,.5)}
+@keyframes heroCtaFloat{0%,100%{transform:translateY(0);box-shadow:0 10px 34px rgba(56,189,248,.35)}50%{transform:translateY(-8px);box-shadow:0 20px 46px rgba(56,189,248,.6)}}
+.hero-actions .btn-primary{animation:heroCtaFloat 2.4s ease-in-out infinite}
+.hero-actions .btn-primary:hover{animation-play-state:paused;transform:translateY(-3px) !important;box-shadow:0 16px 44px rgba(56,189,248,.5) !important}
 .btn-ghost{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);backdrop-filter:blur(10px);color:var(--tx)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px)}
 .btn-wa{background:linear-gradient(120deg,#4ade80,#25d366 60%,#1eb85a);color:#04140a}
