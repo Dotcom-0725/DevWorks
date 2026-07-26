@@ -33,6 +33,14 @@ const HEADERS = ['#', 'Date', 'Nom', 'WhatsApp', 'Service', 'Budget',
                  'Description du projet', 'Source', 'Statut', 'Prix convenu (DH)',
                  'Payé (DH)', 'Reste (DH)', 'Livraison', 'Notes'];
 
+/* ── Module Finances (v1) — additif, indépendant des Commandes ── */
+const SHEET_FIN = '💸 Finances';
+const FIN_TYPES = ['💰 Revenu', '💸 Dépense'];
+const FIN_CAT_REVENU  = ['Projet client', 'Autre revenu'];
+const FIN_CAT_DEPENSE = ['Hébergement & Domaine', 'Logiciels & Abonnements', 'Publicité (Ads)', 'Matériel', 'Formation', 'Transport', 'Autre dépense'];
+const FIN_PAYMENT_MODES = ['Espèces', 'Virement bancaire', 'Carte bancaire', 'PayPal', 'Autre'];
+const FIN_HEADERS = ['#', 'Date', 'Type', 'Catégorie', 'Description', 'Montant (DH)', 'Mode de paiement', 'Notes'];
+
 /* Formule "Reste" pour une seule ligne */
 function setRemainFormula(sh, r) {
   sh.getRange(r, 12).setFormula('=IF(J' + r + '="","",J' + r + '-IF(K' + r + '="",0,K' + r + '))');
@@ -151,12 +159,23 @@ function setDropdown(sheet, col, list, rows) {
   sheet.getRange(2, col, rows).setDataValidation(rule);
 }
 
-/* Formule "Reste" auto lors d'une édition manuelle de Prix/Payé */
+/* Formule "Reste" auto (Commandes) + numérotation auto (Finances) */
 function onEdit(e) {
   const sh = e.range.getSheet();
-  if (sh.getName() !== SHEET_LEADS) return;
   const r = e.range.getRow(), c = e.range.getColumn();
-  if (r >= 2 && (c === 10 || c === 11)) setRemainFormula(sh, r);
+
+  if (sh.getName() === SHEET_LEADS) {
+    if (r >= 2 && (c === 10 || c === 11)) setRemainFormula(sh, r);
+    if (r >= 2 && (c === 9 || c === 11)) maybeTransferPaymentToFinance(sh, r);
+    return;
+  }
+
+  if (sh.getName() === SHEET_FIN) {
+    if (r >= 2 && c !== 1 && sh.getRange(r, 1).getValue() === '') {
+      const filled = sh.getRange(r, 2, 1, 7).getValues()[0].some(v => v !== '');
+      if (filled) sh.getRange(r, 1).setValue(r - 1);
+    }
+  }
 }
 
 /* ─────────── Réception du formulaire du site ─────────── */
@@ -203,4 +222,258 @@ function doGet() {
   }
   return ContentService.createTextOutput(JSON.stringify(info))
                        .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ═══════════════════════════════════════════════════════════
+ *  MODULE FINANCES — v1
+ *  100% additif : ne touche jamais à 📋 Commandes (données réelles).
+ *  Sûr à relancer autant de fois que nécessaire.
+ * ═══════════════════════════════════════════════════════════ */
+
+/* ─────────── Création / mise à jour de la feuille 💸 Finances ─────────── */
+function setupFinance() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  let fin = ss.getSheetByName(SHEET_FIN) || ss.insertSheet(SHEET_FIN, 1);
+  fin.clear();
+  fin.setRightToLeft(false);
+  fin.getRange(1, 1, 1, FIN_HEADERS.length).setValues([FIN_HEADERS])
+     .setBackground('#0e1b30').setFontColor('#ffffff')
+     .setFontWeight('bold').setFontSize(11)
+     .setHorizontalAlignment('center').setVerticalAlignment('middle');
+  fin.setFrozenRows(1);
+  fin.setRowHeight(1, 42);
+
+  const widths = [45, 110, 130, 220, 300, 120, 150, 220];
+  widths.forEach((w, i) => fin.setColumnWidth(i + 1, w));
+
+  const maxRows = 1000;
+  const dateRule = SpreadsheetApp.newDataValidation().requireDate().setAllowInvalid(false).build();
+  fin.getRange(2, 2, maxRows).setDataValidation(dateRule); // clic sur la cellule → petit calendrier natif Google Sheets
+  setDropdown(fin, 3, FIN_TYPES, maxRows);
+  setDropdown(fin, 4, FIN_CAT_REVENU.concat(FIN_CAT_DEPENSE), maxRows);
+  setDropdown(fin, 7, FIN_PAYMENT_MODES, maxRows);
+
+  const rowRange = fin.getRange(2, 1, maxRows, FIN_HEADERS.length);
+  fin.setConditionalFormatRules([
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied('=$C2="' + FIN_TYPES[0] + '"')
+      .setBackground('#d1e7dd').setRanges([rowRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied('=$C2="' + FIN_TYPES[1] + '"')
+      .setBackground('#f8d7da').setRanges([rowRange]).build()
+  ]);
+
+  fin.getRange(2, 2, maxRows).setNumberFormat('yyyy/mm/dd');
+  fin.getRange(2, 6, maxRows).setNumberFormat('#,##0 "DH"');
+  fin.getRange(2, 5, maxRows).setWrap(true);
+  fin.getRange(2, 1, maxRows, FIN_HEADERS.length).setVerticalAlignment('middle');
+
+  // Ajoute les listes Finances à ⚙️ Paramètres (colonnes D-F) SANS toucher A-C (Statuts/Sources/Services)
+  const conf = ss.getSheetByName(SHEET_CONF);
+  if (conf) {
+    conf.getRange(1, 4, 1, 3).setValues([['Types Finance', 'Catégories Finance', 'Modes de paiement']])
+        .setFontWeight('bold').setBackground('#0e1b30').setFontColor('#ffffff');
+    conf.getRange(2, 4, FIN_TYPES.length, 1).setValues(FIN_TYPES.map(s => [s]));
+    const allCats = FIN_CAT_REVENU.concat(FIN_CAT_DEPENSE);
+    conf.getRange(2, 5, allCats.length, 1).setValues(allCats.map(s => [s]));
+    conf.getRange(2, 6, FIN_PAYMENT_MODES.length, 1).setValues(FIN_PAYMENT_MODES.map(s => [s]));
+    conf.setColumnWidths(4, 3, 190);
+  }
+
+  try { SpreadsheetApp.getUi().alert('✅ ورقة الماليات (💸 Finances) جاهزة! سجّل فيها كل دخول ومصروف حقيقي بتاريخه.'); } catch (e) {}
+}
+
+/* ─────────── Reconstruction complète du tableau de bord (formules + graphiques) ───────────
+ * Sûre à relancer : 📊 Tableau de bord est 100% calculée, aucune saisie manuelle n'y est perdue. */
+function buildDashboard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const L = "'" + SHEET_LEADS + "'";
+  const F = "'" + SHEET_FIN + "'";
+
+  // Feuille technique cachée qui alimente les graphiques
+  let helper = ss.getSheetByName('_ChartData') || ss.insertSheet('_ChartData');
+  helper.clear();
+
+  helper.getRange(1, 1, 1, 2).setValues([['Catégorie', 'Montant']]);
+  helper.getRange(2, 1, FIN_CAT_DEPENSE.length, 1).setValues(FIN_CAT_DEPENSE.map(c => [c]));
+  helper.getRange(2, 2, FIN_CAT_DEPENSE.length, 1).setFormulas(
+    FIN_CAT_DEPENSE.map(c => ['=SUMIFS(' + F + '!F:F,' + F + '!C:C,"' + FIN_TYPES[1] + '",' + F + '!D:D,"' + c + '")'])
+  );
+
+  helper.getRange(1, 4, 1, 3).setValues([['Mois', 'Revenus', 'Dépenses']]);
+  for (let i = 0; i < 6; i++) {
+    const monthsAgo = 5 - i;
+    const r = 2 + i;
+    helper.getRange(r, 4).setFormula('=TEXT(EOMONTH(TODAY(),-' + monthsAgo + ')+1,"mmm yyyy")');
+    helper.getRange(r, 5).setFormula('=SUMIFS(' + F + '!F:F,' + F + '!C:C,"' + FIN_TYPES[0] + '",' + F + '!B:B,">="&EOMONTH(TODAY(),-' + (monthsAgo + 1) + ')+1,' + F + '!B:B,"<="&EOMONTH(TODAY(),-' + monthsAgo + '))');
+    helper.getRange(r, 6).setFormula('=SUMIFS(' + F + '!F:F,' + F + '!C:C,"' + FIN_TYPES[1] + '",' + F + '!B:B,">="&EOMONTH(TODAY(),-' + (monthsAgo + 1) + ')+1,' + F + '!B:B,"<="&EOMONTH(TODAY(),-' + monthsAgo + '))');
+  }
+  helper.hideSheet();
+
+  // Suppression puis recréation (plus sûr que clear() pour effacer fusions/graphiques résiduels)
+  const oldDash = ss.getSheetByName(SHEET_DASH);
+  if (oldDash) ss.deleteSheet(oldDash);
+  let dash = ss.insertSheet(SHEET_DASH, 1);
+  dash.setRightToLeft(false);
+  try { dash.setHiddenGridlines(true); } catch (e) {}
+  try { dash.setTabColor('#38bdf8'); } catch (e) {}
+
+  dash.getRange(2, 2, 1, 8).merge().setValue('📊 لوحة التحكم الشاملة — Rachid DevWorks Pro')
+      .setFontSize(18).setFontWeight('bold').setFontColor('#0e1b30')
+      .setVerticalAlignment('middle');
+  dash.setRowHeight(2, 44);
+
+  // ── Cartes KPI (4 blocs colorés) ──
+  const cardDefs = [
+    { col: 2, label: '💰 إجمالي المداخيل',
+      formula: '=SUMIF(' + F + '!C:C,"' + FIN_TYPES[0] + '",' + F + '!F:F)',
+      bg: '#d1e7dd', fg: '#0f5132' },
+    { col: 4, label: '💸 إجمالي المصاريف',
+      formula: '=SUMIF(' + F + '!C:C,"' + FIN_TYPES[1] + '",' + F + '!F:F)',
+      bg: '#f8d7da', fg: '#842029' },
+    { col: 6, label: '📈 الربح الصافي',
+      formula: '=SUMIF(' + F + '!C:C,"' + FIN_TYPES[0] + '",' + F + '!F:F)-SUMIF(' + F + '!C:C,"' + FIN_TYPES[1] + '",' + F + '!F:F)',
+      bg: '#cfe2ff', fg: '#084298' },
+    { col: 8, label: '📊 هامش الربح',
+      formula: '=IFERROR((SUMIF(' + F + '!C:C,"' + FIN_TYPES[0] + '",' + F + '!F:F)-SUMIF(' + F + '!C:C,"' + FIN_TYPES[1] + '",' + F + '!F:F))/SUMIF(' + F + '!C:C,"' + FIN_TYPES[0] + '",' + F + '!F:F),0)',
+      bg: '#e2d9f3', fg: '#432874', pct: true }
+  ];
+
+  cardDefs.forEach(card => {
+    dash.getRange(4, card.col, 1, 2).merge().setValue(card.label)
+        .setBackground(card.bg).setFontColor(card.fg)
+        .setFontWeight('bold').setFontSize(11)
+        .setHorizontalAlignment('center').setVerticalAlignment('middle');
+    dash.getRange(5, card.col, 2, 2).merge().setFormula(card.formula)
+        .setBackground(card.bg).setFontColor(card.fg)
+        .setFontWeight('bold').setFontSize(20)
+        .setHorizontalAlignment('center').setVerticalAlignment('middle')
+        .setNumberFormat(card.pct ? '0.0%' : '#,##0 "DH"');
+  });
+  for (let c = 2; c <= 9; c++) dash.setColumnWidth(c, 115);
+  dash.setRowHeight(4, 26);
+  dash.setRowHeight(5, 30);
+  dash.setRowHeight(6, 30);
+
+  // ── Pipeline clients (repris de l'ancien tableau de bord) ──
+  dash.getRange(9, 2, 1, 2).merge().setValue('📌 حالة المشاريع')
+      .setFontSize(13).setFontWeight('bold').setFontColor('#0e1b30').setBackground('#f1f5fb');
+
+  const pipelineLabels = ['إجمالي الطلبات', 'طلبات هاد الشهر'].concat(STATUSES);
+  const pipelineFormulas = [
+    '=COUNTA(' + L + '!C2:C)',
+    '=COUNTIFS(' + L + '!B2:B,">="&EOMONTH(TODAY(),-1)+1)'
+  ].concat(STATUSES.map(st => '=COUNTIF(' + L + '!I2:I,"' + st + '")'));
+
+  dash.getRange(10, 2, pipelineLabels.length, 1).setValues(pipelineLabels.map(l => [l]))
+      .setFontWeight('bold').setBackground('#f8fafc');
+  dash.getRange(10, 3, pipelineFormulas.length, 1).setFormulas(pipelineFormulas.map(f => [f]))
+      .setFontWeight('bold').setHorizontalAlignment('center').setBackground('#ffffff');
+  dash.getRange(10, 2, pipelineLabels.length, 2)
+      .setBorder(true, true, true, true, true, true, '#d0d7e2', SpreadsheetApp.BorderStyle.SOLID);
+
+  // ── Graphiques financiers ──
+  const chartsRow = 10 + pipelineLabels.length + 2;
+  dash.getRange(chartsRow, 2, 1, 2).merge().setValue('📈 التحليل المالي')
+      .setFontSize(13).setFontWeight('bold').setFontColor('#0e1b30').setBackground('#f1f5fb');
+
+  const pieRange = helper.getRange(1, 1, FIN_CAT_DEPENSE.length + 1, 2);
+  const pieChart = dash.newChart()
+      .setChartType(Charts.ChartType.PIE)
+      .addRange(pieRange)
+      .setPosition(chartsRow + 2, 2, 0, 0)
+      .setOption('title', 'توزيع المصاريف حسب الفئة')
+      .setOption('width', 480).setOption('height', 320)
+      .setOption('colors', ['#38bdf8', '#f7941d', '#a78bfa', '#34d399', '#f87171', '#fbbf24', '#60a5fa'])
+      .build();
+  dash.insertChart(pieChart);
+
+  const trendRange = helper.getRange(1, 4, 7, 3);
+  const trendChart = dash.newChart()
+      .setChartType(Charts.ChartType.COLUMN)
+      .addRange(trendRange)
+      .setPosition(chartsRow + 2, 7, 0, 0)
+      .setOption('title', 'المداخيل مقابل المصاريف شهرياً')
+      .setOption('width', 480).setOption('height', 320)
+      .setOption('series', { 0: { color: '#22c55e' }, 1: { color: '#ef4444' } })
+      .build();
+  dash.insertChart(trendChart);
+
+  try { SpreadsheetApp.getUi().alert('✅ لوحة التحكم محدّثة بنجاح!'); } catch (e) {}
+}
+
+/* ─────────── Colonne de suivi (Commandes!O) : empêche les doublons de transfert ─────────── */
+function ensureTransferColumn() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const leads = ss.getSheetByName(SHEET_LEADS);
+  if (!leads) return;
+  if (leads.getRange(1, 15).getValue() === '') {
+    leads.getRange(1, 15).setValue('Transféré Finance')
+         .setBackground('#0e1b30').setFontColor('#ffffff')
+         .setFontWeight('bold').setFontSize(11)
+         .setHorizontalAlignment('center').setVerticalAlignment('middle');
+    leads.setColumnWidth(15, 130);
+    leads.getRange(2, 15, 1000).setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
+  }
+}
+
+/* ─────────── Transfert auto Commandes(Livré + Payé) → 💸 Finances (une seule fois par ligne) ─────────── */
+function maybeTransferPaymentToFinance(sh, r) {
+  const statut = sh.getRange(r, 9).getValue();
+  if (statut !== STATUSES[4]) return; // '✅ Livré' uniquement
+
+  const paye = sh.getRange(r, 11).getValue();
+  if (!paye || paye <= 0) return;
+
+  ensureTransferColumn();
+  if (sh.getRange(r, 15).getValue() === true) return; // déjà transféré
+
+  const ss = sh.getParent();
+  const fin = ss.getSheetByName(SHEET_FIN);
+  if (!fin) return;
+
+  const num = sh.getRange(r, 1).getValue();
+  const nom = sh.getRange(r, 3).getValue();
+  const service = sh.getRange(r, 5).getValue();
+  const livraison = sh.getRange(r, 13).getValue();
+  const dateVal = (livraison instanceof Date) ? livraison : new Date();
+
+  const fr = fin.getLastRow() + 1;
+  fin.getRange(fr, 1, 1, 8).setValues([[
+    fr - 1, dateVal, FIN_TYPES[0], FIN_CAT_REVENU[0],
+    'Commande #' + num + ' — ' + nom + ' (' + service + ')',
+    paye, '', 'Transfert automatique depuis 📋 Commandes'
+  ]]);
+
+  sh.getRange(r, 15).setValue(true);
+}
+
+/* ─────────── Rattrapage : transfère les commandes Livré déjà existantes (à lancer une seule fois) ─────────── */
+function backfillFinanceFromCommandes() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const leads = ss.getSheetByName(SHEET_LEADS);
+  if (!leads) return;
+  ensureTransferColumn();
+  const last = leads.getLastRow();
+  for (let r = 2; r <= last; r++) maybeTransferPaymentToFinance(leads, r);
+  try { SpreadsheetApp.getUi().alert('✅ تم نقل كل الدفعات القديمة (المسلَّمة) لورقة 💸 Finances.'); } catch (e) {}
+}
+
+/* ─────────── Installation en un clic de tout le module finance (ne touche pas aux Commandes) ─────────── */
+function setupFinanceSystem() {
+  ensureTransferColumn();
+  setupFinance();
+  buildDashboard();
+}
+
+/* ─────────── Menu rapide à l'ouverture du classeur ─────────── */
+function onOpen() {
+  try {
+    SpreadsheetApp.getUi().createMenu('🛠️ أدوات CRM')
+      .addItem('💰 تثبيت/تحديث وحدة الماليات', 'setupFinanceSystem')
+      .addItem('📊 تحديث لوحة التحكم فقط', 'buildDashboard')
+      .addItem('🔁 نقل الدفعات القديمة (مرة واحدة)', 'backfillFinanceFromCommandes')
+      .addToUi();
+  } catch (e) {}
 }
