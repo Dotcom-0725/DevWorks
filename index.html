@@ -169,6 +169,8 @@ nav.scrolled{border-color:var(--line)}
 @keyframes heroCtaFloat{0%,100%{transform:translateY(0);box-shadow:0 10px 34px rgba(56,189,248,.35)}50%{transform:translateY(-8px);box-shadow:0 20px 46px rgba(56,189,248,.6)}}
 .hero-actions .btn-primary{animation:heroCtaFloat 2.4s ease-in-out infinite}
 .hero-actions .btn-primary:hover{animation-play-state:paused;transform:translateY(-3px) !important;box-shadow:0 16px 44px rgba(56,189,248,.5) !important}
+.btn-devis{background:var(--grad2);color:#1a0f00;box-shadow:0 10px 34px rgba(247,148,29,.35)}
+.btn-devis:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(247,148,29,.5)}
 .btn-ghost{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);backdrop-filter:blur(10px);color:var(--tx)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px)}
 .btn-wa{background:linear-gradient(120deg,#4ade80,#25d366 60%,#1eb85a);color:#04140a}
@@ -334,6 +336,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <h1 data-i18n-html="hero.title"></h1>
       <p class="lead" data-i18n="hero.lead"></p>
       <div class="hero-actions">
+        <a class="btn btn-devis" href="https://form-devis.vercel.app/" target="_blank" rel="noopener" data-i18n="hero.cta0"></a>
         <a class="btn btn-primary" href="#request" data-i18n="hero.cta1"></a>
         <a class="btn btn-ghost" href="#services" data-i18n="hero.cta2"></a>
         <a class="btn btn-ghost" href="#works" data-i18n="hero.cta4"></a>
@@ -650,7 +653,7 @@ const I18N = {
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
     "hero.title":"مواقع و صفحات هبوط <span class='grad-text'>تحوّل الزوار إلى عملاء</span>",
     "hero.lead":"أطوّر مواقع إلكترونية وصفحات هبوط احترافية، وأصمم إعلانات (صور وفيديو) وأطلق حملات إعلانية تحقق نتائج حقيقية لمشروعك.",
-    "hero.cta1":"اطلب مشروعك الآن","hero.cta2":"تصفح الخدمات","hero.cta3":"شاهد الأسعار","hero.cta4":"شاهد نماذج الأعمال",
+    "hero.cta0":"اطلب عرض سعر مجاني","hero.cta1":"اطلب مشروعك الآن","hero.cta2":"تصفح الخدمات","hero.cta3":"شاهد الأسعار","hero.cta4":"شاهد نماذج الأعمال",
     "stat.1":"سنوات خبرة","stat.2":"خدمات متكاملة","stat.3":"سرعة الرد",
     "services.title2":"خدمات <span>متكاملة</span> لمشروعك",
     "services.sub":"كل ما يحتاجه مشروعك للظهور والبيع أونلاين، من التصميم إلى الإعلان.",
@@ -711,7 +714,7 @@ const I18N = {
     "hero.badge":"Disponible pour de nouveaux projets",
     "hero.title":"Des sites web & landing pages <span class='grad-text'>qui convertissent vos visiteurs en clients</span>",
     "hero.lead":"Je développe des sites web et landing pages professionnels, je crée des visuels et vidéos publicitaires et je lance des campagnes qui génèrent de vrais résultats pour votre business.",
-    "hero.cta1":"Démarrer votre projet","hero.cta2":"Voir les services","hero.cta3":"Voir les tarifs","hero.cta4":"Voir mes réalisations",
+    "hero.cta0":"Demander un devis gratuit","hero.cta1":"Démarrer votre projet","hero.cta2":"Voir les services","hero.cta3":"Voir les tarifs","hero.cta4":"Voir mes réalisations",
     "stat.1":"Ans d'expérience","stat.2":"Services complets","stat.3":"Délai de réponse",
     "services.title2":"Des services <span>complets</span> pour votre projet",
     "services.sub":"Tout ce qu'il faut pour vendre en ligne, du design à la publicité.",
