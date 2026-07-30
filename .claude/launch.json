@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": [".claude/static-server.js"],
       "autoPort": true
+    },
+    {
+      "name": "form-devis",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "FormDevworks"],
+      "port": 5173
     }
   ]
 }

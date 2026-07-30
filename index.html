@@ -782,6 +782,7 @@ function applyLang() {
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t[el.dataset.i18nPh] ?? ''; });
   document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = t[el.dataset.i18nAlt] ?? ''; });
   document.getElementById('langBtn').textContent = lang === 'ar' ? 'FR' : 'عربي';
+  document.querySelectorAll('.btn-devis').forEach(el => { el.href = 'https://form-devis.vercel.app/?lang=' + lang; });
   localStorage.setItem('rdw-lang', lang);
 }
 document.getElementById('langBtn').addEventListener('click', () => { lang = lang === 'ar' ? 'fr' : 'ar'; applyLang(); });
