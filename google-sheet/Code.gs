@@ -181,12 +181,35 @@ function onEdit(e) {
   }
 }
 
-/* ─────────── Réception du formulaire du site ─────────── */
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ─────────── Réception du formulaire du site (public, inchangé) OU actions du tableau
+ * de bord (protégées par DASH_TOKEN : ajout/modif/suppression client & finance) ─────────── */
 function doPost(e) {
+  const p = e.parameter;
+
+  if (p.action) {
+    if (p.token !== DASH_TOKEN) return jsonOut({ ok: false, error: 'unauthorized' });
+    try {
+      switch (p.action) {
+        case 'addLead':       return addLead(p);
+        case 'updateLead':    return updateLead(p);
+        case 'deleteLead':    return deleteLead(p);
+        case 'addFinance':    return addFinance(p);
+        case 'updateFinance': return updateFinance(p);
+        case 'deleteFinance': return deleteFinance(p);
+        default: return jsonOut({ ok: false, error: 'unknown action' });
+      }
+    } catch (err) {
+      return jsonOut({ ok: false, error: String(err) });
+    }
+  }
+
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sh = ss.getSheetByName(SHEET_LEADS);
-    const p = e.parameter;
     const r = sh.getLastRow() + 1;
 
     const service = SERVICE_MAP[p.service] || p.service || '';
@@ -206,12 +229,114 @@ function doPost(e) {
     ]]);
     setRemainFormula(sh, r);
 
-    return ContentService.createTextOutput(JSON.stringify({ ok: true, row: r }))
-                         .setMimeType(ContentService.MimeType.JSON);
+    return jsonOut({ ok: true, row: r });
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-                         .setMimeType(ContentService.MimeType.JSON);
+    return jsonOut({ ok: false, error: String(err) });
   }
+}
+
+/* ─────────── CRUD Commandes depuis le tableau de bord ─────────── */
+function addLead(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_LEADS);
+  const r = sh.getLastRow() + 1;
+
+  sh.getRange(r, 1, 1, 14).setValues([[
+    r - 1,
+    p.date ? new Date(p.date) : new Date(),
+    p.name || '',
+    p.whatsapp || '',
+    p.service || '',
+    p.budget || 'Non défini',
+    p.desc || '',
+    p.source || '🌐 Formulaire du site',
+    p.status || '🆕 Nouveau',
+    p.price !== undefined && p.price !== '' ? Number(p.price) : '',
+    p.paid !== undefined && p.paid !== '' ? Number(p.paid) : '',
+    '',
+    p.delivery ? new Date(p.delivery) : '',
+    p.notes || ''
+  ]]);
+  setRemainFormula(sh, r);
+  maybeTransferPaymentToFinance(sh, r);
+  return jsonOut({ ok: true, row: r });
+}
+
+function updateLead(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_LEADS);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+
+  const fieldCols = { name: 3, whatsapp: 4, service: 5, budget: 6, desc: 7, source: 8, status: 9, price: 10, paid: 11, notes: 14 };
+  Object.keys(fieldCols).forEach(key => {
+    if (p[key] !== undefined) {
+      let v = p[key];
+      if (key === 'price' || key === 'paid') v = v === '' ? '' : Number(v);
+      sh.getRange(r, fieldCols[key]).setValue(v);
+    }
+  });
+  if (p.date !== undefined) sh.getRange(r, 2).setValue(p.date ? new Date(p.date) : '');
+  if (p.delivery !== undefined) sh.getRange(r, 13).setValue(p.delivery ? new Date(p.delivery) : '');
+
+  setRemainFormula(sh, r);
+  maybeTransferPaymentToFinance(sh, r);
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteLead(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_LEADS);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  sh.deleteRow(r);
+  return jsonOut({ ok: true });
+}
+
+/* ─────────── CRUD Finances depuis le tableau de bord ─────────── */
+function addFinance(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fin = ss.getSheetByName(SHEET_FIN);
+  const r = fin.getLastRow() + 1;
+  fin.getRange(r, 1, 1, 8).setValues([[
+    r - 1,
+    p.date ? new Date(p.date) : new Date(),
+    p.type || FIN_TYPES[0],
+    p.category || '',
+    p.description || '',
+    p.amount !== undefined && p.amount !== '' ? Number(p.amount) : 0,
+    p.paymentMode || '',
+    p.notes || ''
+  ]]);
+  return jsonOut({ ok: true, row: r });
+}
+
+function updateFinance(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fin = ss.getSheetByName(SHEET_FIN);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+
+  const fieldCols = { type: 3, category: 4, description: 5, amount: 6, paymentMode: 7, notes: 8 };
+  Object.keys(fieldCols).forEach(key => {
+    if (p[key] !== undefined) {
+      let v = p[key];
+      if (key === 'amount') v = v === '' ? 0 : Number(v);
+      fin.getRange(r, fieldCols[key]).setValue(v);
+    }
+  });
+  if (p.date !== undefined) fin.getRange(r, 2).setValue(p.date ? new Date(p.date) : '');
+
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteFinance(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fin = ss.getSheetByName(SHEET_FIN);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  fin.deleteRow(r);
+  return jsonOut({ ok: true });
 }
 
 /* Vérification rapide (par défaut) OU données complètes du dashboard (?action=dashboard&token=...) */
@@ -247,17 +372,19 @@ function sheetToObjects(sheet, keys, requiredKey) {
   if (last < 2) return [];
   const values = sheet.getRange(2, 1, last - 1, keys.length).getValues();
   const reqIdx = requiredKey ? keys.indexOf(requiredKey) : -1;
-  return values
-    .filter(row => reqIdx >= 0 ? (row[reqIdx] !== '' && row[reqIdx] !== null) : row.some(v => v !== '' && v !== null))
-    .map(row => {
-      const obj = {};
-      keys.forEach((k, i) => {
-        let v = row[i];
-        if (v instanceof Date) v = v.toISOString();
-        obj[k] = v;
-      });
-      return obj;
+  const out = [];
+  values.forEach((row, i) => {
+    const keep = reqIdx >= 0 ? (row[reqIdx] !== '' && row[reqIdx] !== null) : row.some(v => v !== '' && v !== null);
+    if (!keep) return;
+    const obj = { row: i + 2 };
+    keys.forEach((k, j) => {
+      let v = row[j];
+      if (v instanceof Date) v = v.toISOString();
+      obj[k] = v;
     });
+    out.push(obj);
+  });
+  return out;
 }
 
 function getDashboardData() {

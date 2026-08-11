@@ -49,9 +49,12 @@ a{color:inherit;text-decoration:none}
 /* ── Panels ── */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:22px}
 .panel h2{font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:14px}
 .chart-box{position:relative;height:280px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.panel-head h2{margin:0}
+.panel-head-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
 /* ── Table ── */
 .table-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -61,7 +64,8 @@ a{color:inherit;text-decoration:none}
 table.data{width:100%;border-collapse:collapse;font-size:.88rem}
 table.data th{text-align:left;color:var(--mut);font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
 table.data td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
-table.data tr:hover td{background:rgba(56,189,248,.05)}
+table.data tbody tr{cursor:pointer}
+table.data tbody tr:hover td{background:rgba(56,189,248,.08)}
 .badge{padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap}
 .badge.b-new{background:#fff3cd;color:#7a5b00}
 .badge.b-contact{background:#cfe2ff;color:#0b3d91}
@@ -76,7 +80,35 @@ table.data tr:hover td{background:rgba(56,189,248,.05)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .refresh-btn{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.4);color:var(--accent);font-family:inherit;font-weight:700;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer;transition:var(--tr)}
 .refresh-btn:hover{background:rgba(56,189,248,.18)}
+.add-btn{background:rgba(247,148,29,.12);border:1px solid rgba(247,148,29,.4);color:var(--accent2);font-family:inherit;font-weight:800;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer;transition:var(--tr)}
+.add-btn:hover{background:rgba(247,148,29,.22)}
 .updated-at{font-size:.75rem;color:var(--mut)}
+
+/* ── Modales (ajout / modification) ── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(3,8,16,.72);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--line);border-radius:18px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:1.05rem;font-weight:900}
+.modal-close{background:none;border:none;color:var(--mut);font-size:1.2rem;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--tx)}
+.modal-body{padding:20px 22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid label{display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:700;color:var(--mut)}
+.form-grid label.full{grid-column:1/-1}
+.form-grid input,.form-grid select,.form-grid textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:10px 12px}
+.form-grid textarea{resize:vertical;min-height:60px}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--accent)}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.modal-foot{display:flex;gap:10px;align-items:center;padding:16px 22px;border-top:1px solid var(--line)}
+.btn-primary{background:var(--grad);color:#06121a;border:none;border-radius:10px;font-family:inherit;font-weight:800;font-size:.9rem;padding:10px 20px;cursor:pointer;transition:var(--tr)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--mut);border-radius:10px;font-family:inherit;font-weight:700;font-size:.9rem;padding:10px 18px;cursor:pointer;transition:var(--tr)}
+.btn-ghost:hover{color:var(--tx);border-color:var(--tx)}
+.btn-danger{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:var(--red);border-radius:10px;font-family:inherit;font-weight:800;font-size:.85rem;padding:10px 16px;cursor:pointer;transition:var(--tr)}
+.btn-danger:hover{background:rgba(239,68,68,.22)}
+.modal-msg{padding:0 22px 16px;color:#f87171;font-size:.85rem;min-height:1em}
 
 /* ── Gate (accès protégé, identique aux autres pages admin) ── */
 .wrap{display:none}
@@ -153,10 +185,11 @@ table.data tr:hover td{background:rgba(56,189,248,.05)}
     </div>
 
     <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-        <h2 style="margin:0">👥 Clients & Projets</h2>
-        <div style="display:flex;gap:10px;align-items:center">
+      <div class="panel-head">
+        <h2>👥 Clients & Projets</h2>
+        <div class="panel-head-tools">
           <span class="updated-at" id="updatedAt"></span>
+          <button class="add-btn" id="addLeadBtn">➕ Nouveau client</button>
           <button class="refresh-btn" id="refreshBtn">🔄 Actualiser</button>
         </div>
       </div>
@@ -172,6 +205,81 @@ table.data tr:hover td{background:rgba(56,189,248,.05)}
       </div>
     </div>
 
+    <div class="panel">
+      <div class="panel-head">
+        <h2>💰 Journal des Finances</h2>
+        <div class="panel-head-tools">
+          <button class="add-btn" id="addFinanceBtn">➕ Nouvelle transaction</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Date</th><th>Type</th><th>Catégorie</th><th>Description</th><th>Montant (DH)</th><th>Mode</th></tr></thead>
+          <tbody id="financeBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Modale : Client / Projet ── -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="leadModalTitle">Nouveau client / projet</h3>
+      <button class="modal-close" id="leadModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label>Nom<input type="text" id="leadName"/></label>
+        <label>WhatsApp<input type="text" id="leadWhatsapp"/></label>
+        <label>Service<select id="leadService"></select></label>
+        <label>Budget<select id="leadBudget"></select></label>
+        <label>Source<select id="leadSource"></select></label>
+        <label>Statut<select id="leadStatus"></select></label>
+        <label>Prix convenu (DH)<input type="number" id="leadPrice" min="0"/></label>
+        <label>Payé (DH)<input type="number" id="leadPaid" min="0"/></label>
+        <label>Livraison<input type="date" id="leadDelivery"/></label>
+        <label class="full">Description du projet<textarea id="leadDesc"></textarea></label>
+        <label class="full">Notes<textarea id="leadNotes"></textarea></label>
+      </div>
+    </div>
+    <div class="modal-msg" id="leadModalMsg"></div>
+    <div class="modal-foot">
+      <button class="btn-danger" id="leadDeleteBtn" style="display:none">🗑️ Supprimer</button>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" id="leadCancelBtn">Annuler</button>
+      <button class="btn-primary" id="leadSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modale : Transaction financière ── -->
+<div class="modal-overlay" id="financeModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="financeModalTitle">Nouvelle transaction</h3>
+      <button class="modal-close" id="financeModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label>Date<input type="date" id="financeDate"/></label>
+        <label>Type<select id="financeType"></select></label>
+        <label>Catégorie<select id="financeCategory"></select></label>
+        <label>Montant (DH)<input type="number" id="financeAmount" min="0"/></label>
+        <label>Mode de paiement<select id="financePaymentMode"></select></label>
+        <label class="full">Description<input type="text" id="financeDesc"/></label>
+        <label class="full">Notes<textarea id="financeNotes"></textarea></label>
+      </div>
+    </div>
+    <div class="modal-msg" id="financeModalMsg"></div>
+    <div class="modal-foot">
+      <button class="btn-danger" id="financeDeleteBtn" style="display:none">🗑️ Supprimer</button>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" id="financeCancelBtn">Annuler</button>
+      <button class="btn-primary" id="financeSaveBtn">Enregistrer</button>
+    </div>
   </div>
 </div>
 
@@ -203,9 +311,6 @@ $('gateBtn').onclick = tryUnlock;
 $('gatePass').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
 $('lockBtn').onclick = e => { e.preventDefault(); localStorage.removeItem(GATE_KEY); location.reload(); };
 
-if (localStorage.getItem(GATE_KEY) === '1') unlock();
-else $('gatePass').focus();
-
 /* ─────────── Connexion Google Sheets (via l'Apps Script Web App déjà déployé) ─────────── */
 const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYxWZgopSI74uKt-gOCxsAN_Ht0ZRgf6qrBPri7S6b70J_zt5v_zfsC3/exec';
 const DASH_TOKEN = 'rdw-dash-x7q9k2';
@@ -218,10 +323,20 @@ const STATUS_MAP = {
   '✅ Livré': { label: 'Livré', cls: 'b-livre' },
   '❌ Annulé': { label: 'Annulé', cls: 'b-annule' }
 };
+const STATUSES = Object.keys(STATUS_MAP);
+const SOURCES  = ['🌐 Formulaire du site', '💬 WhatsApp direct', '📱 Réseaux sociaux', '👥 Recommandation'];
+const SERVICES = ['Site web', 'Landing page', 'Visuels publicitaires', 'Vidéo publicitaire', 'Campagne publicitaire', 'Autre service'];
+const BUDGETS  = ['Moins de 1000 DH', '1000 – 3000 DH', '3000 – 7000 DH', 'Plus de 7000 DH', 'Non défini'];
+const FIN_TYPES = ['💰 Revenu', '💸 Dépense'];
+const FIN_CAT_REVENU  = ['Projet client', 'Autre revenu'];
+const FIN_CAT_DEPENSE = ['Hébergement & Domaine', 'Logiciels & Abonnements', 'Publicité (Ads)', 'Matériel', 'Formation', 'Transport', 'Autre dépense'];
+const FIN_PAYMENT_MODES = ['Espèces', 'Virement bancaire', 'Carte bancaire', 'PayPal', 'Autre'];
+
 const fmtDH = n => (n || 0).toLocaleString('fr-MA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' DH';
 
 let allLeads = [], allFinances = [];
 let trendChartInstance = null, expenseChartInstance = null;
+let editingLeadRow = null, editingFinanceRow = null;
 
 async function loadData() {
   $('loadingState').style.display = 'block';
@@ -269,6 +384,7 @@ function render(generatedAt) {
   renderCharts();
   populateStatusFilter();
   renderTable();
+  renderFinanceTable();
 }
 
 function renderCharts() {
@@ -363,7 +479,7 @@ function renderTable() {
   $('clientsBody').innerHTML = rows.map(l => {
     const info = STATUS_MAP[l.status] || { label: l.status || '—', cls: 'b-def' };
     const dateStr = l.date ? new Date(l.date).toLocaleDateString('fr-FR') : '—';
-    return '<tr>' +
+    return '<tr data-row="' + l.row + '">' +
       '<td>' + dateStr + '</td>' +
       '<td>' + (l.name || '—') + '</td>' +
       '<td>' + (l.service || '—') + '</td>' +
@@ -375,8 +491,210 @@ function renderTable() {
   }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--mut)">Aucun résultat</td></tr>';
 }
 
+function renderFinanceTable() {
+  const rows = allFinances.slice().sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  $('financeBody').innerHTML = rows.map(f => {
+    const isRevenu = f.type === FIN_TYPES[0];
+    const dateStr = f.date ? new Date(f.date).toLocaleDateString('fr-FR') : '—';
+    return '<tr data-row="' + f.row + '">' +
+      '<td>' + dateStr + '</td>' +
+      '<td><span class="badge ' + (isRevenu ? 'b-livre' : 'b-annule') + '">' + (f.type || '—') + '</span></td>' +
+      '<td>' + (f.category || '—') + '</td>' +
+      '<td>' + (f.description || '—') + '</td>' +
+      '<td>' + fmtDH(f.amount) + '</td>' +
+      '<td>' + (f.paymentMode || '—') + '</td>' +
+      '</tr>';
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--mut)">Aucune transaction</td></tr>';
+}
+
 $('searchInput').addEventListener('input', renderTable);
 $('statusFilter').addEventListener('change', renderTable);
+
+$('clientsBody').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-row]');
+  if (!tr) return;
+  const lead = allLeads.find(l => String(l.row) === tr.dataset.row);
+  if (lead) openLeadModal(lead);
+});
+$('financeBody').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-row]');
+  if (!tr) return;
+  const f = allFinances.find(f => String(f.row) === tr.dataset.row);
+  if (f) openFinanceModal(f);
+});
+
+/* ─────────── Formulaires : options des listes déroulantes ─────────── */
+function fillSelect(id, options) {
+  $(id).innerHTML = options.map(o => '<option value="' + o.replace(/"/g, '&quot;') + '">' + o + '</option>').join('');
+}
+function initFormOptions() {
+  fillSelect('leadService', SERVICES);
+  fillSelect('leadBudget', BUDGETS);
+  fillSelect('leadSource', SOURCES);
+  fillSelect('leadStatus', STATUSES);
+  fillSelect('financeType', FIN_TYPES);
+  fillSelect('financePaymentMode', FIN_PAYMENT_MODES);
+  updateFinanceCategoryOptions();
+}
+$('financeType').addEventListener('change', () => updateFinanceCategoryOptions());
+function updateFinanceCategoryOptions(keepValue) {
+  const type = $('financeType').value;
+  const cats = type === FIN_TYPES[0] ? FIN_CAT_REVENU : FIN_CAT_DEPENSE;
+  fillSelect('financeCategory', cats);
+  if (keepValue && cats.includes(keepValue)) $('financeCategory').value = keepValue;
+}
+initFormOptions();
+
+/* ─────────── Modale Client / Projet ─────────── */
+function openLeadModal(lead) {
+  editingLeadRow = lead ? lead.row : null;
+  $('leadModalTitle').textContent = lead ? 'Modifier client / projet' : 'Nouveau client / projet';
+  $('leadName').value = lead ? (lead.name || '') : '';
+  $('leadWhatsapp').value = lead ? (lead.whatsapp || '') : '';
+  $('leadService').value = lead && SERVICES.includes(lead.service) ? lead.service : SERVICES[0];
+  $('leadBudget').value = lead && BUDGETS.includes(lead.budget) ? lead.budget : BUDGETS[BUDGETS.length - 1];
+  $('leadSource').value = lead && SOURCES.includes(lead.source) ? lead.source : SOURCES[0];
+  $('leadStatus').value = lead && STATUSES.includes(lead.status) ? lead.status : STATUSES[0];
+  $('leadPrice').value = lead && lead.price ? lead.price : '';
+  $('leadPaid').value = lead && lead.paid ? lead.paid : '';
+  $('leadDelivery').value = lead && lead.delivery ? String(lead.delivery).slice(0, 10) : '';
+  $('leadDesc').value = lead ? (lead.desc || '') : '';
+  $('leadNotes').value = lead ? (lead.notes || '') : '';
+  $('leadDeleteBtn').style.display = lead ? 'inline-flex' : 'none';
+  $('leadModalMsg').textContent = '';
+  $('leadModal').classList.add('open');
+}
+function closeLeadModal() { $('leadModal').classList.remove('open'); }
+$('addLeadBtn').onclick = () => openLeadModal(null);
+$('leadModalClose').onclick = closeLeadModal;
+$('leadCancelBtn').onclick = closeLeadModal;
+$('leadModal').addEventListener('click', e => { if (e.target.id === 'leadModal') closeLeadModal(); });
+
+async function saveLead() {
+  const btn = $('leadSaveBtn'); btn.disabled = true; btn.textContent = 'Enregistrement…';
+  $('leadModalMsg').textContent = '';
+  const body = new URLSearchParams({
+    token: DASH_TOKEN,
+    action: editingLeadRow ? 'updateLead' : 'addLead',
+    name: $('leadName').value.trim(),
+    whatsapp: $('leadWhatsapp').value.trim(),
+    service: $('leadService').value,
+    budget: $('leadBudget').value,
+    source: $('leadSource').value,
+    status: $('leadStatus').value,
+    price: $('leadPrice').value,
+    paid: $('leadPaid').value,
+    delivery: $('leadDelivery').value,
+    desc: $('leadDesc').value,
+    notes: $('leadNotes').value
+  });
+  if (editingLeadRow) body.set('row', editingLeadRow);
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeLeadModal();
+    await loadData();
+  } catch (err) {
+    $('leadModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+$('leadSaveBtn').onclick = saveLead;
+
+async function deleteLeadRow() {
+  if (!editingLeadRow) return;
+  if (!confirm('Supprimer définitivement ce client/projet ? Cette action est irréversible.')) return;
+  const btn = $('leadDeleteBtn'); btn.disabled = true;
+  try {
+    const body = new URLSearchParams({ token: DASH_TOKEN, action: 'deleteLead', row: editingLeadRow });
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeLeadModal();
+    await loadData();
+  } catch (err) {
+    $('leadModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+$('leadDeleteBtn').onclick = deleteLeadRow;
+
+/* ─────────── Modale Transaction financière ─────────── */
+function openFinanceModal(fin) {
+  editingFinanceRow = fin ? fin.row : null;
+  $('financeModalTitle').textContent = fin ? 'Modifier la transaction' : 'Nouvelle transaction';
+  $('financeDate').value = fin && fin.date ? String(fin.date).slice(0, 10) : new Date().toISOString().slice(0, 10);
+  $('financeType').value = fin && FIN_TYPES.includes(fin.type) ? fin.type : FIN_TYPES[0];
+  updateFinanceCategoryOptions(fin ? fin.category : null);
+  $('financeAmount').value = fin && fin.amount ? fin.amount : '';
+  $('financePaymentMode').value = fin && FIN_PAYMENT_MODES.includes(fin.paymentMode) ? fin.paymentMode : FIN_PAYMENT_MODES[0];
+  $('financeDesc').value = fin ? (fin.description || '') : '';
+  $('financeNotes').value = fin ? (fin.notes || '') : '';
+  $('financeDeleteBtn').style.display = fin ? 'inline-flex' : 'none';
+  $('financeModalMsg').textContent = '';
+  $('financeModal').classList.add('open');
+}
+function closeFinanceModal() { $('financeModal').classList.remove('open'); }
+$('addFinanceBtn').onclick = () => openFinanceModal(null);
+$('financeModalClose').onclick = closeFinanceModal;
+$('financeCancelBtn').onclick = closeFinanceModal;
+$('financeModal').addEventListener('click', e => { if (e.target.id === 'financeModal') closeFinanceModal(); });
+
+async function saveFinance() {
+  const btn = $('financeSaveBtn'); btn.disabled = true; btn.textContent = 'Enregistrement…';
+  $('financeModalMsg').textContent = '';
+  const body = new URLSearchParams({
+    token: DASH_TOKEN,
+    action: editingFinanceRow ? 'updateFinance' : 'addFinance',
+    date: $('financeDate').value,
+    type: $('financeType').value,
+    category: $('financeCategory').value,
+    description: $('financeDesc').value.trim(),
+    amount: $('financeAmount').value,
+    paymentMode: $('financePaymentMode').value,
+    notes: $('financeNotes').value
+  });
+  if (editingFinanceRow) body.set('row', editingFinanceRow);
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeFinanceModal();
+    await loadData();
+  } catch (err) {
+    $('financeModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+$('financeSaveBtn').onclick = saveFinance;
+
+async function deleteFinanceRow() {
+  if (!editingFinanceRow) return;
+  if (!confirm('Supprimer définitivement cette transaction ? Cette action est irréversible.')) return;
+  const btn = $('financeDeleteBtn'); btn.disabled = true;
+  try {
+    const body = new URLSearchParams({ token: DASH_TOKEN, action: 'deleteFinance', row: editingFinanceRow });
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeFinanceModal();
+    await loadData();
+  } catch (err) {
+    $('financeModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+$('financeDeleteBtn').onclick = deleteFinanceRow;
+
+/* ─────────── Auto-déverrouillage si déjà authentifié (doit rester en dernier :
+ * dépend de WEBAPP_URL / loadData / etc. définis plus haut) ─────────── */
+if (localStorage.getItem(GATE_KEY) === '1') unlock();
+else $('gatePass').focus();
 </script>
 </body>
 </html>
