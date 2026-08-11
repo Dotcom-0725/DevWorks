@@ -530,31 +530,24 @@ function fixPhantomRows() {
   const last = leads.getLastRow();
   if (last < 2) return;
 
-  // S'arrête au premier "trou" (ligne vide) en partant du haut — évite d'inclure
-  // par erreur une ligne fantôme lointaine dans le calcul de la vraie dernière ligne.
-  const names = leads.getRange(2, 3, last - 1, 1).getValues();
-  let realLastRow = 1;
-  for (let i = 0; i < names.length; i++) {
-    if (names[i][0] !== '') realLastRow = i + 2;
-    else break;
-  }
+  const numCols = 15; // A..O
+  const allRows = leads.getRange(2, 1, last - 1, numCols).getValues();
 
-  if (last > realLastRow) {
-    for (let r = realLastRow + 1; r <= last; r++) {
-      const rowVals = leads.getRange(r, 1, 1, 15).getValues()[0];
-      const hasData = rowVals.some((v, i) => i !== 14 && v !== '');
-      if (hasData) {
-        realLastRow++;
-        leads.getRange(realLastRow, 1, 1, 15).setValues([rowVals]);
-        leads.getRange(r, 1, 1, 15).clearContent().clearDataValidations();
-      }
+  // Une ligne est "réelle" si au moins une colonne A..N (donc hors O, qui peut
+  // légitimement contenir FAUX tout seul sur une ligne fantôme) n'est pas vide.
+  // NB : on ne se fie surtout pas à une seule colonne (ex. Nom) pour détecter la fin
+  // des données, car certaines lignes réelles ont le Nom vide mais un téléphone rempli.
+  const realRows = allRows.filter(row => row.some((v, i) => i !== 14 && v !== '' && v !== null));
+
+  leads.getRange(2, 1, last - 1, numCols).clearContent().clearDataValidations();
+  if (realRows.length > 0) {
+    leads.getRange(2, 1, realRows.length, numCols).setValues(realRows);
+    for (let i = 0; i < realRows.length; i++) {
+      if (realRows[i][14] !== '' && realRows[i][14] !== null) applyTransferCheckbox(leads, 2 + i);
     }
-    const from = realLastRow + 1;
-    const count = last - realLastRow;
-    if (count > 0) leads.getRange(from, 15, count, 1).clearContent().clearDataValidations();
   }
 
-  try { SpreadsheetApp.getUi().alert('✅ Nettoyage terminé. Dernière ligne réelle : ' + realLastRow); } catch (e) {}
+  try { SpreadsheetApp.getUi().alert('✅ Nettoyage terminé. Lignes réelles : ' + realRows.length); } catch (e) {}
 }
 
 /* ─────────── Installation en un clic de tout le module finance (ne touche pas aux Commandes) ─────────── */
