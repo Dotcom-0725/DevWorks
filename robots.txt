@@ -3,5 +3,6 @@ User-agent: *
 Allow: /
 Disallow: /facture.html
 Disallow: /services-realises.html
+Disallow: /dashboard.html
 
 Sitemap: https://www.rachiddevworks.com/sitemap.xml

@@ -41,6 +41,9 @@ const FIN_CAT_DEPENSE = ['Hébergement & Domaine', 'Logiciels & Abonnements', 'P
 const FIN_PAYMENT_MODES = ['Espèces', 'Virement bancaire', 'Carte bancaire', 'PayPal', 'Autre'];
 const FIN_HEADERS = ['#', 'Date', 'Type', 'Catégorie', 'Description', 'Montant (DH)', 'Mode de paiement', 'Notes'];
 
+/* ── Jeton d'accès au tableau de bord web (dashboard.html) — change-le si besoin ── */
+const DASH_TOKEN = 'rdw-dash-x7q9k2';
+
 /* Formule "Reste" pour une seule ligne */
 function setRemainFormula(sh, r) {
   sh.getRange(r, 12).setFormula('=IF(J' + r + '="","",J' + r + '-IF(K' + r + '="",0,K' + r + '))');
@@ -211,8 +214,19 @@ function doPost(e) {
   }
 }
 
-/* Vérification rapide : nombre de commandes + dernière commande */
-function doGet() {
+/* Vérification rapide (par défaut) OU données complètes du dashboard (?action=dashboard&token=...) */
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+
+  if (p.action === 'dashboard') {
+    if (p.token !== DASH_TOKEN) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'unauthorized' }))
+                           .setMimeType(ContentService.MimeType.JSON);
+    }
+    return ContentService.createTextOutput(JSON.stringify(getDashboardData()))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
   const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_LEADS);
   const last = sh.getLastRow();
   const info = { ok: true, leads: Math.max(0, last - 1) };
@@ -222,6 +236,40 @@ function doGet() {
   }
   return ContentService.createTextOutput(JSON.stringify(info))
                        .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ─────────── Extraction JSON complète (Commandes + Finances) pour dashboard.html ───────────
+ * requiredKey : n'inclut que les lignes où cette colonne n'est pas vide (évite les faux positifs
+ * dus aux cases à cocher qui écrivent FAUX sur des lignes par ailleurs vides). */
+function sheetToObjects(sheet, keys, requiredKey) {
+  if (!sheet) return [];
+  const last = sheet.getLastRow();
+  if (last < 2) return [];
+  const values = sheet.getRange(2, 1, last - 1, keys.length).getValues();
+  const reqIdx = requiredKey ? keys.indexOf(requiredKey) : -1;
+  return values
+    .filter(row => reqIdx >= 0 ? (row[reqIdx] !== '' && row[reqIdx] !== null) : row.some(v => v !== '' && v !== null))
+    .map(row => {
+      const obj = {};
+      keys.forEach((k, i) => {
+        let v = row[i];
+        if (v instanceof Date) v = v.toISOString();
+        obj[k] = v;
+      });
+      return obj;
+    });
+}
+
+function getDashboardData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const leads = sheetToObjects(ss.getSheetByName(SHEET_LEADS), [
+    'num', 'date', 'name', 'whatsapp', 'service', 'budget', 'desc',
+    'source', 'status', 'price', 'paid', 'remain', 'delivery', 'notes', 'transferred'
+  ], 'name');
+  const finances = sheetToObjects(ss.getSheetByName(SHEET_FIN), [
+    'num', 'date', 'type', 'category', 'description', 'amount', 'paymentMode', 'notes'
+  ], 'description');
+  return { ok: true, generatedAt: new Date().toISOString(), leads, finances };
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -403,7 +451,11 @@ function buildDashboard() {
   try { SpreadsheetApp.getUi().alert('✅ لوحة التحكم محدّثة بنجاح!'); } catch (e) {}
 }
 
-/* ─────────── Colonne de suivi (Commandes!O) : empêche les doublons de transfert ─────────── */
+/* ─────────── Colonne de suivi (Commandes!O) : empêche les doublons de transfert ───────────
+ * IMPORTANT : la validation "case à cocher" écrit FAUX dans la cellule dès qu'on l'applique,
+ * même sur une cellule vide. On ne l'applique donc JAMAIS à un gros bloc de lignes vides
+ * (ça décale getLastRow() très loin et casse l'ajout des nouvelles commandes) — seulement
+ * ligne par ligne, via applyTransferCheckbox(), quand la ligne a réellement des données. */
 function ensureTransferColumn() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const leads = ss.getSheetByName(SHEET_LEADS);
@@ -414,7 +466,13 @@ function ensureTransferColumn() {
          .setFontWeight('bold').setFontSize(11)
          .setHorizontalAlignment('center').setVerticalAlignment('middle');
     leads.setColumnWidth(15, 130);
-    leads.getRange(2, 15, 1000).setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
+  }
+}
+
+function applyTransferCheckbox(sh, r) {
+  const cell = sh.getRange(r, 15);
+  if (!cell.getDataValidation()) {
+    cell.setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
   }
 }
 
@@ -427,6 +485,7 @@ function maybeTransferPaymentToFinance(sh, r) {
   if (!paye || paye <= 0) return;
 
   ensureTransferColumn();
+  applyTransferCheckbox(sh, r);
   if (sh.getRange(r, 15).getValue() === true) return; // déjà transféré
 
   const ss = sh.getParent();
@@ -458,6 +517,44 @@ function backfillFinanceFromCommandes() {
   const last = leads.getLastRow();
   for (let r = 2; r <= last; r++) maybeTransferPaymentToFinance(leads, r);
   try { SpreadsheetApp.getUi().alert('✅ تم نقل كل الدفعات القديمة (المسلَّمة) لورقة 💸 Finances.'); } catch (e) {}
+}
+
+/* ─────────── Nettoyage ponctuel : répare les lignes fantômes créées par l'ancienne version
+ * de ensureTransferColumn (qui appliquait la case à cocher sur 1000 lignes d'un coup, ce qui
+ * écrivait FAUX partout et décalait les nouvelles commandes très loin). Sûr à relancer :
+ * si tout est déjà propre, ne fait rien. ─────────── */
+function fixPhantomRows() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const leads = ss.getSheetByName(SHEET_LEADS);
+  if (!leads) return;
+  const last = leads.getLastRow();
+  if (last < 2) return;
+
+  // S'arrête au premier "trou" (ligne vide) en partant du haut — évite d'inclure
+  // par erreur une ligne fantôme lointaine dans le calcul de la vraie dernière ligne.
+  const names = leads.getRange(2, 3, last - 1, 1).getValues();
+  let realLastRow = 1;
+  for (let i = 0; i < names.length; i++) {
+    if (names[i][0] !== '') realLastRow = i + 2;
+    else break;
+  }
+
+  if (last > realLastRow) {
+    for (let r = realLastRow + 1; r <= last; r++) {
+      const rowVals = leads.getRange(r, 1, 1, 15).getValues()[0];
+      const hasData = rowVals.some((v, i) => i !== 14 && v !== '');
+      if (hasData) {
+        realLastRow++;
+        leads.getRange(realLastRow, 1, 1, 15).setValues([rowVals]);
+        leads.getRange(r, 1, 1, 15).clearContent().clearDataValidations();
+      }
+    }
+    const from = realLastRow + 1;
+    const count = last - realLastRow;
+    if (count > 0) leads.getRange(from, 15, count, 1).clearContent().clearDataValidations();
+  }
+
+  try { SpreadsheetApp.getUi().alert('✅ Nettoyage terminé. Dernière ligne réelle : ' + realLastRow); } catch (e) {}
 }
 
 /* ─────────── Installation en un clic de tout le module finance (ne touche pas aux Commandes) ─────────── */

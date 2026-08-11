@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Tableau de Bord | Rachid DevWorks Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#07101d;--card:#0e1b30;--line:rgba(148,197,253,.12);
+  --accent:#38bdf8;--accent2:#f7941d;--grad:linear-gradient(120deg,#38bdf8,#2f6fed);
+  --tx:#eef4fb;--mut:#93a7c2;--tr:.25s ease;
+  --green:#22c55e;--red:#ef4444;--purple:#a78bfa;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;padding:24px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1400px;margin:0 auto}
+
+/* ── En-tête (identique à facture.html / services-realises.html) ── */
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:1.3rem;font-weight:900}
+.top h1 span{color:var(--accent)}
+.top .back{color:var(--mut);font-weight:700;font-size:.9rem;border:1px solid var(--line);padding:8px 16px;border-radius:12px;transition:var(--tr)}
+.top .back:hover{color:var(--accent);border-color:var(--accent)}
+.logout-link{color:var(--mut);font-size:.8rem;border:1px solid var(--line);padding:6px 12px;border-radius:10px;transition:var(--tr)}
+.logout-link:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ── KPI cards ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.kpi .lbl{font-size:.78rem;font-weight:800;color:var(--mut);margin-bottom:8px}
+.kpi .val{font-size:1.6rem;font-weight:900}
+.kpi.green{border-color:rgba(34,197,94,.35)} .kpi.green .val{color:var(--green)}
+.kpi.red{border-color:rgba(239,68,68,.35)} .kpi.red .val{color:var(--red)}
+.kpi.blue{border-color:rgba(56,189,248,.35)} .kpi.blue .val{color:var(--accent)}
+.kpi.purple{border-color:rgba(167,139,250,.35)} .kpi.purple .val{color:var(--purple)}
+.kpi.orange{border-color:rgba(247,148,29,.35)} .kpi.orange .val{color:var(--accent2)}
+
+/* ── Pipeline chips ── */
+.pipeline{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:.85rem;font-weight:700;display:flex;gap:8px;align-items:center}
+.chip b{font-size:.95rem}
+
+/* ── Panels ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel h2{font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:14px}
+.chart-box{position:relative;height:280px}
+
+/* ── Table ── */
+.table-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.table-tools input,.table-tools select{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:9px 12px}
+.table-tools input{flex:1;min-width:180px}
+.table-scroll{overflow-x:auto}
+table.data{width:100%;border-collapse:collapse;font-size:.88rem}
+table.data th{text-align:left;color:var(--mut);font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data tr:hover td{background:rgba(56,189,248,.05)}
+.badge{padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap}
+.badge.b-new{background:#fff3cd;color:#7a5b00}
+.badge.b-contact{background:#cfe2ff;color:#0b3d91}
+.badge.b-accord{background:#e2d9f3;color:#4b2e83}
+.badge.b-cours{background:#ffe5d0;color:#8a4b00}
+.badge.b-livre{background:#d1e7dd;color:#0f5132}
+.badge.b-annule{background:#f8d7da;color:#842029}
+.badge.b-def{background:var(--line);color:var(--mut)}
+
+.state{text-align:center;padding:60px 20px;color:var(--mut)}
+.state .spin{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.refresh-btn{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.4);color:var(--accent);font-family:inherit;font-weight:700;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer;transition:var(--tr)}
+.refresh-btn:hover{background:rgba(56,189,248,.18)}
+.updated-at{font-size:.75rem;color:var(--mut)}
+
+/* ── Gate (accès protégé, identique aux autres pages admin) ── */
+.wrap{display:none}
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+#gate .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px 30px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+#gate .lock{font-size:2.2rem;margin-bottom:10px}
+#gate h2{font-size:1.1rem;font-weight:900;margin-bottom:6px}
+#gate p{color:var(--mut);font-size:.85rem;margin-bottom:18px}
+#gate input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:1rem;padding:12px 14px;text-align:center;transition:var(--tr)}
+#gate input:focus{outline:none;border-color:var(--accent)}
+#gate button{width:100%;margin-top:12px;background:var(--grad);color:#06121a;border:none;border-radius:10px;font-family:inherit;font-weight:800;font-size:.95rem;padding:12px;cursor:pointer;transition:var(--tr)}
+#gate button:hover{filter:brightness(1.08)}
+#gate .err{color:#f87171;font-size:.85rem;margin-top:10px;min-height:1.2em}
+#gate.shake .box{animation:shakeBox .35s}
+@keyframes shakeBox{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <div class="lock">🔒</div>
+    <h2>Espace protégé</h2>
+    <p>Entrez le mot de passe pour accéder au tableau de bord.</p>
+    <input type="password" id="gatePass" placeholder="Mot de passe" autocomplete="off"/>
+    <button type="button" id="gateBtn">Accéder</button>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="wrap-el">
+
+  <div class="top">
+    <h1>📊 Tableau de <span>Bord</span> — Rachid DevWorks Pro</h1>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <a class="back" href="facture.html">🧾 Factures & Devis</a>
+      <a class="back" href="services-realises.html">📋 Services Réalisés</a>
+      <a class="logout-link" href="#" id="lockBtn">🔒 Verrouiller</a>
+      <a class="back" href="index.html">← Portfolio</a>
+    </div>
+  </div>
+
+  <div id="loadingState" class="state">
+    <div class="spin"></div>
+    Chargement des données depuis Google Sheets…
+  </div>
+
+  <div id="errorState" class="state" style="display:none">
+    ⚠️ <span id="errorMsg">Erreur de chargement.</span><br/><br/>
+    <button class="refresh-btn" id="retryBtn">Réessayer</button>
+  </div>
+
+  <div id="content" style="display:none">
+
+    <div class="kpi-grid">
+      <div class="kpi blue"><div class="lbl">TOTAL PROJETS</div><div class="val" id="kpiTotal">0</div></div>
+      <div class="kpi orange"><div class="lbl">EN COURS</div><div class="val" id="kpiCours">0</div></div>
+      <div class="kpi green"><div class="lbl">TOTAL REVENUS</div><div class="val" id="kpiRevenu">0 DH</div></div>
+      <div class="kpi red"><div class="lbl">TOTAL DÉPENSES</div><div class="val" id="kpiDepense">0 DH</div></div>
+      <div class="kpi purple"><div class="lbl">BÉNÉFICE NET</div><div class="val" id="kpiProfit">0 DH</div></div>
+    </div>
+
+    <div class="pipeline" id="pipelineChips"></div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>📈 Revenus vs Dépenses (6 derniers mois)</h2>
+        <div class="chart-box"><canvas id="trendChart"></canvas></div>
+      </div>
+      <div class="panel">
+        <h2>🥧 Répartition des dépenses</h2>
+        <div class="chart-box"><canvas id="expenseChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h2 style="margin:0">👥 Clients & Projets</h2>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span class="updated-at" id="updatedAt"></span>
+          <button class="refresh-btn" id="refreshBtn">🔄 Actualiser</button>
+        </div>
+      </div>
+      <div class="table-tools">
+        <input type="text" id="searchInput" placeholder="🔍 Rechercher un client, service..."/>
+        <select id="statusFilter"><option value="">Tous les statuts</option></select>
+      </div>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Date</th><th>Client</th><th>Service</th><th>Statut</th><th>Prix (DH)</th><th>Payé (DH)</th><th>Reste (DH)</th></tr></thead>
+          <tbody id="clientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─────────── Accès protégé (même session que les autres pages admin) ─────────── */
+const GATE_PASS = '1472';
+const GATE_KEY = 'rdw-invoice-auth';
+
+function unlock() {
+  $('gate').style.display = 'none';
+  $('wrap-el').style.display = 'block';
+  loadData();
+}
+function tryUnlock() {
+  const val = $('gatePass').value;
+  if (val === GATE_PASS) {
+    localStorage.setItem(GATE_KEY, '1');
+    unlock();
+  } else {
+    $('gateErr').textContent = 'Mot de passe incorrect.';
+    $('gate').classList.remove('shake'); void $('gate').offsetWidth; $('gate').classList.add('shake');
+    $('gatePass').value = '';
+    $('gatePass').focus();
+  }
+}
+$('gateBtn').onclick = tryUnlock;
+$('gatePass').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+$('lockBtn').onclick = e => { e.preventDefault(); localStorage.removeItem(GATE_KEY); location.reload(); };
+
+if (localStorage.getItem(GATE_KEY) === '1') unlock();
+else $('gatePass').focus();
+
+/* ─────────── Connexion Google Sheets (via l'Apps Script Web App déjà déployé) ─────────── */
+const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYxWZgopSI74uKt-gOCxsAN_Ht0ZRgf6qrBPri7S6b70J_zt5v_zfsC3/exec';
+const DASH_TOKEN = 'rdw-dash-x7q9k2';
+
+const STATUS_MAP = {
+  '🆕 Nouveau': { label: 'Nouveau', cls: 'b-new' },
+  '📞 Contacté': { label: 'Contacté', cls: 'b-contact' },
+  '🤝 Accord': { label: 'Accord', cls: 'b-accord' },
+  '⚙️ En cours': { label: 'En cours', cls: 'b-cours' },
+  '✅ Livré': { label: 'Livré', cls: 'b-livre' },
+  '❌ Annulé': { label: 'Annulé', cls: 'b-annule' }
+};
+const fmtDH = n => (n || 0).toLocaleString('fr-MA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' DH';
+
+let allLeads = [], allFinances = [];
+let trendChartInstance = null, expenseChartInstance = null;
+
+async function loadData() {
+  $('loadingState').style.display = 'block';
+  $('errorState').style.display = 'none';
+  $('content').style.display = 'none';
+  try {
+    const url = WEBAPP_URL + '?action=dashboard&token=' + encodeURIComponent(DASH_TOKEN);
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Réponse invalide');
+    allLeads = data.leads || [];
+    allFinances = data.finances || [];
+    render(data.generatedAt);
+    $('loadingState').style.display = 'none';
+    $('content').style.display = 'block';
+  } catch (err) {
+    $('errorMsg').textContent = 'Impossible de charger les données (' + err.message + ').';
+    $('loadingState').style.display = 'none';
+    $('errorState').style.display = 'block';
+  }
+}
+$('retryBtn').onclick = loadData;
+$('refreshBtn').onclick = loadData;
+
+function render(generatedAt) {
+  $('updatedAt').textContent = generatedAt ? 'Mis à jour : ' + new Date(generatedAt).toLocaleString('fr-FR') : '';
+
+  /* KPIs */
+  $('kpiTotal').textContent = allLeads.length;
+  $('kpiCours').textContent = allLeads.filter(l => l.status === '⚙️ En cours').length;
+  const totalRevenu = allFinances.filter(f => f.type === '💰 Revenu').reduce((s, f) => s + (parseFloat(f.amount) || 0), 0);
+  const totalDepense = allFinances.filter(f => f.type === '💸 Dépense').reduce((s, f) => s + (parseFloat(f.amount) || 0), 0);
+  $('kpiRevenu').textContent = fmtDH(totalRevenu);
+  $('kpiDepense').textContent = fmtDH(totalDepense);
+  $('kpiProfit').textContent = fmtDH(totalRevenu - totalDepense);
+
+  /* Pipeline chips */
+  const counts = {};
+  allLeads.forEach(l => { counts[l.status] = (counts[l.status] || 0) + 1; });
+  $('pipelineChips').innerHTML = Object.keys(STATUS_MAP).map(st => {
+    const info = STATUS_MAP[st];
+    return '<span class="chip"><span class="badge ' + info.cls + '">' + info.label + '</span><b>' + (counts[st] || 0) + '</b></span>';
+  }).join('');
+
+  renderCharts();
+  populateStatusFilter();
+  renderTable();
+}
+
+function renderCharts() {
+  /* Trend: 6 derniers mois */
+  const months = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ key: d.getFullYear() + '-' + d.getMonth(), label: d.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' }) });
+  }
+  const revenueByMonth = months.map(m => 0);
+  const expenseByMonth = months.map(m => 0);
+  allFinances.forEach(f => {
+    if (!f.date) return;
+    const d = new Date(f.date);
+    const key = d.getFullYear() + '-' + d.getMonth();
+    const idx = months.findIndex(m => m.key === key);
+    if (idx === -1) return;
+    const amt = parseFloat(f.amount) || 0;
+    if (f.type === '💰 Revenu') revenueByMonth[idx] += amt;
+    else if (f.type === '💸 Dépense') expenseByMonth[idx] += amt;
+  });
+
+  if (trendChartInstance) trendChartInstance.destroy();
+  trendChartInstance = new Chart($('trendChart'), {
+    type: 'bar',
+    data: {
+      labels: months.map(m => m.label),
+      datasets: [
+        { label: 'Revenus', data: revenueByMonth, backgroundColor: '#22c55e', borderRadius: 6 },
+        { label: 'Dépenses', data: expenseByMonth, backgroundColor: '#ef4444', borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#eef4fb' } } },
+      scales: {
+        x: { ticks: { color: '#93a7c2' }, grid: { color: 'rgba(148,197,253,.08)' } },
+        y: { ticks: { color: '#93a7c2' }, grid: { color: 'rgba(148,197,253,.08)' } }
+      }
+    }
+  });
+
+  /* Expense by category */
+  const catTotals = {};
+  allFinances.filter(f => f.type === '💸 Dépense').forEach(f => {
+    const cat = f.category || 'Autre';
+    catTotals[cat] = (catTotals[cat] || 0) + (parseFloat(f.amount) || 0);
+  });
+  const catLabels = Object.keys(catTotals);
+  const catValues = Object.values(catTotals);
+
+  if (expenseChartInstance) expenseChartInstance.destroy();
+  if (catLabels.length === 0) {
+    expenseChartInstance = null;
+    $('expenseChart').getContext('2d').clearRect(0, 0, 999, 999);
+  } else {
+    expenseChartInstance = new Chart($('expenseChart'), {
+      type: 'doughnut',
+      data: {
+        labels: catLabels,
+        datasets: [{ data: catValues, backgroundColor: ['#38bdf8', '#f7941d', '#a78bfa', '#34d399', '#f87171', '#fbbf24', '#60a5fa'] }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { color: '#eef4fb', boxWidth: 12, font: { size: 11 } } } }
+      }
+    });
+  }
+}
+
+function populateStatusFilter() {
+  const sel = $('statusFilter');
+  if (sel.options.length > 1) return;
+  Object.keys(STATUS_MAP).forEach(st => {
+    const opt = document.createElement('option');
+    opt.value = st;
+    opt.textContent = STATUS_MAP[st].label;
+    sel.appendChild(opt);
+  });
+}
+
+function renderTable() {
+  const q = $('searchInput').value.trim().toLowerCase();
+  const statusFilter = $('statusFilter').value;
+
+  const rows = allLeads
+    .filter(l => !statusFilter || l.status === statusFilter)
+    .filter(l => !q || (l.name + ' ' + l.service + ' ' + l.whatsapp).toLowerCase().includes(q))
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  $('clientsBody').innerHTML = rows.map(l => {
+    const info = STATUS_MAP[l.status] || { label: l.status || '—', cls: 'b-def' };
+    const dateStr = l.date ? new Date(l.date).toLocaleDateString('fr-FR') : '—';
+    return '<tr>' +
+      '<td>' + dateStr + '</td>' +
+      '<td>' + (l.name || '—') + '</td>' +
+      '<td>' + (l.service || '—') + '</td>' +
+      '<td><span class="badge ' + info.cls + '">' + info.label + '</span></td>' +
+      '<td>' + (l.price ? fmtDH(l.price) : '—') + '</td>' +
+      '<td>' + (l.paid ? fmtDH(l.paid) : '—') + '</td>' +
+      '<td>' + (l.remain ? fmtDH(l.remain) : '—') + '</td>' +
+      '</tr>';
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--mut)">Aucun résultat</td></tr>';
+}
+
+$('searchInput').addEventListener('input', renderTable);
+$('statusFilter').addEventListener('change', renderTable);
+</script>
+</body>
+</html>
