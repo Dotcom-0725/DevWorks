@@ -5,6 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="google-site-verification" content="rfe9VPb0t3akEZPoBic0I7dO5SQ2vfGqQLEqLUDUml8" />
 
+<!-- ═══════════ Google Ads — balise + conversion "Clic WhatsApp" ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18474814852"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18474814852');
+
+  (function () {
+    var SEND_TO = 'AW-18474814852/6ntiCLKewIUdEISbvelE';
+    var WA = /(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp:\/\/)/i;
+    var lastFire = 0;
+    function fireConversion() {
+      var now = Date.now();
+      if (now - lastFire < 1500) return;
+      lastFire = now;
+      gtag('event', 'conversion', { send_to: SEND_TO, transport_type: 'beacon' });
+    }
+    /* Liens WhatsApp (nav + bouton flottant) */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (a && WA.test(a.getAttribute('href'))) fireConversion();
+    }, true);
+    /* Formulaire "Envoyer via WhatsApp" (open('https://wa.me/...')) */
+    var _open = window.open;
+    window.open = function (url) {
+      if (url && WA.test(String(url))) fireConversion();
+      return _open.apply(window, arguments);
+    };
+  })();
+</script>
+
 <!-- ═══════════ SEO — domaine officiel : https://www.rachiddevworks.com ═══════════ -->
 <title>Création de sites web & landing pages à Tanger | Rachid DevWorks Pro</title>
 <meta name="description" content="تصميم مواقع إلكترونية احترافية وصفحات هبوط بالمغرب — Développeur & designer web à Tanger : création de sites web, landing pages qui convertissent, visuels et vidéos publicitaires, campagnes Facebook & Instagram. Devis gratuit, paiement après satisfaction."/>
