@@ -41,8 +41,14 @@ const FIN_CAT_DEPENSE = ['Hébergement & Domaine', 'Logiciels & Abonnements', 'P
 const FIN_PAYMENT_MODES = ['Espèces', 'Virement bancaire', 'Carte bancaire', 'PayPal', 'Autre'];
 const FIN_HEADERS = ['#', 'Date', 'Type', 'Catégorie', 'Description', 'Montant (DH)', 'Mode de paiement', 'Notes'];
 
-/* ── Jeton d'accès au tableau de bord web (dashboard.html) — change-le si besoin ── */
-const DASH_TOKEN = 'rdw-dash-x7q9k2';
+/* ── Jeton d'accès au tableau de bord web (dashboard.html) — change-le si besoin ──
+ * IMPORTANT (sécurité) : ce jeton est forcément visible en clair dans le code source
+ * de dashboard.html (site 100% statique, sans serveur pour le cacher). Un jeton long
+ * et aléatoire comme celui-ci protège contre le brute-force/scan automatique, mais PAS
+ * contre quelqu'un qui consulte directement le code source de dashboard.html — dans ce
+ * cas, la seule vraie protection est de ne jamais partager/lier publiquement cette page
+ * (déjà fait : Disallow: /dashboard.html dans robots.txt). */
+const DASH_TOKEN = 'PlIpOz_X0sFsY1c3Z11NWRt_OzG5yLOQ';
 
 /* Formule "Reste" pour une seule ligne */
 function setRemainFormula(sh, r) {
