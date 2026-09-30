@@ -804,6 +804,10 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
         </div>
         <div class="two-col">
           <div class="field">
+            <label for="f-activity"><span data-i18n="f.activity"></span> <small data-i18n="f.opt"></small></label>
+            <input id="f-activity" name="activity" type="text" data-i18n-ph="f.activity.ph"/>
+          </div>
+          <div class="field">
             <label for="f-service" data-i18n="f.service"></label>
             <select id="f-service" name="service" required>
               <option value="" disabled selected data-i18n="f.service.ph"></option>
@@ -815,16 +819,16 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
               <option data-i18n="opt.other"></option>
             </select>
           </div>
-          <div class="field">
-            <label for="f-budget"><span data-i18n="f.budget"></span> <small data-i18n="f.opt"></small></label>
-            <select id="f-budget" name="budget">
-              <option value="" selected data-i18n="opt.b0"></option>
-              <option data-i18n="opt.b1"></option>
-              <option data-i18n="opt.b2"></option>
-              <option data-i18n="opt.b3"></option>
-              <option data-i18n="opt.b4"></option>
-            </select>
-          </div>
+        </div>
+        <div class="field">
+          <label for="f-budget"><span data-i18n="f.budget"></span> <small data-i18n="f.opt"></small></label>
+          <select id="f-budget" name="budget">
+            <option value="" selected data-i18n="opt.b0"></option>
+            <option data-i18n="opt.b1"></option>
+            <option data-i18n="opt.b2"></option>
+            <option data-i18n="opt.b3"></option>
+            <option data-i18n="opt.b4"></option>
+          </select>
         </div>
         <div class="field">
           <label for="f-desc" data-i18n="f.desc"></label>
@@ -936,13 +940,14 @@ const I18N = {
     "cta.p1":"بدون أي دفع مسبق","cta.p2":"تعديلات مجانية حتى الرضا التام","cta.p3":"تسليم سريع وجودة مضمونة",
     "req.title":"اطلب مشروعك","req.sub":"املأ هذا الفورم البسيط وسيصلني طلبك مباشرة على الواتساب.",
     "f.name":"الاسم","f.name.ph":"اسمك الكامل","f.phone":"رقم الواتساب","f.opt":"(اختياري)",
+    "f.activity":"نشاطك التجاري","f.activity.ph":"مثال: مطعم، عيادة، متجر إلكتروني...",
     "f.service":"نوع الخدمة","f.service.ph":"اختر الخدمة","f.budget":"الميزانية التقريبية",
     "f.desc":"وصف مختصر للمشروع","f.desc.ph":"مثال: أحتاج صفحة هبوط لمنتج تجميلي مع تصميم إعلان للنشر على فيسبوك...",
     "opt.web":"موقع إلكتروني","opt.landing":"صفحة هبوط","opt.visual":"تصميم صور إعلانية","opt.video":"فيديو إعلاني","opt.ads":"حملة إعلانية","opt.other":"خدمة أخرى",
     "opt.b0":"غير محددة","opt.b1":"أقل من 1000 درهم","opt.b2":"1000 – 3000 درهم","opt.b3":"3000 – 7000 درهم","opt.b4":"أكثر من 7000 درهم",
-    "f.submit":"إرسال الطلب عبر واتساب","f.note":"سيتم فتح الواتساب مباشرة مع رسالة جاهزة تحتوي تفاصيل طلبك.",
+    "f.submit":"اطلب عرض سعري المجاني","f.note":"سيتم فتح الواتساب مباشرة مع رسالة جاهزة تحتوي تفاصيل طلبك.",
     "footer.rights":"جميع الحقوق محفوظة","footer.billing":"📄 إصدار الفواتير و Devis",
-    "wa.head":"📋 *طلب مشروع جديد — Rachid DevWorks Pro*","wa.name":"👤 الاسم: ","wa.phone":"📱 الواتساب: ","wa.service":"🛠️ الخدمة: ","wa.budget":"💰 الميزانية: ","wa.desc":"📝 وصف المشروع:",
+    "wa.head":"📋 *طلب مشروع جديد — Rachid DevWorks Pro*","wa.name":"👤 الاسم: ","wa.phone":"📱 الواتساب: ","wa.activity":"🏢 النشاط: ","wa.service":"🛠️ الخدمة: ","wa.budget":"💰 الميزانية: ","wa.desc":"📝 وصف المشروع:",
     "nav.faq":"الأسئلة الشائعة",
     "faq.title":"الأسئلة الشائعة","faq.sub":"كل ما تحتاج معرفته قبل طلب تصميم موقعك الإلكتروني",
     "faq1.q":"كم تكلفة تصميم موقع إلكتروني في المغرب؟","faq1.a":"تبدأ أسعار تصميم المواقع عندي من 300 درهم لصفحة الهبوط، ومن 2000 درهم للموقع الاحترافي الكامل حتى 5 صفحات. السعر يختلف حسب حجم المشروع ومتطلباته — يمكنك الاطلاع على التفاصيل في قسم الأسعار أو طلب عرض سعر مجاني.",
@@ -1033,13 +1038,14 @@ const I18N = {
     "cta.p1":"Aucun paiement à l'avance","cta.p2":"Retouches gratuites jusqu'à satisfaction","cta.p3":"Livraison rapide et qualité garantie",
     "req.title":"Demandez votre projet","req.sub":"Remplissez ce court formulaire, votre demande m'arrive directement sur WhatsApp.",
     "f.name":"Nom","f.name.ph":"Votre nom complet","f.phone":"N° WhatsApp","f.opt":"(optionnel)",
+    "f.activity":"Votre activité","f.activity.ph":"Ex : restaurant, clinique, boutique en ligne...",
     "f.service":"Type de service","f.service.ph":"Choisissez un service","f.budget":"Budget approximatif",
     "f.desc":"Description brève du projet","f.desc.ph":"Ex : j'ai besoin d'une landing page pour un produit cosmétique avec un visuel publicitaire pour Facebook...",
     "opt.web":"Site web","opt.landing":"Landing page","opt.visual":"Visuels publicitaires","opt.video":"Vidéo publicitaire","opt.ads":"Campagne publicitaire","opt.other":"Autre service",
     "opt.b0":"Non défini","opt.b1":"Moins de 1000 DH","opt.b2":"1000 – 3000 DH","opt.b3":"3000 – 7000 DH","opt.b4":"Plus de 7000 DH",
-    "f.submit":"Envoyer via WhatsApp","f.note":"WhatsApp s'ouvrira avec un message prêt contenant les détails de votre demande.",
+    "f.submit":"Demander mon devis gratuit","f.note":"WhatsApp s'ouvrira avec un message prêt contenant les détails de votre demande.",
     "footer.rights":"Tous droits réservés","footer.billing":"📄 Espace Factures & Devis",
-    "wa.head":"📋 *Nouvelle demande de projet — Rachid DevWorks Pro*","wa.name":"👤 Nom : ","wa.phone":"📱 WhatsApp : ","wa.service":"🛠️ Service : ","wa.budget":"💰 Budget : ","wa.desc":"📝 Description du projet :",
+    "wa.head":"📋 *Nouvelle demande de projet — Rachid DevWorks Pro*","wa.name":"👤 Nom : ","wa.phone":"📱 WhatsApp : ","wa.activity":"🏢 Activité : ","wa.service":"🛠️ Service : ","wa.budget":"💰 Budget : ","wa.desc":"📝 Description du projet :",
     "nav.faq":"FAQ",
     "faq.title":"Questions fréquentes","faq.sub":"Tout ce qu'il faut savoir avant de lancer votre projet de création de site web",
     "faq1.q":"Quel est le prix de la création d'un site web au Maroc ?","faq1.a":"Les tarifs commencent à 300 DH pour une landing page et à 2000 DH pour un site professionnel complet (jusqu'à 5 pages). Le prix varie selon la taille et les besoins du projet — consultez la section Tarifs ou demandez un devis gratuit.",
@@ -1062,7 +1068,6 @@ function applyLang() {
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t[el.dataset.i18nPh] ?? ''; });
   document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = t[el.dataset.i18nAlt] ?? ''; });
   document.getElementById('langBtn').textContent = lang === 'ar' ? 'FR' : 'عربي';
-  document.querySelectorAll('.btn-devis').forEach(el => { el.href = 'https://form-devis.vercel.app/?lang=' + lang; });
   localStorage.setItem('rdw-lang', lang);
 }
 document.getElementById('langBtn').addEventListener('click', () => { lang = lang === 'ar' ? 'fr' : 'ar'; applyLang(); });
@@ -1112,12 +1117,14 @@ const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYx
 
 function sendToSheet(f) {
   if (!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.startsWith('PASTE')) return;
+  const activity = f.activity.value.trim();
+  const desc = (activity ? 'Activité : ' + activity + ' — ' : '') + f.desc.value.trim();
   const data = new URLSearchParams({
     name: f.name.value.trim(),
     phone: f.phone.value.trim(),
     service: f.service.value,
     budget: f.budget.value,
-    desc: f.desc.value.trim()
+    desc: desc
   });
   fetch(SHEET_WEBAPP_URL, { method: 'POST', mode: 'no-cors', body: data }).catch(() => {});
 }
@@ -1130,6 +1137,7 @@ document.getElementById('brief').addEventListener('submit', e => {
     t['wa.head'], '',
     t['wa.name'] + f.name.value.trim(),
     f.phone.value.trim() ? t['wa.phone'] + f.phone.value.trim() : null,
+    f.activity.value.trim() ? t['wa.activity'] + f.activity.value.trim() : null,
     t['wa.service'] + f.service.value,
     f.budget.value ? t['wa.budget'] + f.budget.value : null,
     '', t['wa.desc'], f.desc.value.trim()
