@@ -37,15 +37,27 @@ const server = http.createServer((req, res) => {
     res.writeHead(403); res.end('Forbidden'); return;
   }
 
+  const serveFile = (fp) => {
+    const ext = path.extname(fp).toLowerCase();
+    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    fs.createReadStream(fp).pipe(res);
+  };
+
   fs.stat(filePath, (err, stat) => {
-    if (err || !stat.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 Not Found');
+    if (!err && stat.isFile()) { serveFile(filePath); return; }
+    // Directory-style URL (e.g. /fr/ or /fr) — try its index.html, matching
+    // how static hosts like Vercel resolve directory paths in production.
+    if (!err && stat.isDirectory()) {
+      const idx = path.join(filePath, 'index.html');
+      fs.stat(idx, (e2, s2) => {
+        if (!e2 && s2.isFile()) { serveFile(idx); return; }
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('404 Not Found');
+      });
       return;
     }
-    const ext = path.extname(filePath).toLowerCase();
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
-    fs.createReadStream(filePath).pipe(res);
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('404 Not Found');
   });
 });
 
