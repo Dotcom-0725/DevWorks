@@ -228,6 +228,16 @@ nav.scrolled{border-color:var(--line)}
 .s-body p{color:var(--mut);font-size:.95rem}
 .soon{position:absolute;top:14px;inset-inline-end:14px;z-index:3;font-size:.74rem;font-weight:800;color:#fbbf24;border:1px solid rgba(251,191,36,.4);background:rgba(10,15,25,.75);backdrop-filter:blur(6px);padding:4px 12px;border-radius:999px}
 
+.svc-cat-title{font-size:1.05rem;font-weight:900;color:var(--accent);margin:44px 0 18px;padding-top:36px;border-top:1px solid var(--line)}
+.services-grid + .svc-cat-title{margin-top:44px}
+.svc-mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.svc-mini{background:var(--card-solid);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:flex-start;transition:var(--tr)}
+.svc-mini:hover{transform:translateY(-4px);border-color:rgba(56,189,248,.4)}
+.svc-mini .s-icon{width:44px;height:44px;border-radius:12px;margin:0;flex-shrink:0}
+.svc-mini .s-icon svg{width:21px;height:21px}
+.svc-mini h4{font-size:.96rem;font-weight:900;margin-bottom:4px}
+.svc-mini p{color:var(--mut);font-size:.84rem}
+
 /* ── Works / Portfolio ── */
 #works{background:var(--bg)}
 .works-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
@@ -346,12 +356,11 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <img src="images/nav-logo-full.png" width="1056" height="180" alt="Rachid DevWorks Pro"/>
     </a>
     <ul class="nav-links">
+      <li><a href="#top" data-i18n="nav.home"></a></li>
       <li><a href="#services" data-i18n="nav.services"></a></li>
       <li><a href="#works" data-i18n="nav.works"></a></li>
       <li><a href="#pricing" data-i18n="nav.pricing"></a></li>
-      <li><a href="#process" data-i18n="nav.process"></a></li>
       <li><a href="#faq" data-i18n="nav.faq"></a></li>
-      <li><a href="#request" data-i18n="nav.request"></a></li>
     </ul>
     <div class="nav-end">
       <button class="lang-btn" id="langBtn" type="button">FR</button>
@@ -368,11 +377,8 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <h1 data-i18n-html="hero.title"></h1>
       <p class="lead" data-i18n="hero.lead"></p>
       <div class="hero-actions">
-        <a class="btn btn-devis" href="https://form-devis.vercel.app/" target="_blank" rel="noopener" data-i18n="hero.cta0"></a>
         <a class="btn btn-primary" href="#request" data-i18n="hero.cta1"></a>
-        <a class="btn btn-ghost" href="#services" data-i18n="hero.cta2"></a>
         <a class="btn btn-ghost" href="#works" data-i18n="hero.cta4"></a>
-        <a class="btn btn-ghost" href="#pricing" data-i18n="hero.cta3"></a>
       </div>
       <div class="hero-stats">
         <div class="stat"><b>+3</b><span data-i18n="stat.1"></span></div>
@@ -388,6 +394,8 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
   <div class="container" style="position:relative;z-index:1">
     <h2 class="sec-title reveal" data-i18n-html="services.title2"></h2>
     <p class="sec-sub reveal" data-i18n="services.sub"></p>
+
+    <h3 class="svc-cat-title reveal" data-i18n="svc.cat1" style="border-top:none;padding-top:0;margin-top:0"></h3>
     <div class="services-grid">
       <div class="s-card reveal">
         <div class="s-media"><img src="images/hf/web.webp" width="1200" height="896" data-i18n-alt="s1.t" alt="" loading="lazy"/></div>
@@ -403,6 +411,60 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
           <h3 data-i18n="s2.t"></h3><p data-i18n="s2.d"></p>
         </div>
       </div>
+      <div class="s-card reveal">
+        <span class="soon" data-i18n="soon"></span>
+        <div class="s-media"><img src="images/hf/app.webp" width="1200" height="896" data-i18n-alt="s6.t" alt="" loading="lazy"/></div>
+        <div class="s-body">
+          <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 18h.01"/></svg></div>
+          <h3 data-i18n="s6.t"></h3><p data-i18n="s6.d"></p>
+        </div>
+      </div>
+    </div>
+    <div class="svc-mini-grid" style="margin-top:16px">
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+        <div><h4 data-i18n="s7.t"></h4><p data-i18n="s7.d"></p></div>
+      </div>
+    </div>
+
+    <h3 class="svc-cat-title reveal" data-i18n="svc.cat2"></h3>
+    <div class="svc-mini-grid">
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div><h4 data-i18n="s8.t"></h4><p data-i18n="s8.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></div>
+        <div><h4 data-i18n="s9.t"></h4><p data-i18n="s9.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.57 2.6"/><path d="M21 3v6h-6"/></svg></div>
+        <div><h4 data-i18n="s10.t"></h4><p data-i18n="s10.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="M6 6h.01M6 12h.01M6 15h.01"/></svg></div>
+        <div><h4 data-i18n="s11.t"></h4><p data-i18n="s11.d"></p></div>
+      </div>
+    </div>
+
+    <h3 class="svc-cat-title reveal" data-i18n="svc.cat3"></h3>
+    <div class="svc-mini-grid">
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div><h4 data-i18n="s12.t"></h4><p data-i18n="s12.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><h4 data-i18n="s13.t"></h4><p data-i18n="s13.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
+        <div><h4 data-i18n="s14.t"></h4><p data-i18n="s14.d"></p></div>
+      </div>
+    </div>
+
+    <h3 class="svc-cat-title reveal" data-i18n="svc.cat4"></h3>
+    <div class="services-grid">
       <div class="s-card reveal">
         <div class="s-media"><img src="images/hf/visual.webp" width="1200" height="896" data-i18n-alt="s3.t" alt="" loading="lazy"/></div>
         <div class="s-body">
@@ -424,13 +486,30 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
           <h3 data-i18n="s5.t"></h3><p data-i18n="s5.d"></p>
         </div>
       </div>
-      <div class="s-card reveal">
-        <span class="soon" data-i18n="soon"></span>
-        <div class="s-media"><img src="images/hf/app.webp" width="1200" height="896" data-i18n-alt="s6.t" alt="" loading="lazy"/></div>
-        <div class="s-body">
-          <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 18h.01"/></svg></div>
-          <h3 data-i18n="s6.t"></h3><p data-i18n="s6.d"></p>
-        </div>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <div class="container">
+    <h2 class="sec-title reveal" data-i18n-html="more.title"></h2>
+    <p class="sec-sub reveal" data-i18n="more.sub"></p>
+    <div class="svc-mini-grid">
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><h4 data-i18n="more1.t"></h4><p data-i18n="more1.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></div>
+        <div><h4 data-i18n="more2.t"></h4><p data-i18n="more2.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div><h4 data-i18n="more3.t"></h4><p data-i18n="more3.d"></p></div>
+      </div>
+      <div class="svc-mini reveal">
+        <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.57 2.6"/><path d="M21 3v6h-6"/></svg></div>
+        <div><h4 data-i18n="more4.t"></h4><p data-i18n="more4.d"></p></div>
       </div>
     </div>
   </div>
@@ -623,7 +702,10 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
     <div class="cta-banner reveal">
       <h2 data-i18n-html="cta.title"></h2>
       <p data-i18n="cta.sub"></p>
-      <a class="btn btn-primary" href="#request" data-i18n="cta.btn"></a>
+      <div class="hero-actions" style="justify-content:center">
+        <a class="btn btn-primary" href="#request" data-i18n="cta.btn"></a>
+        <a class="btn btn-wa" href="https://wa.me/212628537649" target="_blank" rel="noopener" data-i18n="nav.cta2"></a>
+      </div>
       <div class="cta-points">
         <span data-i18n="cta.p1"></span>
         <span data-i18n="cta.p2"></span>
@@ -704,23 +786,37 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 /* ─────────── i18n ─────────── */
 const I18N = {
   ar: {
-    "nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"تواصل واتساب",
+    "nav.home":"الرئيسية","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"اطلب عرض سعر",
     "logo.tag":"إبنِ • حلّ • ارتقِ",
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
-    "hero.title":"مواقع و صفحات هبوط <span class='grad-text'>تحوّل الزوار إلى عملاء</span>",
-    "hero.lead":"أطوّر مواقع إلكترونية وصفحات هبوط احترافية، وأصمم إعلانات (صور وفيديو) وأطلق حملات إعلانية تحقق نتائج حقيقية لمشروعك.",
-    "hero.cta0":"اطلب عرض سعر مجاني","hero.cta1":"اطلب مشروعك الآن","hero.cta2":"تصفح الخدمات","hero.cta3":"شاهد الأسعار","hero.cta4":"شاهد نماذج الأعمال",
+    "hero.title":"مقاولتك تستحق <span class='grad-text'>موقعاً يشتغل لفائدتك</span>",
+    "hero.lead":"مواقع احترافية، أنظمة CRM، أتمتة، وحلول رقمية مصممة خصيصاً لاحتياجاتك. تشوف وتجرب مشروعك بنفسك قبل ما تخلص أي درهم.",
+    "hero.cta1":"اطلب عرض سعر مجاني","hero.cta4":"شاهد نماذج الأعمال",
     "stat.1":"سنوات خبرة","stat.2":"خدمات متكاملة","stat.3":"سرعة الرد",
     "services.title2":"خدمات <span>متكاملة</span> لمشروعك",
-    "services.sub":"كل ما يحتاجه مشروعك للظهور والبيع أونلاين، من التصميم إلى الإعلان.",
+    "services.sub":"كل ما يحتاجه مشروعك للظهور والبيع أونلاين وتسيير الزبناء، من التصميم إلى الأتمتة.",
+    "svc.cat1":"إنشاء رقمي","svc.cat2":"إدارة وأتمتة","svc.cat3":"ظهور وتواجد محلي","svc.cat4":"تصاميم وإعلانات",
     "s1.t":"تطوير و تصميم المواقع","s1.d":"مواقع احترافية سريعة ومتجاوبة مع جميع الأجهزة، بتصميم يعكس هوية علامتك التجارية.",
     "s2.t":"صفحات الهبوط","s2.d":"صفحات هبوط مصممة للتحويل: عرض واضح، تحميل سريع، ودعوة قوية لاتخاذ الإجراء.",
     "s3.t":"تصميم صور إعلانية","s3.d":"تصاميم إبداعية جذابة لمنتجاتك وعروضك، جاهزة للنشر على جميع المنصات.",
     "s4.t":"فيديوهات إعلانية","s4.d":"فيديوهات قصيرة مؤثرة تشد الانتباه وتوصل رسالتك التسويقية في ثوانٍ.",
     "s5.t":"إطلاق الحملات الإعلانية","s5.d":"إعداد وإطلاق حملات إعلانية مستهدفة مع متابعة الأداء لتحقيق أفضل عائد.",
-    "s6.t":"تصميم التطبيقات","s6.d":"واجهات تطبيقات جوال عصرية وسهلة الاستخدام — الخدمة قادمة قريباً.",
+    "s6.t":"تطبيقات ويب","s6.d":"واجهات وتطبيقات ويب عصرية وسهلة الاستخدام — الخدمة قادمة قريباً.",
+    "s7.t":"متجر إلكتروني","s7.d":"متاجر أونلاين كاملة لبيع منتجاتك، بسلة شراء وطرق دفع، جاهزة للانطلاق.",
+    "s8.t":"نظام CRM لإدارة الزبناء","s8.d":"نظام متكامل لتتبع طلبات وزبناء مشروعك في مكان واحد — نفس النظام اللي كنستعمل فيه أنا شخصياً.",
+    "s9.t":"ربط واتساب","s9.d":"طلبات وتواصل مباشر عبر واتساب مدمج فموقعك، بحال كل المشاريع اللي أنجزتها.",
+    "s10.t":"أتمتة المهام","s10.d":"ربط موقعك بأدوات كـGoogle Sheets باش توصلك بيانات الطلبات أوتوماتيكياً بلا تدخل يدوي.",
+    "s11.t":"قاعدة بيانات Google Sheets","s11.d":"قاعدة بيانات مجانية وسهلة الاستعمال لتتبع الطلبات، الزبناء، والمداخيل بدون تكلفة إضافية.",
+    "s12.t":"تحسين SEO","s12.d":"أساسيات تحسين محركات البحث مدمجة فكل موقع باش تظهر فنتائج Google.",
+    "s13.t":"إعداد Google Business","s13.d":"إعداد وتحسين ملف نشاطك على خرائط Google باش يلقاوك الزبناء بسهولة.",
+    "s14.t":"تحسين محلي","s14.d":"استهداف عملائك فمدينتك أو منطقتك، باش تجيك طلبات من ناس قريبين منك فعلياً.",
     "soon":"قريباً",
     "nav.works":"أعمالي",
+    "more.title":"أكثر من مجرد <span>موقع إلكتروني</span>","more.sub":"كل مشروع كنسلمو ماشي غير تصميم — مبني بأدوات حقيقية تسهّل عليك تسيير مشروعك يوم بعد يوم.",
+    "more1.t":"نظام حجز مباشر","more1.d":"بحال موقع Auto Fluchos Coches وEco Clean Tanger، فينهم الزبون يحجز الخدمة مباشرة من الموقع.",
+    "more2.t":"تكامل واتساب","more2.d":"كل موقع كنبنيه فيه زر تواصل مباشر عبر واتساب، باش توصلك الطلبات فالوقت الحقيقي.",
+    "more3.t":"نظام CRM لتتبع الزبناء","more3.d":"نفس النظام اللي كنستعمله أنا شخصياً لتسيير مشروعي: كل زبون وكل طلب وكل دفعة فمكان واحد.",
+    "more4.t":"أتمتة بـGoogle Sheets","more4.d":"بيانات طلباتك كتتسجل أوتوماتيكياً فقاعدة بيانات مجانية، بلا برمجة معقدة ولا تكلفة شهرية.",
     "works.title":"نماذج من <span>أعمالي</span>",
     "works.sub":"أمثلة حقيقية من مشاريع أنجزتها لعملائي — مرّر فوق التصاميم الطويلة لتصفحها.",
     "w1.c":"صفحة هبوط","w1.t":"صفحة هبوط — منتجات المسابح","w1.d":"صفحة بيع كاملة بالفرنسية لمنتج كلور احترافي، مصممة للتحويل.",
@@ -742,13 +838,13 @@ const I18N = {
     "pr3.name":"الباقة الشاملة","pr3.desc":"موقع + تصاميم + حملة إعلانية متكاملة.","pr3.save":"عرض مخصص حسب مشروعك",
     "pr3.f1":"موقع أو متجر إلكتروني متكامل","pr3.f2":"تصميم صور إعلانية لمنصاتك","pr3.f3":"فيديو إعلاني قصير","pr3.f4":"إطلاق حملة إعلانية مستهدفة","pr3.f5":"متابعة ودعم شامل",
     "process.title":"طريقة العمل","process.sub":"خطوات واضحة وبسيطة من الفكرة إلى التسليم.",
-    "p1.t":"الطلب","p1.d":"تملأ الفورم أو تراسلني على الواتساب بفكرة مشروعك.",
-    "p2.t":"الاتفاق","p2.d":"نحدد التفاصيل، المدة، والسعر بكل شفافية.",
-    "p3.t":"التنفيذ","p3.d":"أنجز العمل مع إطلاعك على التقدم خطوة بخطوة.",
-    "p4.t":"التسليم","p4.d":"تستلم مشروعك جاهزاً مع التعديلات والدعم.",
-    "cta.title":"🔥 خليك مطمئن... <span class='grad-text'>موقعك أولاً، والدفع من بعد</span>",
+    "p1.t":"توضيح الاحتياج","p1.d":"كتشرح لينا فكرة مشروعك عبر الفورم أو مباشرة على واتساب.",
+    "p2.t":"تحضير الحل","p2.d":"كنجهزو ليك الحل المناسب مع تحديد المدة والسعر بكل شفافية.",
+    "p3.t":"المعاينة والتجربة","p3.d":"كتشوف وتجرب مشروعك بنفسك قبل أي التزام بالدفع.",
+    "p4.t":"التأكيد والنشر","p4.d":"بعد رضاك التام، كنأكدو وننشرو مشروعك جاهزاً للانطلاق.",
+    "cta.title":"عندك مشروع؟ <span class='grad-text'>خلينا نتكلمو</span>",
     "cta.sub":"🚀 شوف موقعك جاهزاً قدامك قبل ما تخلص أي درهم — ما تدفع حتى تكون راضي 100% على النتيجة.",
-    "cta.btn":"ابدأ مشروعك بدون مخاطرة",
+    "cta.btn":"اطلب عرض سعر مجاني","nav.cta2":"واتساب",
     "cta.p1":"بدون أي دفع مسبق","cta.p2":"تعديلات مجانية حتى الرضا التام","cta.p3":"تسليم سريع وجودة مضمونة",
     "req.title":"اطلب مشروعك","req.sub":"املأ هذا الفورم البسيط وسيصلني طلبك مباشرة على الواتساب.",
     "f.name":"الاسم","f.name.ph":"اسمك الكامل","f.phone":"رقم الواتساب","f.opt":"(اختياري)",
@@ -769,23 +865,37 @@ const I18N = {
     "faq6.q":"هل تصميم الموقع يشمل تحسين محركات البحث (SEO)؟","faq6.a":"نعم، كل المواقع التي أصممها تُبنى بأساسيات SEO سليمة (عناوين، أوصاف، سرعة تحميل، توافق مع الجوال) لتساعدك على الظهور في نتائج البحث بشكل أفضل."
   },
   fr: {
-    "nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"WhatsApp",
+    "nav.home":"Accueil","nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"Demander un devis",
     "logo.tag":"BÂTIR • RÉSOUDRE • ÉLEVER",
     "hero.badge":"Disponible pour de nouveaux projets",
-    "hero.title":"Des sites web & landing pages <span class='grad-text'>qui convertissent vos visiteurs en clients</span>",
-    "hero.lead":"Je développe des sites web et landing pages professionnels, je crée des visuels et vidéos publicitaires et je lance des campagnes qui génèrent de vrais résultats pour votre business.",
-    "hero.cta0":"Demander un devis gratuit","hero.cta1":"Démarrer votre projet","hero.cta2":"Voir les services","hero.cta3":"Voir les tarifs","hero.cta4":"Voir mes réalisations",
+    "hero.title":"Votre entreprise mérite <span class='grad-text'>un site qui travaille pour vous</span>",
+    "hero.lead":"Sites web professionnels, CRM, automatisation et solutions digitales sur mesure. Vous voyez et testez votre projet avant de payer.",
+    "hero.cta1":"Demander un devis gratuit","hero.cta4":"Voir mes réalisations",
     "stat.1":"Ans d'expérience","stat.2":"Services complets","stat.3":"Délai de réponse",
     "services.title2":"Des services <span>complets</span> pour votre projet",
-    "services.sub":"Tout ce qu'il faut pour vendre en ligne, du design à la publicité.",
+    "services.sub":"Tout ce qu'il faut pour vendre en ligne et gérer vos clients, du design à l'automatisation.",
+    "svc.cat1":"Création digitale","svc.cat2":"Gestion & automatisation","svc.cat3":"Visibilité","svc.cat4":"Créations visuelles & publicité",
     "s1.t":"Création de sites web","s1.d":"Des sites rapides, responsives et professionnels, à l'image de votre marque.",
     "s2.t":"Landing pages","s2.d":"Des pages conçues pour convertir : offre claire, chargement rapide et appel à l'action puissant.",
     "s3.t":"Visuels publicitaires","s3.d":"Des créations attractives pour vos produits et offres, prêtes à publier sur toutes les plateformes.",
     "s4.t":"Vidéos publicitaires","s4.d":"Des vidéos courtes et percutantes qui captent l'attention en quelques secondes.",
     "s5.t":"Campagnes publicitaires","s5.d":"Création et lancement de campagnes ciblées avec suivi des performances.",
-    "s6.t":"Design d'applications","s6.d":"Interfaces mobiles modernes et intuitives — bientôt disponible.",
+    "s6.t":"Applications web","s6.d":"Interfaces et applications web modernes et intuitives — bientôt disponible.",
+    "s7.t":"E-commerce","s7.d":"Des boutiques en ligne complètes pour vendre vos produits, avec panier et moyens de paiement.",
+    "s8.t":"CRM de gestion clients","s8.d":"Un système complet pour suivre vos demandes et clients au même endroit — celui-là même que j'utilise pour gérer mon activité.",
+    "s9.t":"Intégration WhatsApp","s9.d":"Commandes et contact direct via WhatsApp intégrés à votre site, comme sur tous mes projets livrés.",
+    "s10.t":"Automatisation","s10.d":"Connexion de votre site à des outils comme Google Sheets pour recevoir vos données automatiquement.",
+    "s11.t":"Base de données Google Sheets","s11.d":"Une base de données gratuite et simple pour suivre vos commandes, clients et revenus sans coût supplémentaire.",
+    "s12.t":"Optimisation SEO","s12.d":"Les bases du référencement intégrées à chaque site pour mieux apparaître sur Google.",
+    "s13.t":"Fiche Google Business","s13.d":"Création et optimisation de votre fiche Google Maps pour être trouvé facilement par vos clients.",
+    "s14.t":"Optimisation locale","s14.d":"Ciblage de vos clients dans votre ville ou région pour des demandes vraiment locales.",
     "soon":"Bientôt",
     "nav.works":"Réalisations",
+    "more.title":"Plus qu'un <span>simple site web</span>","more.sub":"Chaque projet livré n'est pas qu'un design — il embarque de vrais outils qui simplifient la gestion de votre activité au quotidien.",
+    "more1.t":"Réservation en ligne","more1.d":"Comme sur Auto Fluchos Coches et Eco Clean Tanger, où le client réserve directement depuis le site.",
+    "more2.t":"Intégration WhatsApp","more2.d":"Chaque site inclut un contact direct via WhatsApp, pour recevoir vos demandes en temps réel.",
+    "more3.t":"CRM de suivi clients","more3.d":"Le même système que j'utilise pour gérer mon activité : chaque client, chaque demande et chaque paiement au même endroit.",
+    "more4.t":"Automatisation Google Sheets","more4.d":"Vos données de commandes s'enregistrent automatiquement dans une base gratuite, sans code ni abonnement mensuel.",
     "works.title":"Mes <span>réalisations</span>",
     "works.sub":"Des exemples réels de projets livrés à mes clients — survolez les designs longs pour les parcourir.",
     "w1.c":"Landing page","w1.t":"Landing page — Produits piscine","w1.d":"Page de vente complète en français pour un chlore professionnel, conçue pour convertir.",
@@ -807,13 +917,13 @@ const I18N = {
     "pr3.name":"Pack Premium","pr3.desc":"Site + visuels + campagne publicitaire complète.","pr3.save":"Offre sur mesure",
     "pr3.f1":"Site ou boutique en ligne complet","pr3.f2":"Visuels publicitaires pour vos réseaux","pr3.f3":"Vidéo publicitaire courte","pr3.f4":"Lancement d'une campagne ciblée","pr3.f5":"Suivi et support complet",
     "process.title":"Méthode de travail","process.sub":"Des étapes simples et claires, de l'idée à la livraison.",
-    "p1.t":"Demande","p1.d":"Remplissez le formulaire ou contactez-moi sur WhatsApp avec votre idée.",
-    "p2.t":"Accord","p2.d":"Nous fixons les détails, les délais et le prix en toute transparence.",
-    "p3.t":"Réalisation","p3.d":"Je réalise le travail en vous tenant informé à chaque étape.",
-    "p4.t":"Livraison","p4.d":"Vous recevez votre projet finalisé, avec retouches et support.",
-    "cta.title":"🔥 Soyez tranquille... <span class='grad-text'>votre site d'abord, le paiement après</span>",
+    "p1.t":"Votre besoin","p1.d":"Vous expliquez votre idée via le formulaire ou directement sur WhatsApp.",
+    "p2.t":"Notre préparation","p2.d":"Nous préparons la solution adaptée, avec délais et prix en toute transparence.",
+    "p3.t":"Vous testez","p3.d":"Vous voyez et testez votre projet vous-même avant tout engagement de paiement.",
+    "p4.t":"Validation & mise en ligne","p4.d":"Une fois satisfait, nous validons et mettons votre projet en ligne.",
+    "cta.title":"Vous avez un projet ? <span class='grad-text'>Parlons-en</span>",
     "cta.sub":"🚀 Voyez votre site terminé avant de payer le moindre dirham — vous ne réglez que si vous êtes 100% satisfait du résultat.",
-    "cta.btn":"Démarrer sans risque",
+    "cta.btn":"Demander un devis gratuit","nav.cta2":"WhatsApp",
     "cta.p1":"Aucun paiement à l'avance","cta.p2":"Retouches gratuites jusqu'à satisfaction","cta.p3":"Livraison rapide et qualité garantie",
     "req.title":"Demandez votre projet","req.sub":"Remplissez ce court formulaire, votre demande m'arrive directement sur WhatsApp.",
     "f.name":"Nom","f.name.ph":"Votre nom complet","f.phone":"N° WhatsApp","f.opt":"(optionnel)",
