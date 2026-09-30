@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="google-site-verification" content="rfe9VPb0t3akEZPoBic0I7dO5SQ2vfGqQLEqLUDUml8" />
 
-<!-- ═══════════ Google Ads — balise + conversion "Clic WhatsApp" ═══════════ -->
+<!-- ═══════════ Google Ads — suivi : Lead (formulaire envoyé) vs simple clic WhatsApp ═══════════ -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18474814852"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -16,22 +16,33 @@
   (function () {
     var SEND_TO = 'AW-18474814852/6ntiCLKewIUdEISbvelE';
     var WA = /(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp:\/\/)/i;
-    var lastFire = 0;
-    function fireConversion() {
+    var lastLead = 0;
+
+    /* Lead réel = formulaire de contact envoyé (voir #brief submit plus bas).
+       C'est le seul événement qui déclenche la conversion Google Ads. */
+    function fireLeadConversion() {
       var now = Date.now();
-      if (now - lastFire < 1500) return;
-      lastFire = now;
+      if (now - lastLead < 1500) return;
+      lastLead = now;
       gtag('event', 'conversion', { send_to: SEND_TO, transport_type: 'beacon' });
+      gtag('event', 'generate_lead');
     }
-    /* Liens WhatsApp (nav + bouton flottant) */
+    window.__fireLeadConversion = fireLeadConversion;
+
+    /* Simple clic sur un lien WhatsApp (nav, bouton flottant, CTA) = engagement,
+       PAS un Lead — suivi séparément pour ne pas gonfler les conversions. */
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href]');
-      if (a && WA.test(a.getAttribute('href'))) fireConversion();
+      if (a && WA.test(a.getAttribute('href'))) {
+        gtag('event', 'whatsapp_click', { link_url: a.getAttribute('href') });
+      }
     }, true);
-    /* Formulaire "Envoyer via WhatsApp" (open('https://wa.me/...')) */
+
+    /* Le formulaire "Envoyer via WhatsApp" appelle open('https://wa.me/...') après
+       avoir enregistré les données dans le Sheet — seul point représentant un vrai Lead. */
     var _open = window.open;
     window.open = function (url) {
-      if (url && WA.test(String(url))) fireConversion();
+      if (url && WA.test(String(url))) fireLeadConversion();
       return _open.apply(window, arguments);
     };
   })();
@@ -1132,9 +1143,16 @@ function sendToSheet(f) {
   fetch(SHEET_WEBAPP_URL, { method: 'POST', mode: 'no-cors', body: data }).catch(() => {});
 }
 
-document.getElementById('brief').addEventListener('submit', e => {
+const briefForm = document.getElementById('brief');
+let briefStarted = false;
+briefForm.addEventListener('input', () => {
+  if (!briefStarted) { briefStarted = true; gtag('event', 'form_start'); }
+});
+
+briefForm.addEventListener('submit', e => {
   e.preventDefault();
   const t = I18N[lang], f = e.target;
+  gtag('event', 'form_submit');
   sendToSheet(f);
   const lines = [
     t['wa.head'], '',
