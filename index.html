@@ -182,7 +182,15 @@ nav.scrolled{border-color:var(--line)}
 .lang-btn:hover{border-color:var(--accent);color:var(--accent)}
 .nav-cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(120deg,#4ade80,#25d366 60%,#1eb85a);color:#04140a;font-weight:800;font-size:.9rem;padding:10px 19px;border-radius:13px;transition:var(--tr);white-space:nowrap}
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,211,102,.4)}
-@media(max-width:860px){.nav-links{display:none}}
+.nav-toggle{display:none;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--tx)}
+.nav-toggle svg{width:20px;height:20px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:860px){
+  .nav-toggle{display:inline-flex}
+  .nav-links{position:absolute;inset-inline:0;top:68px;flex-direction:column;gap:2px;background:rgba(5,13,26,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:10px 22px 18px;max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s ease,opacity .25s ease}
+  .nav-links.open{display:flex;max-height:60vh;opacity:1;pointer-events:auto;overflow-y:auto}
+  .nav-links a{display:block;padding:13px 14px;border-radius:10px}
+}
 @media(max-width:430px){.nav-cta{display:none}}
 
 /* ── Hero ── */
@@ -393,7 +401,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
     <a class="logo" href="#top">
       <img src="images/nav-logo-full.png" width="1056" height="180" alt="Rachid DevWorks Pro"/>
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#top" data-i18n="nav.home"></a></li>
       <li><a href="#services" data-i18n="nav.services"></a></li>
       <li><a href="#works" data-i18n="nav.works"></a></li>
@@ -404,6 +412,10 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
     <div class="nav-end">
       <button class="lang-btn" id="langBtn" type="button">FR</button>
       <a class="nav-cta" href="https://wa.me/212628537649" target="_blank" rel="noopener" data-i18n="nav.cta"></a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <span class="sr-only" data-i18n="nav.menu"></span>
+      </button>
     </div>
   </div>
 </nav>
@@ -874,7 +886,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 /* ─────────── i18n ─────────── */
 const I18N = {
   ar: {
-    "nav.home":"الرئيسية","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"اطلب عرض سعر","nav.about":"من أنا",
+    "nav.home":"الرئيسية","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"اطلب عرض سعر","nav.about":"من أنا","nav.menu":"القائمة",
     "logo.tag":"إبنِ • حلّ • ارتقِ",
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
     "hero.title":"مقاولتك تستحق <span class='grad-text'>موقعاً يشتغل لفائدتك</span>",
@@ -972,7 +984,7 @@ const I18N = {
     "faq6.q":"هل تصميم الموقع يشمل تحسين محركات البحث (SEO)؟","faq6.a":"نعم، كل المواقع التي أصممها تُبنى بأساسيات SEO سليمة (عناوين، أوصاف، سرعة تحميل، توافق مع الجوال) لتساعدك على الظهور في نتائج البحث بشكل أفضل."
   },
   fr: {
-    "nav.home":"Accueil","nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"Demander un devis","nav.about":"À propos",
+    "nav.home":"Accueil","nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"Demander un devis","nav.about":"À propos","nav.menu":"Menu",
     "logo.tag":"BÂTIR • RÉSOUDRE • ÉLEVER",
     "hero.badge":"Disponible pour de nouveaux projets",
     "hero.title":"Votre entreprise mérite <span class='grad-text'>un site qui travaille pour vous</span>",
@@ -1094,6 +1106,23 @@ applyLang();
 /* ─────────── Navbar / Reveal ─────────── */
 const nav = document.getElementById('nav');
 addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 10));
+
+/* ─────────── Mobile nav toggle ─────────── */
+const navToggle = document.getElementById('navToggle');
+const navLinksEl = document.getElementById('navLinks');
+function closeNavMenu() {
+  navLinksEl.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinksEl.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+});
+navLinksEl.addEventListener('click', e => { if (e.target.closest('a')) closeNavMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNavMenu(); });
+document.addEventListener('click', e => {
+  if (navLinksEl.classList.contains('open') && !e.target.closest('#nav')) closeNavMenu();
+});
 
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
