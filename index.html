@@ -238,6 +238,30 @@ nav.scrolled{border-color:var(--line)}
 .svc-mini h4{font-size:.96rem;font-weight:900;margin-bottom:4px}
 .svc-mini p{color:var(--mut);font-size:.84rem}
 
+/* ── Qui suis-je ── */
+#about{background:var(--bg2)}
+.about-wrap{max-width:720px;margin:0 auto;text-align:center}
+.about-avatar{width:84px;height:84px;border-radius:50%;background:var(--grad);display:grid;place-items:center;margin:0 auto 22px;font-size:1.7rem;font-weight:900;color:#06121a}
+.about-wrap p{color:var(--mut);font-size:1.02rem;line-height:1.95;margin-bottom:26px}
+.about-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.about-chips span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:.84rem;font-weight:700;color:var(--mut)}
+
+/* ── Case studies ── */
+#cases{background:var(--bg)}
+.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
+.case-card{background:var(--card-solid);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--tr)}
+.case-card:hover{transform:translateY(-5px);border-color:rgba(56,189,248,.4)}
+.case-card .w-cat{position:static;display:inline-flex;margin-bottom:14px}
+.case-card h3{font-size:1.12rem;font-weight:900;margin-bottom:18px}
+.case-row{margin-bottom:14px}
+.case-row:last-child{margin-bottom:0}
+.case-row b{display:block;font-size:.74rem;font-weight:900;color:var(--accent);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.case-row p{color:var(--mut);font-size:.89rem}
+
+/* ── Portfolio "Voir le site" ── */
+.w-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.85rem;font-weight:800;color:var(--accent)}
+.w-link:hover{text-decoration:underline}
+
 /* ── Works / Portfolio ── */
 #works{background:var(--bg)}
 .works-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
@@ -360,6 +384,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <li><a href="#services" data-i18n="nav.services"></a></li>
       <li><a href="#works" data-i18n="nav.works"></a></li>
       <li><a href="#pricing" data-i18n="nav.pricing"></a></li>
+      <li><a href="#about" data-i18n="nav.about"></a></li>
       <li><a href="#faq" data-i18n="nav.faq"></a></li>
     </ul>
     <div class="nav-end">
@@ -515,6 +540,21 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
   </div>
 </section>
 
+<section id="about">
+  <div class="container">
+    <h2 class="sec-title reveal" data-i18n="about.title"></h2>
+    <div class="about-wrap reveal">
+      <div class="about-avatar">RD</div>
+      <p data-i18n="about.bio"></p>
+      <div class="about-chips">
+        <span data-i18n="about.chip1"></span>
+        <span data-i18n="about.chip2"></span>
+        <span data-i18n="about.chip3"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="works">
   <div class="orb orb-orange" style="width:360px;height:360px;top:-80px;left:-130px"></div>
   <div class="container" style="position:relative;z-index:1">
@@ -531,7 +571,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w2.c"></span>
         <div class="w-media tall"><img src="images/portfolio/restaurant-amira.jpg" width="491" height="19129" data-i18n-alt="w2.t" alt="" loading="lazy"/></div>
-        <div class="w-body"><h3 data-i18n="w2.t"></h3><p data-i18n="w2.d"></p></div>
+        <div class="w-body"><h3 data-i18n="w2.t"></h3><p data-i18n="w2.d"></p><a class="w-link" href="https://restaurant-amira.vercel.app/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
       <div class="w-card reveal">
@@ -549,13 +589,13 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w5.c"></span>
         <div class="w-media tall"><img src="images/portfolio/rougamar-fr.jpg" width="491" height="14745" data-i18n-alt="w5.t" alt="" loading="lazy"/></div>
-        <div class="w-body"><h3 data-i18n="w5.t"></h3><p data-i18n="w5.d"></p></div>
+        <div class="w-body"><h3 data-i18n="w5.t"></h3><p data-i18n="w5.d"></p><a class="w-link" href="https://rougamar-logistics.vercel.app/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w6.c"></span>
         <div class="w-media tall"><img src="images/portfolio/autofluchoscoches.jpg" width="491" height="14131" data-i18n-alt="w6.t" alt="" loading="lazy"/></div>
-        <div class="w-body"><h3 data-i18n="w6.t"></h3><p data-i18n="w6.d"></p></div>
+        <div class="w-body"><h3 data-i18n="w6.t"></h3><p data-i18n="w6.d"></p><a class="w-link" href="https://autofluchoscoches-rpxh.vercel.app/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
       <div class="w-card reveal">
@@ -567,7 +607,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w8.c"></span>
         <div class="w-media tall"><img src="images/portfolio/aljazeera-voyage.jpg" width="491" height="20361" data-i18n-alt="w8.t" alt="" loading="lazy"/></div>
-        <div class="w-body"><h3 data-i18n="w8.t"></h3><p data-i18n="w8.d"></p></div>
+        <div class="w-body"><h3 data-i18n="w8.t"></h3><p data-i18n="w8.d"></p><a class="w-link" href="https://aljazeera-voyage.vercel.app/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
       <div class="w-card reveal">
@@ -579,9 +619,39 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
       <div class="w-card reveal">
         <span class="w-cat" data-i18n="w10.c"></span>
         <div class="w-media tall"><img src="images/portfolio/fleureal.jpg" width="491" height="17348" data-i18n-alt="w10.t" alt="" loading="lazy"/></div>
-        <div class="w-body"><h3 data-i18n="w10.t"></h3><p data-i18n="w10.d"></p></div>
+        <div class="w-body"><h3 data-i18n="w10.t"></h3><p data-i18n="w10.d"></p><a class="w-link" href="https://fleureal.ca/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="container">
+    <h2 class="sec-title reveal" data-i18n="cases.title"></h2>
+    <p class="sec-sub reveal" data-i18n="cases.sub"></p>
+    <div class="case-grid">
+      <div class="case-card reveal">
+        <span class="w-cat" data-i18n="c1.c"></span>
+        <h3 data-i18n="c1.t"></h3>
+        <div class="case-row"><b data-i18n="cases.problem"></b><p data-i18n="c1.p"></p></div>
+        <div class="case-row"><b data-i18n="cases.solution"></b><p data-i18n="c1.s"></p></div>
+        <div class="case-row"><b data-i18n="cases.result"></b><p data-i18n="c1.r"></p></div>
+      </div>
+      <div class="case-card reveal">
+        <span class="w-cat" data-i18n="c2.c"></span>
+        <h3 data-i18n="c2.t"></h3>
+        <div class="case-row"><b data-i18n="cases.problem"></b><p data-i18n="c2.p"></p></div>
+        <div class="case-row"><b data-i18n="cases.solution"></b><p data-i18n="c2.s"></p></div>
+        <div class="case-row"><b data-i18n="cases.result"></b><p data-i18n="c2.r"></p></div>
+      </div>
+      <div class="case-card reveal">
+        <span class="w-cat" data-i18n="c3.c"></span>
+        <h3 data-i18n="c3.t"></h3>
+        <div class="case-row"><b data-i18n="cases.problem"></b><p data-i18n="c3.p"></p></div>
+        <div class="case-row"><b data-i18n="cases.solution"></b><p data-i18n="c3.s"></p></div>
+        <div class="case-row"><b data-i18n="cases.result"></b><p data-i18n="c3.r"></p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -786,7 +856,7 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
 /* ─────────── i18n ─────────── */
 const I18N = {
   ar: {
-    "nav.home":"الرئيسية","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"اطلب عرض سعر",
+    "nav.home":"الرئيسية","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.request":"اطلب مشروعك","nav.cta":"اطلب عرض سعر","nav.about":"من أنا",
     "logo.tag":"إبنِ • حلّ • ارتقِ",
     "hero.badge":"متاح لاستقبال مشاريع جديدة",
     "hero.title":"مقاولتك تستحق <span class='grad-text'>موقعاً يشتغل لفائدتك</span>",
@@ -812,6 +882,24 @@ const I18N = {
     "s14.t":"تحسين محلي","s14.d":"استهداف عملائك فمدينتك أو منطقتك، باش تجيك طلبات من ناس قريبين منك فعلياً.",
     "soon":"قريباً",
     "nav.works":"أعمالي",
+    "about.title":"من أنا",
+    "about.bio":"أنا رشيد عشركوك، مطوّر ومصمم مواقع من طنجة، بأكثر من 3 سنوات خبرة فتصميم وتطوير المواقع الإلكترونية وصفحات الهبوط. كنشتغل بشكل مباشر معاك من الفكرة حتى التسليم — بلا وسطاء وبلا فريق كبير، غير أنا شخصياً كنتابع مشروعك خطوة بخطوة. بالإضافة للتصميم، كنقدم اليوم حلولاً رقمية متكاملة: أنظمة CRM وأتمتة وربط مباشر بالواتساب — نفس الأدوات اللي كنستعملها فتسيير نشاطي الخاص.",
+    "about.chip1":"+3 سنوات خبرة","about.chip2":"طنجة، المغرب","about.chip3":"Auto-entrepreneur مسجّل رسمياً",
+    "w.visit":"شاهد الموقع ↗",
+    "cases.title":"دراسات حالة","cases.sub":"نظرة أقرب على كيفاش حللت مشاكل حقيقية لزبناء حقيقيين.",
+    "cases.problem":"المشكلة","cases.solution":"الحل","cases.result":"النتيجة",
+    "c1.c":"موقع إلكتروني — تأجير سيارات","c1.t":"Auto Fluchos Coches",
+    "c1.p":"شركة تأجير سيارات بتطوان وطنجة محتاجة نظام حجز أونلاين كامل، بدعم لغات وعملات متعددة للزبناء الأجانب.",
+    "c1.s":"بنيت موقع بنظام حجز متكامل: اختيار مكان الاستلام، التواريخ، وفئة السيارة، مع دعم متعدد اللغات والعملات.",
+    "c1.r":"الموقع شغال حالياً أونلاين، والزبون يقدر يكمل الحجز بالكامل بروحو بلا ما يتصل.",
+    "c2.c":"موقع إلكتروني — وكالة أسفار","c2.t":"وكالة الجزيرة ترافيل",
+    "c2.p":"وكالة أسفار بطنجة متخصصة فالعمرة والحج والسياحة، محتاجة تعرض باقاتها وتسهّل الحجز مباشرة بلا ما يضيع الزبون فمكالمات.",
+    "c2.s":"صممت موقع يعرض كل الباقات بالتفصيل مع زر حجز مباشر عبر الواتساب لكل باقة.",
+    "c2.r":"الموقع شغال حالياً، والزبناء كيتواصلو مباشرة عبر الواتساب من كل صفحة باقة.",
+    "c3.c":"متجر إلكتروني — بيع الزهور","c3.t":"FLEURÉAL",
+    "c3.p":"متجر زهور فاخرة بمونتريال (كندا) محتاج متجر إلكتروني كامل لبيع منتجاته أونلاين لعملاء دوليين.",
+    "c3.s":"بنيت متجر إلكتروني كامل بتصنيفات وسلة شراء متكاملة، يعرض تشكيلة واسعة من الباقات والورود.",
+    "c3.r":"المتجر شغال حالياً أونلاين ومتاح للزبناء يتصفحو ويشريو مباشرة.",
     "more.title":"أكثر من مجرد <span>موقع إلكتروني</span>","more.sub":"كل مشروع كنسلمو ماشي غير تصميم — مبني بأدوات حقيقية تسهّل عليك تسيير مشروعك يوم بعد يوم.",
     "more1.t":"نظام حجز مباشر","more1.d":"بحال موقع Auto Fluchos Coches وEco Clean Tanger، فينهم الزبون يحجز الخدمة مباشرة من الموقع.",
     "more2.t":"تكامل واتساب","more2.d":"كل موقع كنبنيه فيه زر تواصل مباشر عبر واتساب، باش توصلك الطلبات فالوقت الحقيقي.",
@@ -829,7 +917,7 @@ const I18N = {
     "w8.c":"موقع إلكتروني","w8.t":"موقع وكالة الجزيرة ترافيل","w8.d":"موقع لوكالة أسفار بطنجة متخصصة في العمرة والحج والسياحة، يعرض الباقات مع حجز مباشر عبر الواتساب.",
     "w9.c":"موقع إلكتروني","w9.t":"موقع الأستاذة بشرى مرون","w9.d":"موقع تعريفي لمكتب محاماة بالمغرب، يعرض مجالات التدخل (أسرة، جنائي، تجاري...) مع استشارة مباشرة عبر الواتساب.",
     "w10.c":"متجر إلكتروني","w10.t":"متجر FLEURÉAL","w10.d":"متجر إلكتروني لبيع الزهور الفاخرة بمونتريال (كندا)، يعرض تشكيلة واسعة من الباقات والورود مع فئات وسلة شراء متكاملة.",
-    "pricing.title":"الأسعار","pricing.sub":"باقات واضحة بأسعار تنافسية — عرض خاص لفترة محدودة.",
+    "pricing.title":"الأسعار","pricing.sub":"باقات واضحة بأسعار تنافسية.",
     "price.unit":"درهم","price.cta":"اطلب الآن","price.popular":"⭐ الأكثر طلباً","price.from":"ابتداءً من",
     "pr1.name":"باقة البداية","pr1.desc":"مثالية لإطلاق منتج أو عرض بسرعة.","pr1.save":"وفّر 62%",
     "pr1.f1":"صفحة هبوط احترافية","pr1.f2":"تصميم متجاوب مع جميع الأجهزة","pr1.f3":"ربط مباشر بالواتساب","pr1.f4":"تسليم سريع خلال 3 أيام",
@@ -865,7 +953,7 @@ const I18N = {
     "faq6.q":"هل تصميم الموقع يشمل تحسين محركات البحث (SEO)؟","faq6.a":"نعم، كل المواقع التي أصممها تُبنى بأساسيات SEO سليمة (عناوين، أوصاف، سرعة تحميل، توافق مع الجوال) لتساعدك على الظهور في نتائج البحث بشكل أفضل."
   },
   fr: {
-    "nav.home":"Accueil","nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"Demander un devis",
+    "nav.home":"Accueil","nav.services":"Services","nav.pricing":"Tarifs","nav.process":"Méthode","nav.request":"Votre projet","nav.cta":"Demander un devis","nav.about":"À propos",
     "logo.tag":"BÂTIR • RÉSOUDRE • ÉLEVER",
     "hero.badge":"Disponible pour de nouveaux projets",
     "hero.title":"Votre entreprise mérite <span class='grad-text'>un site qui travaille pour vous</span>",
@@ -891,6 +979,24 @@ const I18N = {
     "s14.t":"Optimisation locale","s14.d":"Ciblage de vos clients dans votre ville ou région pour des demandes vraiment locales.",
     "soon":"Bientôt",
     "nav.works":"Réalisations",
+    "about.title":"Qui suis-je ?",
+    "about.bio":"Je suis Rachid Acherkouk, développeur et designer web basé à Tanger, avec plus de 3 ans d'expérience en création de sites web et landing pages. Je travaille directement avec vous, de l'idée à la livraison — sans intermédiaire ni grosse équipe, juste moi qui suis votre projet à chaque étape. En plus du design, je propose aujourd'hui des solutions digitales complètes : CRM, automatisation et intégration WhatsApp — les mêmes outils que j'utilise pour gérer ma propre activité.",
+    "about.chip1":"+3 ans d'expérience","about.chip2":"Tanger, Maroc","about.chip3":"Auto-entrepreneur enregistré",
+    "w.visit":"Voir le site ↗",
+    "cases.title":"Études de cas","cases.sub":"Un regard plus proche sur la façon dont j'ai résolu de vrais problèmes pour de vrais clients.",
+    "cases.problem":"Problème","cases.solution":"Solution","cases.result":"Résultat",
+    "c1.c":"Site web — Location de voitures","c1.t":"Auto Fluchos Coches",
+    "c1.p":"Une agence de location de voitures à Tétouan et Tanger avait besoin d'un système de réservation en ligne complet, multilingue et multidevise pour sa clientèle internationale.",
+    "c1.s":"J'ai développé un site avec un système de réservation complet : choix du lieu de prise en charge, des dates et de la catégorie de véhicule, en plusieurs langues et devises.",
+    "c1.r":"Le site est en ligne et fonctionnel : le client peut finaliser sa réservation seul, sans appel téléphonique.",
+    "c2.c":"Site web — Agence de voyage","c2.t":"Al Jazeera Voyage",
+    "c2.p":"Une agence de voyage à Tanger spécialisée en Omra, Hajj et tourisme avait besoin de présenter ses forfaits et de simplifier la réservation, sans multiplier les appels.",
+    "c2.s":"J'ai conçu un site présentant chaque forfait en détail, avec un bouton de réservation directe via WhatsApp sur chaque offre.",
+    "c2.r":"Le site est en ligne, et les clients contactent directement l'agence via WhatsApp depuis chaque page de forfait.",
+    "c3.c":"Boutique en ligne — Vente de fleurs","c3.t":"FLEURÉAL",
+    "c3.p":"Une boutique de fleurs de luxe à Montréal avait besoin d'une boutique en ligne complète pour vendre ses produits à une clientèle internationale.",
+    "c3.s":"J'ai développé une boutique en ligne complète avec catégories et panier d'achat, présentant un large catalogue de bouquets et roses.",
+    "c3.r":"La boutique est en ligne et fonctionnelle : les clients peuvent parcourir et acheter directement.",
     "more.title":"Plus qu'un <span>simple site web</span>","more.sub":"Chaque projet livré n'est pas qu'un design — il embarque de vrais outils qui simplifient la gestion de votre activité au quotidien.",
     "more1.t":"Réservation en ligne","more1.d":"Comme sur Auto Fluchos Coches et Eco Clean Tanger, où le client réserve directement depuis le site.",
     "more2.t":"Intégration WhatsApp","more2.d":"Chaque site inclut un contact direct via WhatsApp, pour recevoir vos demandes en temps réel.",
@@ -908,7 +1014,7 @@ const I18N = {
     "w8.c":"Site web","w8.t":"Site Al Jazeera Voyage","w8.d":"Site pour une agence de voyage à Tanger spécialisée en Omra, Hajj et tourisme, présentant les forfaits avec réservation directe via WhatsApp.",
     "w9.c":"Site web","w9.t":"Site Avocate Bouchra Merroun","w9.d":"Site vitrine pour un cabinet d'avocats au Maroc, présentant les domaines d'intervention (famille, pénal, commercial...) avec consultation directe via WhatsApp.",
     "w10.c":"Boutique en ligne","w10.t":"Boutique FLEURÉAL","w10.d":"Boutique en ligne de fleurs de luxe à Montréal (Canada), présentant un large catalogue de bouquets et roses avec catégories et panier d'achat complet.",
-    "pricing.title":"Tarifs","pricing.sub":"Des packs clairs à prix compétitifs — offre spéciale à durée limitée.",
+    "pricing.title":"Tarifs","pricing.sub":"Des packs clairs à prix compétitifs.",
     "price.unit":"DH","price.cta":"Commander","price.popular":"⭐ Le plus demandé","price.from":"À partir de",
     "pr1.name":"Pack Starter","pr1.desc":"Idéal pour lancer un produit ou une offre rapidement.","pr1.save":"Économisez 62%",
     "pr1.f1":"Landing page professionnelle","pr1.f2":"Design responsive tous appareils","pr1.f3":"Connexion directe WhatsApp","pr1.f4":"Livraison rapide sous 3 jours",
