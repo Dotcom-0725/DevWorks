@@ -229,6 +229,12 @@ nav.scrolled{border-color:var(--line)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px)}
 .btn-wa{background:linear-gradient(120deg,#4ade80,#25d366 60%,#1eb85a);color:#04140a}
 .btn-wa:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(37,211,102,.4)}
+.hero-trust{display:inline-flex;align-items:center;gap:10px;margin-top:6px;padding:10px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);backdrop-filter:blur(10px);transition:var(--tr);cursor:pointer;width:fit-content}
+.hero-trust:hover{border-color:var(--accent2);background:rgba(255,255,255,.09);transform:translateY(-2px)}
+.hero-trust-stars{color:#f7941d;font-size:1rem;letter-spacing:1px;line-height:1;white-space:nowrap}
+.hero-trust-text{display:flex;flex-direction:column;gap:2px;font-size:.82rem;color:var(--mut);line-height:1.3}
+.hero-trust-text strong{color:var(--tx);font-weight:900}
+@media(max-width:640px){.hero-trust{padding:9px 14px}.hero-trust-text{font-size:.76rem}}
 .hero-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
 .stat{background:rgba(14,27,48,.55);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:16px;padding:14px 26px;text-align:center}
 .stat b{display:block;font-size:1.6rem;font-weight:900;background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -444,6 +450,10 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
         <a class="btn btn-primary" href="#request" data-i18n="hero.cta1"></a>
         <a class="btn btn-ghost" href="#works" data-i18n="hero.cta4"></a>
       </div>
+      <a class="hero-trust" href="#testimonials">
+        <span class="hero-trust-stars" aria-hidden="true">★★★★★</span>
+        <span class="hero-trust-text"><strong>5/5</strong> <span data-i18n="hero.trust1">sur Google</span><span data-i18n="hero.trust2"> — Découvrez les avis de mes clients</span></span>
+      </a>
     </div>
   </div>
 </header>
@@ -964,6 +974,7 @@ const I18N = {
     "hero.title":"مقاولتك تستحق <span class='grad-text'>موقعاً يشتغل لفائدتك</span>",
     "hero.lead":"مواقع احترافية، أنظمة CRM، أتمتة، وحلول رقمية مصممة خصيصاً لاحتياجاتك. تشوف وتجرب مشروعك بنفسك قبل ما تخلص أي درهم.",
     "hero.cta1":"اطلب عرض سعر مجاني","hero.cta4":"شاهد نماذج الأعمال",
+    "hero.trust1":"على Google","hero.trust2":" — اكتشف آراء عملائي",
     "services.title2":"خدمات <span>متكاملة</span> لمشروعك",
     "services.sub":"كل ما يحتاجه مشروعك للظهور والبيع أونلاين وتسيير الزبناء، من التصميم إلى الأتمتة.",
     "svc.cat1":"إنشاء رقمي","svc.cat2":"إدارة وأتمتة","svc.cat3":"ظهور وتواجد محلي","svc.cat4":"تصاميم وإعلانات",
@@ -1070,6 +1081,7 @@ const I18N = {
     "hero.title":"Votre entreprise mérite <span class='grad-text'>un site qui travaille pour vous</span>",
     "hero.lead":"Sites web professionnels, CRM, automatisation et solutions digitales sur mesure. Vous voyez et testez votre projet avant de payer.",
     "hero.cta1":"Demander un devis gratuit","hero.cta4":"Voir mes réalisations",
+    "hero.trust1":"sur Google","hero.trust2":" — Découvrez les avis de mes clients",
     "services.title2":"Des services <span>complets</span> pour votre projet",
     "services.sub":"Tout ce qu'il faut pour vendre en ligne et gérer vos clients, du design à l'automatisation.",
     "svc.cat1":"Création digitale","svc.cat2":"Gestion & automatisation","svc.cat3":"Visibilité","svc.cat4":"Créations visuelles & publicité",
