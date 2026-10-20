@@ -206,6 +206,17 @@ function doPost(e) {
         case 'addFinance':    return addFinance(p);
         case 'updateFinance': return updateFinance(p);
         case 'deleteFinance': return deleteFinance(p);
+        case 'addClient':          return addClient(p);
+        case 'updateClient':       return updateClient(p);
+        case 'deleteClient':       return deleteClient(p);
+        case 'addProject':         return addProjectRow(p);
+        case 'updateProject':      return updateProjectRow(p);
+        case 'deleteProject':      return deleteProjectRow(p);
+        case 'addService':         return addService(p);
+        case 'updateService':      return updateServiceRow(p);
+        case 'renewService':       return renewService(p);
+        case 'deleteService':      return deleteServiceRow(p);
+        case 'deleteHistoryEntry': return deleteHistoryRow(p);
         default: return jsonOut({ ok: false, error: 'unknown action' });
       }
     } catch (err) {
@@ -355,6 +366,15 @@ function doGet(e) {
                            .setMimeType(ContentService.MimeType.JSON);
     }
     return ContentService.createTextOutput(JSON.stringify(getDashboardData()))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (p.action === 'clientsData') {
+    if (p.token !== DASH_TOKEN) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'unauthorized' }))
+                           .setMimeType(ContentService.MimeType.JSON);
+    }
+    return ContentService.createTextOutput(JSON.stringify(getClientsData()))
                          .setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -690,6 +710,265 @@ function setupFinanceSystem() {
   buildDashboard();
 }
 
+/* ═══════════════════════════════════════════════════════════
+ *  MODULE CLIENTS & PROJETS — v1
+ *  100% additif : 4 nouvelles feuilles, ne touche jamais aux
+ *  feuilles existantes (Commandes, Finances, Tableau de bord,
+ *  Paramètres). Sûr à relancer autant de fois que nécessaire.
+ * ═══════════════════════════════════════════════════════════ */
+
+const SHEET_CLI  = '👤 Clients';
+const SHEET_PROJ = '📁 Projets';
+const SHEET_SVC  = '🔁 Services';
+const SHEET_HIST = '🧾 Historique';
+
+const CLI_HEADERS  = ['#', 'Date création', 'Nom', 'Téléphone/WhatsApp', 'Email', 'Notes'];
+const PROJ_HEADERS = ['#', 'ClientID', 'Date création', 'Nom du projet', 'Type de projet', 'Notes'];
+const SVC_HEADERS  = ['#', 'ProjectID', 'Type', 'Fournisseur/Registrar', 'Compte/Plan ou Domaine',
+                      'Date début', 'Date fin', 'Durée', 'Prix achat', 'Prix vente', 'Devise', 'Notes'];
+const HIST_HEADERS = ['#', 'ServiceID', 'ProjectID', 'Date opération', 'Type', 'Nature',
+                      'Prix achat', 'Prix vente', 'Profit', 'Nouvelle durée', 'Nouvelle date fin', 'Devise', 'Notes'];
+
+const SVC_TYPES      = ['Abonnement', 'Hébergement', 'Nom de domaine'];
+const SVC_NATURES    = ['Achat initial', 'Renouvellement'];
+const SVC_DURATIONS  = ['Mensuel', 'Annuel', 'Autre durée'];
+const SVC_CURRENCIES = ['MAD', 'EUR', 'USD'];
+const PROJ_TYPES     = ['Site web', 'Landing page', 'E-commerce', 'Système CRM', 'Application web', 'Autre'];
+
+/* Identifiant stable (ne dépend pas du numéro de ligne, donc survit aux suppressions) :
+ * on scanne la colonne # et on prend max+1. Utilisé pour les relations entre feuilles. */
+function nextId(sheet) {
+  const last = sheet.getLastRow();
+  if (last < 2) return 1;
+  const vals = sheet.getRange(2, 1, last - 1, 1).getValues().flat().filter(v => typeof v === 'number');
+  return vals.length ? Math.max.apply(null, vals) + 1 : 1;
+}
+
+/* ─────────── Construction des 4 feuilles (headers + dropdowns + formats) ─────────── */
+function setupClientsSystem() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const maxRows = 1000;
+
+  function buildSheet(name, headers, widths) {
+    let sh = ss.getSheetByName(name) || ss.insertSheet(name);
+    if (sh.getLastRow() === 0) {
+      sh.setRightToLeft(false);
+      sh.getRange(1, 1, 1, headers.length).setValues([headers])
+        .setBackground('#0e1b30').setFontColor('#ffffff')
+        .setFontWeight('bold').setFontSize(11)
+        .setHorizontalAlignment('center').setVerticalAlignment('middle');
+      sh.setFrozenRows(1);
+      sh.setRowHeight(1, 42);
+      widths.forEach((w, i) => sh.setColumnWidth(i + 1, w));
+    }
+    return sh;
+  }
+
+  const cli  = buildSheet(SHEET_CLI,  CLI_HEADERS,  [45, 110, 170, 150, 190, 260]);
+  const proj = buildSheet(SHEET_PROJ, PROJ_HEADERS, [45, 90, 110, 200, 160, 260]);
+  const svc  = buildSheet(SHEET_SVC,  SVC_HEADERS,  [45, 90, 140, 180, 200, 110, 110, 110, 110, 110, 80, 220]);
+  const hist = buildSheet(SHEET_HIST, HIST_HEADERS, [45, 90, 90, 110, 140, 130, 110, 110, 100, 110, 120, 80, 220]);
+
+  setDropdown(svc, 3, SVC_TYPES, maxRows);
+  setDropdown(svc, 8, SVC_DURATIONS, maxRows);
+  setDropdown(svc, 11, SVC_CURRENCIES, maxRows);
+  setDropdown(proj, 5, PROJ_TYPES, maxRows);
+  setDropdown(hist, 5, SVC_TYPES, maxRows);
+  setDropdown(hist, 6, SVC_NATURES, maxRows);
+  setDropdown(hist, 12, SVC_CURRENCIES, maxRows);
+
+  cli.getRange(2, 2, maxRows).setNumberFormat('yyyy/mm/dd');
+  proj.getRange(2, 3, maxRows).setNumberFormat('yyyy/mm/dd');
+  svc.getRange(2, 6, maxRows, 2).setNumberFormat('yyyy/mm/dd');
+  svc.getRange(2, 9, maxRows, 2).setNumberFormat('#,##0.00');
+  hist.getRange(2, 4, maxRows).setNumberFormat('yyyy/mm/dd');
+  hist.getRange(2, 11, maxRows).setNumberFormat('yyyy/mm/dd');
+  hist.getRange(2, 7, maxRows, 3).setNumberFormat('#,##0.00');
+
+  try { SpreadsheetApp.getUi().alert('✅ نظام العملاء والمشاريع (Clients & Projets) جاهز!'); } catch (e) {}
+}
+
+/* ─────────── CRUD Clients ─────────── */
+function addClient(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_CLI);
+  const r = sh.getLastRow() + 1;
+  const id = nextId(sh);
+  sh.getRange(r, 1, 1, 6).setValues([[
+    id, new Date(), p.name || '', p.phone || '', p.email || '', p.notes || ''
+  ]]);
+  return jsonOut({ ok: true, row: r, id: id });
+}
+
+function updateClient(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_CLI);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  const fieldCols = { name: 3, phone: 4, email: 5, notes: 6 };
+  Object.keys(fieldCols).forEach(key => {
+    if (p[key] !== undefined) sh.getRange(r, fieldCols[key]).setValue(p[key]);
+  });
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteClient(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_CLI);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  sh.deleteRow(r);
+  return jsonOut({ ok: true });
+}
+
+/* ─────────── CRUD Projets ─────────── */
+function addProjectRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_PROJ);
+  const r = sh.getLastRow() + 1;
+  const id = nextId(sh);
+  sh.getRange(r, 1, 1, 6).setValues([[
+    id, p.clientId || '', new Date(), p.name || '', p.type || '', p.notes || ''
+  ]]);
+  return jsonOut({ ok: true, row: r, id: id });
+}
+
+function updateProjectRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_PROJ);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  const fieldCols = { clientId: 2, name: 4, type: 5, notes: 6 };
+  Object.keys(fieldCols).forEach(key => {
+    if (p[key] !== undefined) sh.getRange(r, fieldCols[key]).setValue(p[key]);
+  });
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteProjectRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_PROJ);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  sh.deleteRow(r);
+  return jsonOut({ ok: true });
+}
+
+/* ─────────── CRUD Services (abonnement / hébergement / nom de domaine) ───────────
+ * addService crée l'état courant ET la première ligne Historique (Achat initial).
+ * renewService ajoute une ligne Historique (Renouvellement) ET met à jour l'état courant.
+ * updateService corrige l'état courant sans toucher à l'historique (ex. faute de frappe). */
+function addService(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const svc = ss.getSheetByName(SHEET_SVC);
+  const hist = ss.getSheetByName(SHEET_HIST);
+  const r = svc.getLastRow() + 1;
+  const id = nextId(svc);
+  const buyPrice = p.buyPrice !== undefined && p.buyPrice !== '' ? Number(p.buyPrice) : '';
+  const sellPrice = p.sellPrice !== undefined && p.sellPrice !== '' ? Number(p.sellPrice) : '';
+  const startDate = p.startDate ? new Date(p.startDate) : new Date();
+  const endDate = p.endDate ? new Date(p.endDate) : '';
+  const currency = p.currency || 'MAD';
+
+  svc.getRange(r, 1, 1, 12).setValues([[
+    id, p.projectId || '', p.type || SVC_TYPES[0], p.provider || '', p.account || '',
+    startDate, endDate, p.duration || '', buyPrice, sellPrice, currency, p.notes || ''
+  ]]);
+
+  const hr = hist.getLastRow() + 1;
+  const histId = nextId(hist);
+  const profit = (buyPrice !== '' && sellPrice !== '') ? (sellPrice - buyPrice) : '';
+  hist.getRange(hr, 1, 1, 13).setValues([[
+    histId, id, p.projectId || '', startDate, p.type || SVC_TYPES[0], SVC_NATURES[0],
+    buyPrice, sellPrice, profit, p.duration || '', endDate, currency, p.notes || ''
+  ]]);
+
+  return jsonOut({ ok: true, row: r, id: id });
+}
+
+function updateServiceRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_SVC);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  const fieldCols = { type: 3, provider: 4, account: 5, duration: 8, currency: 11, notes: 12 };
+  Object.keys(fieldCols).forEach(key => {
+    if (p[key] !== undefined) sh.getRange(r, fieldCols[key]).setValue(p[key]);
+  });
+  if (p.startDate !== undefined) sh.getRange(r, 6).setValue(p.startDate ? new Date(p.startDate) : '');
+  if (p.endDate !== undefined) sh.getRange(r, 7).setValue(p.endDate ? new Date(p.endDate) : '');
+  if (p.buyPrice !== undefined) sh.getRange(r, 9).setValue(p.buyPrice === '' ? '' : Number(p.buyPrice));
+  if (p.sellPrice !== undefined) sh.getRange(r, 10).setValue(p.sellPrice === '' ? '' : Number(p.sellPrice));
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteServiceRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_SVC);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  sh.deleteRow(r);
+  return jsonOut({ ok: true });
+}
+
+function renewService(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const svc = ss.getSheetByName(SHEET_SVC);
+  const hist = ss.getSheetByName(SHEET_HIST);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+
+  const serviceId = svc.getRange(r, 1).getValue();
+  const projectId = svc.getRange(r, 2).getValue();
+  const type = svc.getRange(r, 3).getValue();
+
+  const buyPrice = p.buyPrice !== undefined && p.buyPrice !== '' ? Number(p.buyPrice) : '';
+  const sellPrice = p.sellPrice !== undefined && p.sellPrice !== '' ? Number(p.sellPrice) : '';
+  const opDate = p.opDate ? new Date(p.opDate) : new Date();
+  const newEndDate = p.endDate ? new Date(p.endDate) : '';
+  const currency = p.currency || svc.getRange(r, 11).getValue() || 'MAD';
+
+  const hr = hist.getLastRow() + 1;
+  const histId = nextId(hist);
+  const profit = (buyPrice !== '' && sellPrice !== '') ? (sellPrice - buyPrice) : '';
+  hist.getRange(hr, 1, 1, 13).setValues([[
+    histId, serviceId, projectId, opDate, type, SVC_NATURES[1],
+    buyPrice, sellPrice, profit, p.duration || '', newEndDate, currency, p.notes || ''
+  ]]);
+
+  if (p.duration !== undefined) svc.getRange(r, 8).setValue(p.duration);
+  svc.getRange(r, 6).setValue(opDate);
+  if (newEndDate) svc.getRange(r, 7).setValue(newEndDate);
+  if (buyPrice !== '') svc.getRange(r, 9).setValue(buyPrice);
+  if (sellPrice !== '') svc.getRange(r, 10).setValue(sellPrice);
+  svc.getRange(r, 11).setValue(currency);
+
+  return jsonOut({ ok: true, row: r });
+}
+
+function deleteHistoryRow(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SHEET_HIST);
+  const r = parseInt(p.row, 10);
+  if (!r || r < 2) return jsonOut({ ok: false, error: 'invalid row' });
+  sh.deleteRow(r);
+  return jsonOut({ ok: true });
+}
+
+/* ─────────── Extraction JSON complète pour clients.html ─────────── */
+function getClientsData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const clients = sheetToObjects(ss.getSheetByName(SHEET_CLI),
+    ['id', 'createdAt', 'name', 'phone', 'email', 'notes'], 'name');
+  const projects = sheetToObjects(ss.getSheetByName(SHEET_PROJ),
+    ['id', 'clientId', 'createdAt', 'name', 'type', 'notes'], 'name');
+  const services = sheetToObjects(ss.getSheetByName(SHEET_SVC),
+    ['id', 'projectId', 'type', 'provider', 'account', 'startDate', 'endDate', 'duration', 'buyPrice', 'sellPrice', 'currency', 'notes'], 'type');
+  const history = sheetToObjects(ss.getSheetByName(SHEET_HIST),
+    ['id', 'serviceId', 'projectId', 'opDate', 'type', 'nature', 'buyPrice', 'sellPrice', 'profit', 'newDuration', 'newEndDate', 'currency', 'notes'], 'type');
+  return { ok: true, generatedAt: new Date().toISOString(), clients, projects, services, history };
+}
+
 /* ─────────── Menu rapide à l'ouverture du classeur ─────────── */
 function onOpen() {
   try {
@@ -697,6 +976,7 @@ function onOpen() {
       .addItem('💰 تثبيت/تحديث وحدة الماليات', 'setupFinanceSystem')
       .addItem('📊 تحديث لوحة التحكم فقط', 'buildDashboard')
       .addItem('🔁 نقل الدفعات القديمة (مرة واحدة)', 'backfillFinanceFromCommandes')
+      .addItem('🗂️ تثبيت نظام العملاء والمشاريع', 'setupClientsSystem')
       .addToUi();
   } catch (e) {}
 }

@@ -4,5 +4,6 @@ Allow: /
 Disallow: /facture.html
 Disallow: /services-realises.html
 Disallow: /dashboard.html
+Disallow: /clients.html
 
 Sitemap: https://www.rachiddevworks.com/sitemap.xml

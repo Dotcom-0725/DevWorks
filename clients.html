@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Clients & Projets | Rachid DevWorks Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07101d;--card:#0e1b30;--line:rgba(148,197,253,.12);
+  --accent:#38bdf8;--accent2:#f7941d;--grad:linear-gradient(120deg,#38bdf8,#2f6fed);
+  --tx:#eef4fb;--mut:#93a7c2;--tr:.25s ease;
+  --green:#22c55e;--red:#ef4444;--purple:#a78bfa;--gold:#D4AF37;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;padding:24px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1400px;margin:0 auto}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:1.3rem;font-weight:900}
+.top h1 span{color:var(--accent)}
+.top .back{color:var(--mut);font-weight:700;font-size:.9rem;border:1px solid var(--line);padding:8px 16px;border-radius:12px;transition:var(--tr)}
+.top .back:hover{color:var(--accent);border-color:var(--accent)}
+.logout-link{color:var(--mut);font-size:.8rem;border:1px solid var(--line);padding:6px 12px;border-radius:10px;transition:var(--tr)}
+.logout-link:hover{color:var(--accent);border-color:var(--accent)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.kpi .lbl{font-size:.78rem;font-weight:800;color:var(--mut);margin-bottom:8px}
+.kpi .val{font-size:1.5rem;font-weight:900}
+.kpi .val small{font-size:.75rem;color:var(--mut);font-weight:700;display:block;margin-top:2px}
+.kpi.green{border-color:rgba(34,197,94,.35)} .kpi.green .val{color:var(--green)}
+.kpi.red{border-color:rgba(239,68,68,.35)} .kpi.red .val{color:var(--red)}
+.kpi.blue{border-color:rgba(56,189,248,.35)} .kpi.blue .val{color:var(--accent)}
+.kpi.purple{border-color:rgba(167,139,250,.35)} .kpi.purple .val{color:var(--purple)}
+.kpi.orange{border-color:rgba(247,148,29,.35)} .kpi.orange .val{color:var(--accent2)}
+.kpi.gold{border-color:rgba(212,175,55,.35)} .kpi.gold .val{color:var(--gold)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:22px}
+.panel h2{font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:14px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.panel-head h2{margin:0}
+.panel-head-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+.table-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.table-tools input,.table-tools select{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:9px 12px}
+.table-tools input{flex:1;min-width:180px}
+.table-scroll{overflow-x:auto}
+table.data{width:100%;border-collapse:collapse;font-size:.88rem}
+table.data th{text-align:left;color:var(--mut);font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data tbody tr{cursor:pointer}
+table.data tbody tr:hover td{background:rgba(56,189,248,.08)}
+.badge{padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap;display:inline-block}
+.badge.b-actif{background:#d1e7dd;color:#0f5132}
+.badge.b-renew{background:#fff3cd;color:#7a5b00}
+.badge.b-expire{background:#f8d7da;color:#842029}
+.badge.b-none{background:var(--line);color:var(--mut)}
+.badge.b-buy{background:#cfe2ff;color:#0b3d91}
+.badge.b-sub{background:#e2d9f3;color:#4b2e83}
+.badge.b-host{background:#ffe5d0;color:#8a4b00}
+.badge.b-dom{background:#cfe2ff;color:#0b3d91}
+
+.state{text-align:center;padding:60px 20px;color:var(--mut)}
+.state .spin{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.refresh-btn{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.4);color:var(--accent);font-family:inherit;font-weight:700;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer;transition:var(--tr)}
+.refresh-btn:hover{background:rgba(56,189,248,.18)}
+.add-btn{background:rgba(247,148,29,.12);border:1px solid rgba(247,148,29,.4);color:var(--accent2);font-family:inherit;font-weight:800;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer;transition:var(--tr)}
+.add-btn:hover{background:rgba(247,148,29,.22)}
+.updated-at{font-size:.75rem;color:var(--mut)}
+
+/* ── Alertes ── */
+.alert-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg);border:1px solid var(--line);margin-bottom:8px;flex-wrap:wrap}
+.alert-row.urgent{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.06)}
+.alert-row.soon{border-color:rgba(247,148,29,.4);background:rgba(247,148,29,.06)}
+.alert-left{display:flex;flex-direction:column;gap:3px}
+.alert-left b{font-size:.92rem}
+.alert-left span{font-size:.78rem;color:var(--mut)}
+.alert-days{font-weight:900;font-size:.85rem;white-space:nowrap}
+.alert-days.urgent{color:var(--red)}
+.alert-days.soon{color:var(--accent2)}
+.empty-note{color:var(--mut);font-size:.88rem;text-align:center;padding:20px}
+
+/* ── Breadcrumb ── */
+.crumb{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--mut);margin-bottom:16px;flex-wrap:wrap}
+.crumb a{color:var(--accent);font-weight:700;cursor:pointer}
+.crumb a:hover{text-decoration:underline}
+
+/* ── Service cards (détail projet) ── */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.svc-card{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:18px}
+.svc-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.svc-card-head h3{font-size:.95rem;font-weight:900}
+.svc-card .row{display:flex;justify-content:space-between;font-size:.84rem;padding:4px 0;color:var(--mut)}
+.svc-card .row b{color:var(--tx);font-weight:700}
+.svc-card .profit{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-weight:900;font-size:.9rem}
+.svc-card .profit.pos{color:var(--green)}
+.svc-card .profit.neg{color:var(--red)}
+.svc-card .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.svc-card .actions button{flex:1;font-size:.78rem;padding:8px 10px;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;border:1px solid var(--line);background:none;color:var(--tx);transition:var(--tr)}
+.svc-card .actions button:hover{border-color:var(--accent);color:var(--accent)}
+.svc-card .empty{text-align:center;color:var(--mut);font-size:.85rem;padding:14px 0}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.info-item{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.info-item .lbl{font-size:.72rem;color:var(--mut);font-weight:800;text-transform:uppercase;margin-bottom:4px}
+.info-item .v{font-size:.92rem;font-weight:800}
+
+/* ── Modales ── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(3,8,16,.72);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--line);border-radius:18px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:1.05rem;font-weight:900}
+.modal-close{background:none;border:none;color:var(--mut);font-size:1.2rem;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--tx)}
+.modal-body{padding:20px 22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid label{display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:700;color:var(--mut)}
+.form-grid label.full{grid-column:1/-1}
+.form-grid input,.form-grid select,.form-grid textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:.9rem;padding:10px 12px}
+.form-grid textarea{resize:vertical;min-height:60px}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--accent)}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.modal-foot{display:flex;gap:10px;align-items:center;padding:16px 22px;border-top:1px solid var(--line)}
+.btn-primary{background:var(--grad);color:#06121a;border:none;border-radius:10px;font-family:inherit;font-weight:800;font-size:.9rem;padding:10px 20px;cursor:pointer;transition:var(--tr)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--mut);border-radius:10px;font-family:inherit;font-weight:700;font-size:.9rem;padding:10px 18px;cursor:pointer;transition:var(--tr)}
+.btn-ghost:hover{color:var(--tx);border-color:var(--tx)}
+.btn-danger{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:var(--red);border-radius:10px;font-family:inherit;font-weight:800;font-size:.85rem;padding:10px 16px;cursor:pointer;transition:var(--tr)}
+.btn-danger:hover{background:rgba(239,68,68,.22)}
+.modal-msg{padding:0 22px 16px;color:#f87171;font-size:.85rem;min-height:1em}
+
+/* ── Gate ── */
+.wrap{display:none}
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+#gate .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px 30px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+#gate .lock{font-size:2.2rem;margin-bottom:10px}
+#gate h2{font-size:1.1rem;font-weight:900;margin-bottom:6px}
+#gate p{color:var(--mut);font-size:.85rem;margin-bottom:18px}
+#gate input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:inherit;font-size:1rem;padding:12px 14px;text-align:center;transition:var(--tr)}
+#gate input:focus{outline:none;border-color:var(--accent)}
+#gate button{width:100%;margin-top:12px;background:var(--grad);color:#06121a;border:none;border-radius:10px;font-family:inherit;font-weight:800;font-size:.95rem;padding:12px;cursor:pointer;transition:var(--tr)}
+#gate button:hover{filter:brightness(1.08)}
+#gate .err{color:#f87171;font-size:.85rem;margin-top:10px;min-height:1.2em}
+#gate.shake .box{animation:shakeBox .35s}
+@keyframes shakeBox{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <div class="lock">🔒</div>
+    <h2>Espace protégé</h2>
+    <p>Entrez le mot de passe pour accéder aux clients &amp; projets.</p>
+    <input type="password" id="gatePass" placeholder="Mot de passe" autocomplete="off"/>
+    <button type="button" id="gateBtn">Accéder</button>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="wrap-el">
+
+  <div class="top">
+    <h1>🗂️ Clients &amp; <span>Projets</span> — Rachid DevWorks Pro</h1>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <a class="back" href="dashboard.html">📊 Tableau de Bord</a>
+      <a class="back" href="facture.html">🧾 Factures &amp; Devis</a>
+      <a class="back" href="services-realises.html">📋 Services Réalisés</a>
+      <a class="logout-link" href="#" id="lockBtn">🔒 Verrouiller</a>
+      <a class="back" href="index.html">← Portfolio</a>
+    </div>
+  </div>
+
+  <div id="loadingState" class="state">
+    <div class="spin"></div>
+    Chargement des données depuis Google Sheets…
+  </div>
+
+  <div id="errorState" class="state" style="display:none">
+    ⚠️ <span id="errorMsg">Erreur de chargement.</span><br/><br/>
+    <button class="refresh-btn" id="retryBtn">Réessayer</button>
+  </div>
+
+  <div id="content" style="display:none">
+
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>🔔 Renouvellements à venir</h2>
+        <span class="updated-at" id="updatedAt"></span>
+      </div>
+      <div id="alertsBox"></div>
+    </div>
+
+    <div class="panel" id="svcPanel">
+      <div class="panel-head">
+        <h2>🔁 Toutes les services</h2>
+        <div class="panel-head-tools">
+          <button class="refresh-btn" id="refreshBtn">🔄 Actualiser</button>
+        </div>
+      </div>
+      <div class="table-tools">
+        <input type="text" id="svcSearch" placeholder="🔍 Client, projet, fournisseur, domaine…"/>
+        <select id="svcTypeFilter"><option value="">Tous les types</option></select>
+        <select id="svcStatusFilter"><option value="">Tous les statuts</option></select>
+      </div>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Client</th><th>Projet</th><th>Type</th><th>Fournisseur</th><th>Fin</th><th>Statut</th><th>Profit</th></tr></thead>
+          <tbody id="svcBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Vue Clients ── -->
+    <div class="panel" id="viewClients">
+      <div class="panel-head">
+        <h2>👥 Clients</h2>
+        <button class="add-btn" id="addClientBtn">➕ Nouveau client</button>
+      </div>
+      <div class="table-tools">
+        <input type="text" id="clientSearch" placeholder="🔍 Rechercher un client…"/>
+      </div>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Nom</th><th>Téléphone</th><th>Email</th><th>Projets</th></tr></thead>
+          <tbody id="clientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Vue Détail Client ── -->
+    <div class="panel" id="viewClientDetail" style="display:none">
+      <div class="crumb"><a id="crumbToClients">👥 Clients</a> / <span id="crumbClientName"></span></div>
+      <div class="info-grid" id="clientInfoGrid"></div>
+      <div class="panel-head">
+        <h2>📁 Projets</h2>
+        <div class="panel-head-tools">
+          <button class="btn-ghost" id="editClientBtn">✏️ Modifier le client</button>
+          <button class="add-btn" id="addProjectBtn">➕ Nouveau projet</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Nom</th><th>Type</th><th>Créé le</th><th>Services</th></tr></thead>
+          <tbody id="projectsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Vue Détail Projet ── -->
+    <div class="panel" id="viewProjectDetail" style="display:none">
+      <div class="crumb"><a id="crumbToClients2">👥 Clients</a> / <a id="crumbToClient"></a> / <span id="crumbProjectName"></span></div>
+      <div class="panel-head">
+        <h2 id="projectTitle"></h2>
+        <button class="btn-ghost" id="editProjectBtn">✏️ Modifier le projet</button>
+      </div>
+      <div class="svc-grid" id="svcCardsGrid"></div>
+      <h2 style="margin-top:6px">🧾 Historique</h2>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Date</th><th>Type</th><th>Nature</th><th>Achat</th><th>Vente</th><th>Profit</th><th>Devise</th></tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Modale Client ── -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="clientModalTitle">Nouveau client</h3>
+      <button class="modal-close" id="clientModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label class="full">Nom<input type="text" id="cliName"/></label>
+        <label>Téléphone / WhatsApp<input type="text" id="cliPhone"/></label>
+        <label>Email<input type="text" id="cliEmail"/></label>
+        <label class="full">Notes<textarea id="cliNotes"></textarea></label>
+      </div>
+    </div>
+    <div class="modal-msg" id="clientModalMsg"></div>
+    <div class="modal-foot">
+      <button class="btn-danger" id="clientDeleteBtn" style="display:none">🗑️ Supprimer</button>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" id="clientCancelBtn">Annuler</button>
+      <button class="btn-primary" id="clientSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modale Projet ── -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="projectModalTitle">Nouveau projet</h3>
+      <button class="modal-close" id="projectModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label class="full">Nom du projet<input type="text" id="projName"/></label>
+        <label class="full">Type de projet<select id="projType"></select></label>
+        <label class="full">Notes<textarea id="projNotes"></textarea></label>
+      </div>
+    </div>
+    <div class="modal-msg" id="projectModalMsg"></div>
+    <div class="modal-foot">
+      <button class="btn-danger" id="projectDeleteBtn" style="display:none">🗑️ Supprimer</button>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" id="projectCancelBtn">Annuler</button>
+      <button class="btn-primary" id="projectSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modale Service (Abonnement / Hébergement / Nom de domaine) ── -->
+<div class="modal-overlay" id="serviceModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="serviceModalTitle">Nouveau service</h3>
+      <button class="modal-close" id="serviceModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label class="full" id="svcProviderLabelWrap">Fournisseur / Registrar<input type="text" id="svcProvider"/></label>
+        <label class="full" id="svcAccountLabelWrap">Compte / Plan ou Domaine<input type="text" id="svcAccount"/></label>
+        <label>Date début<input type="date" id="svcStartDate"/></label>
+        <label>Date fin (prochain renouvellement)<input type="date" id="svcEndDate"/></label>
+        <label>Durée<select id="svcDuration"></select></label>
+        <label>Devise<select id="svcCurrency"></select></label>
+        <label>Prix d'achat<input type="number" id="svcBuyPrice" min="0" step="0.01"/></label>
+        <label>Prix de vente<input type="number" id="svcSellPrice" min="0" step="0.01"/></label>
+        <label class="full">Notes<textarea id="svcNotes"></textarea></label>
+      </div>
+    </div>
+    <div class="modal-msg" id="serviceModalMsg"></div>
+    <div class="modal-foot">
+      <button class="btn-danger" id="serviceDeleteBtn" style="display:none">🗑️ Supprimer</button>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" id="serviceCancelBtn">Annuler</button>
+      <button class="btn-primary" id="serviceSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─────────── Accès protégé (même session que les autres pages admin) ─────────── */
+const GATE_PASS = 'FaR4Qw7Nyt4LJa';
+const GATE_KEY = 'rdw-invoice-auth';
+
+function unlock() {
+  $('gate').style.display = 'none';
+  $('wrap-el').style.display = 'block';
+  loadData();
+}
+function tryUnlock() {
+  const val = $('gatePass').value;
+  if (val === GATE_PASS) {
+    localStorage.setItem(GATE_KEY, '1');
+    unlock();
+  } else {
+    $('gateErr').textContent = 'Mot de passe incorrect.';
+    $('gate').classList.remove('shake'); void $('gate').offsetWidth; $('gate').classList.add('shake');
+    $('gatePass').value = '';
+    $('gatePass').focus();
+  }
+}
+$('gateBtn').onclick = tryUnlock;
+$('gatePass').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+$('lockBtn').onclick = e => { e.preventDefault(); localStorage.removeItem(GATE_KEY); location.reload(); };
+
+/* ─────────── Connexion Google Sheets (même Web App que dashboard.html) ─────────── */
+const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYxWZgopSI74uKt-gOCxsAN_Ht0ZRgf6qrBPri7S6b70J_zt5v_zfsC3/exec';
+const DASH_TOKEN = 'PlIpOz_X0sFsY1c3Z11NWRt_OzG5yLOQ';
+
+const SVC_TYPES      = ['Abonnement', 'Hébergement', 'Nom de domaine'];
+const SVC_TYPE_CLS   = { 'Abonnement': 'b-sub', 'Hébergement': 'b-host', 'Nom de domaine': 'b-dom' };
+const SVC_NATURES    = ['Achat initial', 'Renouvellement'];
+const SVC_DURATIONS  = ['Mensuel', 'Annuel', 'Autre durée'];
+const SVC_CURRENCIES = ['MAD', 'EUR', 'USD'];
+const PROJ_TYPES     = ['Site web', 'Landing page', 'E-commerce', 'Système CRM', 'Application web', 'Autre'];
+
+const fmt = (n, cur) => (n === '' || n === null || n === undefined ? '—' : Number(n).toLocaleString('fr-MA', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' ' + (cur || 'MAD'));
+const fmtDate = d => d ? new Date(d).toLocaleDateString('fr-FR') : '—';
+
+let allClients = [], allProjects = [], allServices = [], allHistory = [];
+let editingClientRow = null, editingProjectRow = null, editingServiceRow = null;
+let serviceModalMode = 'add'; // 'add' | 'edit' | 'renew'
+let currentClientId = null, currentProjectId = null;
+
+async function loadData() {
+  $('loadingState').style.display = 'block';
+  $('errorState').style.display = 'none';
+  $('content').style.display = 'none';
+  try {
+    const url = WEBAPP_URL + '?action=clientsData&token=' + encodeURIComponent(DASH_TOKEN);
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Réponse invalide');
+    allClients = data.clients || [];
+    allProjects = data.projects || [];
+    allServices = data.services || [];
+    allHistory = data.history || [];
+    $('updatedAt').textContent = data.generatedAt ? 'Mis à jour : ' + new Date(data.generatedAt).toLocaleString('fr-FR') : '';
+    renderAll();
+    $('loadingState').style.display = 'none';
+    $('content').style.display = 'block';
+  } catch (err) {
+    $('errorMsg').textContent = 'Impossible de charger les données (' + err.message + ').';
+    $('loadingState').style.display = 'none';
+    $('errorState').style.display = 'block';
+  }
+}
+$('retryBtn').onclick = loadData;
+$('refreshBtn').onclick = loadData;
+
+/* ─────────── Helpers relationnels ─────────── */
+function projectsOf(clientId) { return allProjects.filter(p => String(p.clientId) === String(clientId)); }
+function servicesOf(projectId) { return allServices.filter(s => String(s.projectId) === String(projectId)); }
+function historyOf(serviceId) { return allHistory.filter(h => String(h.serviceId) === String(serviceId)).sort((a, b) => new Date(b.opDate || 0) - new Date(a.opDate || 0)); }
+function clientById(id) { return allClients.find(c => String(c.id) === String(id)); }
+function projectById(id) { return allProjects.find(p => String(p.id) === String(id)); }
+
+function daysUntil(endDate) {
+  if (!endDate) return null;
+  const d = new Date(endDate);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / 86400000);
+}
+function serviceStatus(svc) {
+  if (!svc || !svc.endDate) return { label: 'Sans ' + (svc ? svc.type : ''), cls: 'b-none' };
+  const d = daysUntil(svc.endDate);
+  if (d < 0) return { label: 'Expiré', cls: 'b-expire', days: d };
+  if (d <= 30) return { label: 'À renouveler', cls: 'b-renew', days: d };
+  return { label: 'Actif', cls: 'b-actif', days: d };
+}
+function serviceProfit(svc) {
+  if (svc.buyPrice === '' || svc.sellPrice === '' || svc.buyPrice === undefined || svc.sellPrice === undefined) return '';
+  return Number(svc.sellPrice) - Number(svc.buyPrice);
+}
+
+/* ─────────── Rendu global ─────────── */
+function renderAll() {
+  renderKPIs();
+  renderAlerts();
+  populateServiceFilters();
+  renderServicesTable();
+  renderClientsTable();
+  if (currentProjectId) renderProjectDetail(currentProjectId);
+  else if (currentClientId) renderClientDetail(currentClientId);
+}
+
+function renderKPIs() {
+  const totalClients = allClients.length;
+  const totalProjects = allProjects.length;
+  const activeByType = { 'Abonnement': 0, 'Hébergement': 0, 'Nom de domaine': 0 };
+  allServices.forEach(s => {
+    const st = serviceStatus(s);
+    if (st.cls === 'b-actif' || st.cls === 'b-renew') activeByType[s.type] = (activeByType[s.type] || 0) + 1;
+  });
+
+  const realizedProfit = {}, purchaseTotal = {}, sellTotal = {};
+  allHistory.forEach(h => {
+    const cur = h.currency || 'MAD';
+    if (h.buyPrice !== '' && h.buyPrice !== undefined) purchaseTotal[cur] = (purchaseTotal[cur] || 0) + Number(h.buyPrice);
+    if (h.sellPrice !== '' && h.sellPrice !== undefined) sellTotal[cur] = (sellTotal[cur] || 0) + Number(h.sellPrice);
+    if (h.profit !== '' && h.profit !== undefined) realizedProfit[cur] = (realizedProfit[cur] || 0) + Number(h.profit);
+  });
+
+  const expectedProfit = {};
+  allServices.forEach(s => {
+    const st = serviceStatus(s);
+    if (st.cls !== 'b-renew') return;
+    const p = serviceProfit(s);
+    if (p === '') return;
+    const cur = s.currency || 'MAD';
+    expectedProfit[cur] = (expectedProfit[cur] || 0) + p;
+  });
+
+  const fmtMulti = obj => {
+    const keys = Object.keys(obj);
+    if (!keys.length) return '0 MAD';
+    return keys.map(k => fmt(obj[k], k)).join(' · ');
+  };
+
+  $('kpiGrid').innerHTML = [
+    kpiCard('blue', 'CLIENTS', totalClients),
+    kpiCard('blue', 'PROJETS', totalProjects),
+    kpiCard('purple', 'SERVICES ACTIFS', (activeByType['Abonnement'] + activeByType['Hébergement'] + activeByType['Nom de domaine']),
+      'Abo ' + activeByType['Abonnement'] + ' · Host ' + activeByType['Hébergement'] + ' · Dom ' + activeByType['Nom de domaine']),
+    kpiCard('red', 'TOTAL ACHATS', fmtMulti(purchaseTotal)),
+    kpiCard('green', 'TOTAL VENTES', fmtMulti(sellTotal)),
+    kpiCard('gold', 'PROFIT RÉALISÉ', fmtMulti(realizedProfit)),
+    kpiCard('orange', 'PROFIT ATTENDU (renouvellements proches)', fmtMulti(expectedProfit))
+  ].join('');
+}
+function kpiCard(color, label, val, sub) {
+  return '<div class="kpi ' + color + '"><div class="lbl">' + label + '</div><div class="val">' + val + (sub ? '<small>' + sub + '</small>' : '') + '</div></div>';
+}
+
+function renderAlerts() {
+  const items = [];
+  allServices.forEach(s => {
+    if (!s.endDate) return;
+    const d = daysUntil(s.endDate);
+    if (d > 30) return;
+    const proj = projectById(s.projectId);
+    const cli = proj ? clientById(proj.clientId) : null;
+    items.push({ svc: s, days: d, project: proj, client: cli });
+  });
+  items.sort((a, b) => a.days - b.days);
+
+  if (!items.length) {
+    $('alertsBox').innerHTML = '<div class="empty-note">Aucun renouvellement dans les 30 prochains jours. 👍</div>';
+    return;
+  }
+
+  $('alertsBox').innerHTML = items.map(it => {
+    const urgency = it.days < 0 ? 'urgent' : (it.days <= 7 ? 'urgent' : 'soon');
+    const daysLabel = it.days < 0 ? ('Expiré depuis ' + Math.abs(it.days) + ' j') : (it.days === 0 ? "Aujourd'hui" : ('Dans ' + it.days + ' j'));
+    return '<div class="alert-row ' + urgency + '" data-project="' + (it.project ? it.project.id : '') + '">' +
+      '<div class="alert-left">' +
+        '<b>' + (it.client ? it.client.name : '—') + ' — ' + (it.project ? it.project.name : '—') + '</b>' +
+        '<span><span class="badge ' + (SVC_TYPE_CLS[it.svc.type] || 'b-none') + '">' + it.svc.type + '</span> ' +
+          (it.svc.account || it.svc.provider || '') + ' · Fin : ' + fmtDate(it.svc.endDate) +
+          (it.svc.buyPrice !== '' ? ' · Achat ' + fmt(it.svc.buyPrice, it.svc.currency) : '') +
+          (it.svc.sellPrice !== '' ? ' · Vente ' + fmt(it.svc.sellPrice, it.svc.currency) : '') +
+        '</span>' +
+      '</div>' +
+      '<div class="alert-days ' + urgency + '">' + daysLabel + '</div>' +
+    '</div>';
+  }).join('');
+
+  $('alertsBox').querySelectorAll('.alert-row').forEach(row => {
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', () => {
+      const pid = row.dataset.project;
+      if (pid) openProjectDetail(pid);
+    });
+  });
+}
+
+function populateServiceFilters() {
+  const typeSel = $('svcTypeFilter');
+  if (typeSel.options.length <= 1) SVC_TYPES.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; typeSel.appendChild(o); });
+  const statusSel = $('svcStatusFilter');
+  if (statusSel.options.length <= 1) ['Actif', 'À renouveler', 'Expiré'].forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; statusSel.appendChild(o); });
+}
+
+function renderServicesTable() {
+  const q = $('svcSearch').value.trim().toLowerCase();
+  const typeF = $('svcTypeFilter').value;
+  const statusF = $('svcStatusFilter').value;
+
+  const rows = allServices.map(s => {
+    const proj = projectById(s.projectId);
+    const cli = proj ? clientById(proj.clientId) : null;
+    const st = serviceStatus(s);
+    return { s, proj, cli, st };
+  }).filter(r => {
+    if (typeF && r.s.type !== typeF) return false;
+    if (statusF && r.st.label !== statusF) return false;
+    if (q) {
+      const hay = ((r.cli ? r.cli.name : '') + ' ' + (r.proj ? r.proj.name : '') + ' ' + (r.s.provider || '') + ' ' + (r.s.account || '')).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }).sort((a, b) => new Date(a.s.endDate || '9999-12-31') - new Date(b.s.endDate || '9999-12-31'));
+
+  $('svcBody').innerHTML = rows.map(r => {
+    const profit = serviceProfit(r.s);
+    return '<tr data-project="' + (r.proj ? r.proj.id : '') + '">' +
+      '<td>' + (r.cli ? r.cli.name : '—') + '</td>' +
+      '<td>' + (r.proj ? r.proj.name : '—') + '</td>' +
+      '<td><span class="badge ' + (SVC_TYPE_CLS[r.s.type] || 'b-none') + '">' + r.s.type + '</span></td>' +
+      '<td>' + (r.s.provider || r.s.account || '—') + '</td>' +
+      '<td>' + fmtDate(r.s.endDate) + '</td>' +
+      '<td><span class="badge ' + r.st.cls + '">' + r.st.label + '</span></td>' +
+      '<td>' + (profit === '' ? '—' : fmt(profit, r.s.currency)) + '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--mut)">Aucun service</td></tr>';
+
+  $('svcBody').querySelectorAll('tr[data-project]').forEach(tr => {
+    tr.addEventListener('click', () => { if (tr.dataset.project) openProjectDetail(tr.dataset.project); });
+  });
+}
+$('svcSearch').addEventListener('input', renderServicesTable);
+$('svcTypeFilter').addEventListener('change', renderServicesTable);
+$('svcStatusFilter').addEventListener('change', renderServicesTable);
+
+/* ─────────── Vue Clients ─────────── */
+function renderClientsTable() {
+  const q = $('clientSearch').value.trim().toLowerCase();
+  const rows = allClients
+    .filter(c => !q || ((c.name || '') + ' ' + (c.phone || '')).toLowerCase().includes(q))
+    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+  $('clientsBody').innerHTML = rows.map(c => {
+    const nbProjects = projectsOf(c.id).length;
+    return '<tr data-client="' + c.id + '">' +
+      '<td>' + (c.name || '—') + '</td>' +
+      '<td>' + (c.phone || '—') + '</td>' +
+      '<td>' + (c.email || '—') + '</td>' +
+      '<td>' + nbProjects + '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--mut)">Aucun client</td></tr>';
+
+  $('clientsBody').querySelectorAll('tr[data-client]').forEach(tr => {
+    tr.addEventListener('click', () => openClientDetail(tr.dataset.client));
+  });
+}
+$('clientSearch').addEventListener('input', renderClientsTable);
+
+function switchView(view) {
+  $('viewClients').style.display = view === 'clients' ? 'block' : 'none';
+  $('viewClientDetail').style.display = view === 'clientDetail' ? 'block' : 'none';
+  $('viewProjectDetail').style.display = view === 'projectDetail' ? 'block' : 'none';
+}
+$('crumbToClients').onclick = () => { currentClientId = null; currentProjectId = null; switchView('clients'); };
+$('crumbToClients2').onclick = () => { currentClientId = null; currentProjectId = null; switchView('clients'); };
+
+function openClientDetail(clientId) {
+  currentClientId = clientId;
+  currentProjectId = null;
+  switchView('clientDetail');
+  renderClientDetail(clientId);
+}
+function renderClientDetail(clientId) {
+  const c = clientById(clientId);
+  if (!c) { switchView('clients'); return; }
+  $('crumbClientName').textContent = c.name || '—';
+  $('clientInfoGrid').innerHTML = [
+    infoItem('Téléphone / WhatsApp', c.phone || '—'),
+    infoItem('Email', c.email || '—'),
+    infoItem('Client depuis', fmtDate(c.createdAt)),
+    infoItem('Notes', c.notes || '—')
+  ].join('');
+
+  const projects = projectsOf(clientId).sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  $('projectsBody').innerHTML = projects.map(p => {
+    const svcs = servicesOf(p.id);
+    const svcBadges = svcs.map(s => '<span class="badge ' + (SVC_TYPE_CLS[s.type] || 'b-none') + '" style="margin-inline-end:4px">' + s.type + '</span>').join('') || '—';
+    return '<tr data-project="' + p.id + '">' +
+      '<td>' + (p.name || '—') + '</td>' +
+      '<td>' + (p.type || '—') + '</td>' +
+      '<td>' + fmtDate(p.createdAt) + '</td>' +
+      '<td>' + svcBadges + '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--mut)">Aucun projet</td></tr>';
+
+  $('projectsBody').querySelectorAll('tr[data-project]').forEach(tr => {
+    tr.addEventListener('click', () => openProjectDetail(tr.dataset.project));
+  });
+}
+function infoItem(label, val) { return '<div class="info-item"><div class="lbl">' + label + '</div><div class="v">' + val + '</div></div>'; }
+
+$('editClientBtn').onclick = () => { const c = clientById(currentClientId); if (c) openClientModal(findClientRow(c)); };
+$('addProjectBtn').onclick = () => openProjectModal(null);
+
+function findClientRow(c) { return c; } // c already carries .row from sheetToObjects
+
+/* ─────────── Vue Détail Projet ─────────── */
+function openProjectDetail(projectId) {
+  const proj = projectById(projectId);
+  if (!proj) return;
+  currentClientId = proj.clientId;
+  currentProjectId = projectId;
+  switchView('projectDetail');
+  renderProjectDetail(projectId);
+}
+function renderProjectDetail(projectId) {
+  const proj = projectById(projectId);
+  if (!proj) { switchView('clients'); return; }
+  const cli = clientById(proj.clientId);
+  $('crumbToClient').textContent = cli ? cli.name : '—';
+  $('crumbToClient').onclick = () => openClientDetail(proj.clientId);
+  $('crumbProjectName').textContent = proj.name || '—';
+  $('projectTitle').textContent = '📁 ' + (proj.name || '—') + ' · ' + (proj.type || '');
+
+  const svcs = servicesOf(projectId);
+  $('svcCardsGrid').innerHTML = SVC_TYPES.map(type => {
+    const svc = svcs.find(s => s.type === type);
+    if (!svc) {
+      return '<div class="svc-card"><div class="svc-card-head"><h3>' + type + '</h3></div>' +
+        '<div class="empty">Aucun ' + type.toLowerCase() + ' pour ce projet.</div>' +
+        '<div class="actions"><button data-add-type="' + type + '">➕ Ajouter</button></div></div>';
+    }
+    const st = serviceStatus(svc);
+    const profit = serviceProfit(svc);
+    return '<div class="svc-card">' +
+      '<div class="svc-card-head"><h3>' + type + '</h3><span class="badge ' + st.cls + '">' + st.label + '</span></div>' +
+      '<div class="row"><span>' + (type === 'Hébergement' ? 'Hébergeur' : type === 'Nom de domaine' ? 'Registrar' : 'Fournisseur') + '</span><b>' + (svc.provider || '—') + '</b></div>' +
+      '<div class="row"><span>' + (type === 'Nom de domaine' ? 'Domaine' : 'Compte / Plan') + '</span><b>' + (svc.account || '—') + '</b></div>' +
+      '<div class="row"><span>Début</span><b>' + fmtDate(svc.startDate) + '</b></div>' +
+      '<div class="row"><span>Fin</span><b>' + fmtDate(svc.endDate) + '</b></div>' +
+      '<div class="row"><span>Durée</span><b>' + (svc.duration || '—') + '</b></div>' +
+      '<div class="row"><span>Achat</span><b>' + fmt(svc.buyPrice, svc.currency) + '</b></div>' +
+      '<div class="row"><span>Vente</span><b>' + fmt(svc.sellPrice, svc.currency) + '</b></div>' +
+      '<div class="profit ' + (profit !== '' && profit < 0 ? 'neg' : 'pos') + '">Profit : ' + (profit === '' ? '—' : fmt(profit, svc.currency)) + '</div>' +
+      '<div class="actions">' +
+        '<button data-renew-row="' + svc.row + '">🔁 Renouveler</button>' +
+        '<button data-edit-row="' + svc.row + '">✏️ Modifier</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  $('svcCardsGrid').querySelectorAll('[data-add-type]').forEach(btn => btn.addEventListener('click', () => openServiceModal('add', btn.dataset.addType, projectId, null)));
+  $('svcCardsGrid').querySelectorAll('[data-edit-row]').forEach(btn => btn.addEventListener('click', () => {
+    const svc = svcs.find(s => String(s.row) === btn.dataset.editRow);
+    openServiceModal('edit', svc.type, projectId, svc);
+  }));
+  $('svcCardsGrid').querySelectorAll('[data-renew-row]').forEach(btn => btn.addEventListener('click', () => {
+    const svc = svcs.find(s => String(s.row) === btn.dataset.renewRow);
+    openServiceModal('renew', svc.type, projectId, svc);
+  }));
+
+  const hist = svcs.flatMap(s => historyOf(s.id).map(h => ({ h, svc: s }))).sort((a, b) => new Date(b.h.opDate || 0) - new Date(a.h.opDate || 0));
+  $('historyBody').innerHTML = hist.map(({ h }) => {
+    return '<tr>' +
+      '<td>' + fmtDate(h.opDate) + '</td>' +
+      '<td><span class="badge ' + (SVC_TYPE_CLS[h.type] || 'b-none') + '">' + h.type + '</span></td>' +
+      '<td>' + (h.nature || '—') + '</td>' +
+      '<td>' + fmt(h.buyPrice, h.currency) + '</td>' +
+      '<td>' + fmt(h.sellPrice, h.currency) + '</td>' +
+      '<td>' + fmt(h.profit, h.currency) + '</td>' +
+      '<td>' + (h.currency || 'MAD') + '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--mut)">Aucune opération enregistrée</td></tr>';
+
+  $('editProjectBtn').onclick = () => openProjectModal(proj);
+}
+
+/* ─────────── Formulaires : listes déroulantes ─────────── */
+function fillSelect(id, options) { $(id).innerHTML = options.map(o => '<option value="' + o.replace(/"/g, '&quot;') + '">' + o + '</option>').join(''); }
+function initFormOptions() {
+  fillSelect('projType', PROJ_TYPES);
+  fillSelect('svcDuration', SVC_DURATIONS);
+  fillSelect('svcCurrency', SVC_CURRENCIES);
+}
+initFormOptions();
+
+/* ─────────── Modale Client ─────────── */
+function openClientModal(client) {
+  editingClientRow = client ? client.row : null;
+  $('clientModalTitle').textContent = client ? 'Modifier le client' : 'Nouveau client';
+  $('cliName').value = client ? (client.name || '') : '';
+  $('cliPhone').value = client ? (client.phone || '') : '';
+  $('cliEmail').value = client ? (client.email || '') : '';
+  $('cliNotes').value = client ? (client.notes || '') : '';
+  $('clientDeleteBtn').style.display = client ? 'inline-flex' : 'none';
+  $('clientModalMsg').textContent = '';
+  $('clientModal').classList.add('open');
+}
+function closeClientModal() { $('clientModal').classList.remove('open'); }
+$('addClientBtn').onclick = () => openClientModal(null);
+$('clientModalClose').onclick = closeClientModal;
+$('clientCancelBtn').onclick = closeClientModal;
+$('clientModal').addEventListener('click', e => { if (e.target.id === 'clientModal') closeClientModal(); });
+
+async function saveClient() {
+  const name = $('cliName').value.trim();
+  if (!name) { $('clientModalMsg').textContent = '⚠️ Le nom est obligatoire.'; return; }
+  const btn = $('clientSaveBtn'); btn.disabled = true; btn.textContent = 'Enregistrement…';
+  $('clientModalMsg').textContent = '';
+  const body = new URLSearchParams({
+    token: DASH_TOKEN,
+    action: editingClientRow ? 'updateClient' : 'addClient',
+    name: name,
+    phone: $('cliPhone').value.trim(),
+    email: $('cliEmail').value.trim(),
+    notes: $('cliNotes').value
+  });
+  if (editingClientRow) body.set('row', editingClientRow);
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeClientModal();
+    await loadData();
+  } catch (err) {
+    $('clientModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+$('clientSaveBtn').onclick = saveClient;
+
+async function deleteClientRow() {
+  if (!editingClientRow) return;
+  if (!confirm('Supprimer définitivement ce client ? Les projets liés ne seront PAS supprimés automatiquement. Cette action est irréversible.')) return;
+  const btn = $('clientDeleteBtn'); btn.disabled = true;
+  try {
+    const body = new URLSearchParams({ token: DASH_TOKEN, action: 'deleteClient', row: editingClientRow });
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeClientModal();
+    currentClientId = null; currentProjectId = null;
+    switchView('clients');
+    await loadData();
+  } catch (err) {
+    $('clientModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+$('clientDeleteBtn').onclick = deleteClientRow;
+
+/* ─────────── Modale Projet ─────────── */
+function openProjectModal(project) {
+  editingProjectRow = project ? project.row : null;
+  $('projectModalTitle').textContent = project ? 'Modifier le projet' : 'Nouveau projet';
+  $('projName').value = project ? (project.name || '') : '';
+  $('projType').value = project && PROJ_TYPES.includes(project.type) ? project.type : PROJ_TYPES[0];
+  $('projNotes').value = project ? (project.notes || '') : '';
+  $('projectDeleteBtn').style.display = project ? 'inline-flex' : 'none';
+  $('projectModalMsg').textContent = '';
+  $('projectModal').classList.add('open');
+}
+function closeProjectModal() { $('projectModal').classList.remove('open'); }
+$('projectModalClose').onclick = closeProjectModal;
+$('projectCancelBtn').onclick = closeProjectModal;
+$('projectModal').addEventListener('click', e => { if (e.target.id === 'projectModal') closeProjectModal(); });
+
+async function saveProject() {
+  const name = $('projName').value.trim();
+  if (!name) { $('projectModalMsg').textContent = '⚠️ Le nom du projet est obligatoire.'; return; }
+  if (!currentClientId) { $('projectModalMsg').textContent = '⚠️ Aucun client sélectionné.'; return; }
+  const btn = $('projectSaveBtn'); btn.disabled = true; btn.textContent = 'Enregistrement…';
+  $('projectModalMsg').textContent = '';
+  const body = new URLSearchParams({
+    token: DASH_TOKEN,
+    action: editingProjectRow ? 'updateProject' : 'addProject',
+    clientId: currentClientId,
+    name: name,
+    type: $('projType').value,
+    notes: $('projNotes').value
+  });
+  if (editingProjectRow) body.set('row', editingProjectRow);
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeProjectModal();
+    await loadData();
+  } catch (err) {
+    $('projectModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+$('projectSaveBtn').onclick = saveProject;
+
+async function deleteProjectRowFn() {
+  if (!editingProjectRow) return;
+  if (!confirm('Supprimer définitivement ce projet ? Les services liés ne seront PAS supprimés automatiquement. Cette action est irréversible.')) return;
+  const btn = $('projectDeleteBtn'); btn.disabled = true;
+  try {
+    const body = new URLSearchParams({ token: DASH_TOKEN, action: 'deleteProject', row: editingProjectRow });
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeProjectModal();
+    currentProjectId = null;
+    switchView('clientDetail');
+    await loadData();
+  } catch (err) {
+    $('projectModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+$('projectDeleteBtn').onclick = deleteProjectRowFn;
+
+/* ─────────── Modale Service ─────────── */
+let serviceModalType = SVC_TYPES[0], serviceModalProjectId = null;
+function openServiceModal(mode, type, projectId, svc) {
+  serviceModalMode = mode;
+  serviceModalType = type;
+  serviceModalProjectId = projectId;
+  editingServiceRow = svc ? svc.row : null;
+
+  const titles = { add: 'Ajouter — ' + type, edit: 'Modifier — ' + type, renew: 'Renouveler — ' + type };
+  $('serviceModalTitle').textContent = titles[mode];
+
+  const providerLabel = type === 'Hébergement' ? 'Hébergeur' : type === 'Nom de domaine' ? 'Registrar' : 'Fournisseur';
+  const accountLabel = type === 'Nom de domaine' ? 'Nom de domaine' : 'Compte / Plan';
+  $('svcProviderLabelWrap').firstChild.textContent = providerLabel;
+  $('svcAccountLabelWrap').firstChild.textContent = accountLabel;
+
+  $('svcProvider').value = svc ? (svc.provider || '') : '';
+  $('svcAccount').value = svc ? (svc.account || '') : '';
+  $('svcStartDate').value = svc && svc.startDate ? String(svc.startDate).slice(0, 10) : new Date().toISOString().slice(0, 10);
+  $('svcEndDate').value = svc && svc.endDate ? String(svc.endDate).slice(0, 10) : '';
+  $('svcDuration').value = svc && SVC_DURATIONS.includes(svc.duration) ? svc.duration : SVC_DURATIONS[1];
+  $('svcCurrency').value = svc && SVC_CURRENCIES.includes(svc.currency) ? svc.currency : SVC_CURRENCIES[0];
+  $('svcBuyPrice').value = svc && svc.buyPrice !== '' ? svc.buyPrice : '';
+  $('svcSellPrice').value = svc && svc.sellPrice !== '' ? svc.sellPrice : '';
+  $('svcNotes').value = svc ? (svc.notes || '') : '';
+
+  // En mode "renouveler" : on garde fournisseur/compte visibles mais on vide les prix/dates pour la nouvelle période
+  if (mode === 'renew') {
+    $('svcStartDate').value = new Date().toISOString().slice(0, 10);
+    $('svcEndDate').value = '';
+    $('svcBuyPrice').value = '';
+    $('svcSellPrice').value = '';
+  }
+  $('svcProvider').closest('label').style.display = mode === 'renew' ? 'none' : 'flex';
+  $('svcAccount').closest('label').style.display = mode === 'renew' ? 'none' : 'flex';
+
+  $('serviceDeleteBtn').style.display = (mode === 'edit') ? 'inline-flex' : 'none';
+  $('serviceModalMsg').textContent = '';
+  $('serviceModal').classList.add('open');
+}
+function closeServiceModal() { $('serviceModal').classList.remove('open'); }
+$('serviceModalClose').onclick = closeServiceModal;
+$('serviceCancelBtn').onclick = closeServiceModal;
+$('serviceModal').addEventListener('click', e => { if (e.target.id === 'serviceModal') closeServiceModal(); });
+
+async function saveService() {
+  const btn = $('serviceSaveBtn'); btn.disabled = true; btn.textContent = 'Enregistrement…';
+  $('serviceModalMsg').textContent = '';
+
+  let action, params;
+  if (serviceModalMode === 'add') {
+    action = 'addService';
+    params = {
+      projectId: serviceModalProjectId, type: serviceModalType,
+      provider: $('svcProvider').value.trim(), account: $('svcAccount').value.trim(),
+      startDate: $('svcStartDate').value, endDate: $('svcEndDate').value,
+      duration: $('svcDuration').value, currency: $('svcCurrency').value,
+      buyPrice: $('svcBuyPrice').value, sellPrice: $('svcSellPrice').value, notes: $('svcNotes').value
+    };
+  } else if (serviceModalMode === 'renew') {
+    action = 'renewService';
+    params = {
+      row: editingServiceRow, opDate: $('svcStartDate').value, endDate: $('svcEndDate').value,
+      duration: $('svcDuration').value, currency: $('svcCurrency').value,
+      buyPrice: $('svcBuyPrice').value, sellPrice: $('svcSellPrice').value, notes: $('svcNotes').value
+    };
+  } else {
+    action = 'updateService';
+    params = {
+      row: editingServiceRow, provider: $('svcProvider').value.trim(), account: $('svcAccount').value.trim(),
+      startDate: $('svcStartDate').value, endDate: $('svcEndDate').value,
+      duration: $('svcDuration').value, currency: $('svcCurrency').value,
+      buyPrice: $('svcBuyPrice').value, sellPrice: $('svcSellPrice').value, notes: $('svcNotes').value
+    };
+  }
+
+  const body = new URLSearchParams(Object.assign({ token: DASH_TOKEN, action: action }, params));
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeServiceModal();
+    await loadData();
+  } catch (err) {
+    $('serviceModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+$('serviceSaveBtn').onclick = saveService;
+
+async function deleteServiceRowFn() {
+  if (!editingServiceRow) return;
+  if (!confirm('Supprimer définitivement ce service ? Son historique ne sera PAS supprimé. Cette action est irréversible.')) return;
+  const btn = $('serviceDeleteBtn'); btn.disabled = true;
+  try {
+    const body = new URLSearchParams({ token: DASH_TOKEN, action: 'deleteService', row: editingServiceRow });
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    closeServiceModal();
+    await loadData();
+  } catch (err) {
+    $('serviceModalMsg').textContent = '⚠️ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+$('serviceDeleteBtn').onclick = deleteServiceRowFn;
+
+/* ─────────── Auto-déverrouillage si déjà authentifié (doit rester en dernier) ─────────── */
+if (localStorage.getItem(GATE_KEY) === '1') unlock();
+else $('gatePass').focus();
+</script>
+</body>
+</html>
