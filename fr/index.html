@@ -613,8 +613,14 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
     <div class="works-grid">
 
       <div class="w-card reveal">
+        <span class="w-cat" data-i18n="w12.c"></span>
+        <div class="w-media"><img src="../images/portfolio/asfarflow.jpg" width="800" height="606" data-i18n-alt="w12.t" alt="" loading="lazy"/></div>
+        <div class="w-body"><h3 data-i18n="w12.t"></h3><p data-i18n="w12.d"></p><a class="w-link" href="https://asfarflow.com/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
+      </div>
+
+      <div class="w-card reveal">
         <span class="w-cat" data-i18n="w11.c"></span>
-        <div class="w-media"><img src="../images/portfolio/kiraa.jpg" width="800" height="821" data-i18n-alt="w11.t" alt="" loading="lazy"/></div>
+        <div class="w-media"><img src="../images/portfolio/kiraa.jpg" width="799" height="609" data-i18n-alt="w11.t" alt="" loading="lazy"/></div>
         <div class="w-body"><h3 data-i18n="w11.t"></h3><p data-i18n="w11.d"></p><a class="w-link" href="https://www.kiraa-auto.com/" target="_blank" rel="noopener" data-i18n="w.visit"></a></div>
       </div>
 
@@ -687,6 +693,13 @@ footer .billing-link:hover{background:rgba(56,189,248,.1)}
     <h2 class="sec-title reveal" data-i18n="cases.title">Études de cas</h2>
     <p class="sec-sub reveal" data-i18n="cases.sub">Un regard plus proche sur la façon dont j'ai résolu de vrais problèmes pour de vrais clients.</p>
     <div class="case-grid">
+      <div class="case-card reveal">
+        <span class="w-cat" data-i18n="c4.c"></span>
+        <h3 data-i18n="c4.t"></h3>
+        <div class="case-row"><b data-i18n="cases.problem"></b><p data-i18n="c4.p"></p></div>
+        <div class="case-row"><b data-i18n="cases.solution"></b><p data-i18n="c4.s"></p></div>
+        <div class="case-row"><b data-i18n="cases.result"></b><p data-i18n="c4.r"></p></div>
+      </div>
       <div class="case-card reveal">
         <span class="w-cat" data-i18n="c0.c"></span>
         <h3 data-i18n="c0.t"></h3>
@@ -1005,10 +1018,14 @@ const I18N = {
     "cases.title":"دراسات حالة","cases.sub":"نظرة أقرب على كيفاش حللت مشاكل حقيقية لزبناء حقيقيين.",
     "testi.title":"آراء عملائي","testi.sub":"تقييمات حقيقية وموثقة على Google — بلا أي تلفيق.","testi.link":"شوف جميع التقييمات على Google ←",
     "cases.problem":"المشكلة","cases.solution":"الحل","cases.result":"النتيجة",
-    "c0.c":"نظام تسيير — كراء السيارات","c0.t":"Kiraa",
+    "c4.c":"منصة SaaS — تسيير وكالات الأسفار والحج والعمرة","c4.t":"AsfarFlow",
+    "c4.p":"وكالات الأسفار المغربية، وخصوصاً المتخصصة فالحج والعمرة، كتسيّر الزبناء والحجوزات والفواتير وملفات الحجاج (الجوازات، التأشيرات، توزيع الغرف) بالإكسل ودفاتر متفرقة، وهاد الشي كيصعّب المتابعة وكيزيد خطر ضياع المعلومات، خصوصاً مع تعدد الحجاج والبرامج.",
+    "c4.s":"بنيت AsfarFlow، منصة SaaS متعددة الوكالات: كل وكالة عندها لوحة تحكم معزولة بالكامل كتجمع الزبناء والحجوزات والفواتير فمكان واحد، مع وحدة متكاملة خاصة بالحج والعمرة (ملف كل معتمر، الجواز والتأشيرة، البرامج والفنادق بمكة والمدينة، توزيع الغرف والحافلات، تصدير البيانات لنسك)، وواجهة بالعربية والدارجة مع دعم الفرنسية والإنجليزية.",
+    "c4.r":"المنصة شغالة حالياً أونلاين (asfarflow.com)، وأي وكالة تقدر تنشئ حسابها الخاص وتبدا تجربة مجانية ديال 30 يوم بلا أي بطاقة بنكية ولا التزام.",
+    "c0.c":"منصة SaaS — تسيير وكالات كراء السيارات","c0.t":"Kiraa",
     "c0.p":"وكالات كراء السيارات غالباً كيسيرو السيارات والحجوزات والعقود يدوياً (فورقة أو ملفات متفرقة)، اللي كيصعّب تتبع توفر السيارات ويزيد خطر تضارب الحجوزات وضياع المعلومات.",
-    "c0.s":"بنيت نظام Kiraa، منصة ويب متكاملة كتمركز تسيير الوكالة فمكان واحد: السيارات والمطاريق، التوفر، الحجوزات، الزبناء، العقود، الفوترة والأداءات — كلشي مرتبط ببعضه فواجهة واحدة سهلة الاستعمال، بدعم اللغة العربية والفرنسية.",
-    "c0.r":"النظام شغال حالياً أونلاين (kiraa-auto.com)، وكل وكالة تقدر تنشئ حساب خاص بيها وتبدأ تسيير كراءها مباشرة. وكالة Atlas Rent Cars موجودة داخل النظام كمثال توضيحي.",
+    "c0.s":"بنيت Kiraa، منصة SaaS متعددة الوكالات كتمركز تسيير وكالة كراء السيارات فمكان واحد: الأسطول والمطاريق، التوفر، الحجوزات، الزبناء، الضمانات والأضرار، مع تعمير العقد أوتوماتيكياً من صورة البطاقة ورخصة السياقة — كلشي من الهاتف، بدعم اللغة العربية والفرنسية، وكل وكالة عندها فضاء معزول خاص بيها.",
+    "c0.r":"النظام شغال حالياً أونلاين (kiraa-auto.com) كمنصة SaaS متعددة الوكالات: أي وكالة كراء سيارات تقدر تنشئ حسابها الخاص وتبدا تجربة مجانية ديال 30 يوم بلا أي التزام، ووكالات حقيقية كتستعمل Kiraa فالتسيير اليومي ديالها.",
     "c1.c":"موقع إلكتروني — تأجير سيارات","c1.t":"Auto Fluchos Coches",
     "c1.p":"شركة تأجير سيارات بتطوان وطنجة محتاجة نظام حجز أونلاين كامل، بدعم لغات وعملات متعددة للزبناء الأجانب.",
     "c1.s":"بنيت موقع بنظام حجز متكامل: اختيار مكان الاستلام، التواريخ، وفئة السيارة، مع دعم متعدد اللغات والعملات.",
@@ -1028,7 +1045,8 @@ const I18N = {
     "more4.t":"أتمتة بـGoogle Sheets","more4.d":"بيانات طلباتك كتتسجل أوتوماتيكياً فقاعدة بيانات مجانية، بلا برمجة معقدة ولا تكلفة شهرية.",
     "works.title":"نماذج من <span>أعمالي</span>",
     "works.sub":"أمثلة حقيقية من مشاريع أنجزتها لعملائي — مرّر فوق التصاميم الطويلة لتصفحها.",
-    "w11.c":"نظام تسيير","w11.t":"Kiraa — نظام تسيير وكالات كراء السيارات","w11.d":"نظام تسيير متكامل لوكالات كراء السيارات: تسيير السيارات والمطاريق، التوفر، الحجوزات، الزبناء، العقود، الفوترة والأداءات. مثال داخل النظام: وكالة Atlas Rent Cars كتجربة توضيحية.",
+    "w12.c":"منصة SaaS","w12.t":"AsfarFlow — منصة تسيير وكالات الأسفار والحج والعمرة","w12.d":"منصة SaaS متعددة الوكالات: تتبع الزبناء والحجوزات والفواتير، وحدة متكاملة للحج والعمرة (الحجاج، الجوازات والتأشيرات، توزيع الغرف والحافلات)، بيانات كل وكالة معزولة بالكامل، وتجربة مجانية 30 يوم بلا أي التزام.",
+    "w11.c":"منصة SaaS","w11.t":"Kiraa — منصة تسيير وكالات كراء السيارات","w11.d":"منصة SaaS متعددة الوكالات لتسيير السيارات والمطاريق، التوفر، الحجوزات، الزبناء، الضمانات والأضرار، مع تعمير العقد أوتوماتيكياً من صورة وثائق الزبون، وفضاء معزول خاص بكل وكالة.",
     "w1.c":"صفحة هبوط","w1.t":"صفحة هبوط — منتجات المسابح","w1.d":"صفحة بيع كاملة بالفرنسية لمنتج كلور احترافي، مصممة للتحويل.",
     "w2.c":"موقع إلكتروني","w2.t":"موقع مطعم Amira","w2.d":"موقع تعريفي لمطعم بتصميم دافئ يعرض الأطباق والقائمة وطرق التواصل.",
     "w3.c":"موقع إلكتروني","w3.t":"موقع Eco Clean Tanger","w3.d":"موقع تعريفي لشركة تنظيف بالبخار في طنجة، يعرض الخدمات (تنظيف الكنب والسجاد) مع حجز مباشر لكل خدمة.",
@@ -1112,10 +1130,14 @@ const I18N = {
     "cases.title":"Études de cas","cases.sub":"Un regard plus proche sur la façon dont j'ai résolu de vrais problèmes pour de vrais clients.",
     "testi.title":"Avis clients","testi.sub":"Des avis authentiques et vérifiés sur Google — aucune invention.","testi.link":"Voir tous les avis sur Google →",
     "cases.problem":"Problème","cases.solution":"Solution","cases.result":"Résultat",
-    "c0.c":"Système de gestion — Location de voitures","c0.t":"Kiraa",
+    "c4.c":"Plateforme SaaS — Gestion d'agences de voyage, Hajj et Omra","c4.t":"AsfarFlow",
+    "c4.p":"Les agences de voyage marocaines, notamment spécialisées en Hajj et Omra, géraient clients, réservations, factures et dossiers de pèlerins (passeports, visas, répartition des chambres) via Excel et des fichiers dispersés, compliquant le suivi et augmentant le risque de perte d'informations, surtout avec de nombreux pèlerins et programmes.",
+    "c4.s":"J'ai développé AsfarFlow, une plateforme SaaS multi-agences : chaque agence dispose d'un tableau de bord totalement isolé regroupant clients, réservations et facturation en un seul endroit, avec un module complet dédié au Hajj et à l'Omra (dossier de chaque pèlerin, passeport et visa, programmes et hôtels à La Mecque et Médine, répartition des chambres et bus, export des données pour Nusuk), et une interface en arabe/darija avec support du français et de l'anglais.",
+    "c4.r":"La plateforme est en ligne et fonctionnelle (asfarflow.com) : chaque agence peut créer son compte et démarrer un essai gratuit de 30 jours, sans carte bancaire ni engagement.",
+    "c0.c":"Plateforme SaaS — Location de voitures","c0.t":"Kiraa",
     "c0.p":"Les agences de location de voitures gèrent souvent leurs véhicules, réservations et contrats manuellement (papier ou fichiers dispersés), ce qui complique le suivi de la disponibilité et augmente le risque de doubles réservations ou de perte d'informations.",
-    "c0.s":"J'ai développé Kiraa, une plateforme web qui centralise toute la gestion de l'agence en un seul endroit : véhicules et matricules, disponibilité, réservations, clients, contrats, facturation et paiements — le tout relié dans une interface unique, disponible en arabe et en français.",
-    "c0.r":"Le système est en ligne et fonctionnel (kiraa-auto.com) : chaque agence peut créer son propre compte et gérer sa location immédiatement. L'agence Atlas Rent Cars est intégrée au système à titre de démonstration.",
+    "c0.s":"J'ai développé Kiraa, une plateforme SaaS multi-agences qui centralise toute la gestion d'une agence de location en un seul endroit : flotte et matricules, disponibilité, réservations, clients, cautions et dommages, avec un contrat généré automatiquement à partir d'une photo des documents du client — le tout depuis le téléphone, en arabe et en français, avec un espace isolé propre à chaque agence.",
+    "c0.r":"Le système est en ligne et fonctionnel (kiraa-auto.com) en tant que plateforme SaaS multi-agences : toute agence de location peut créer son compte et démarrer un essai gratuit de 30 jours sans engagement, et de vraies agences utilisent déjà Kiraa dans leur gestion quotidienne.",
     "c1.c":"Site web — Location de voitures","c1.t":"Auto Fluchos Coches",
     "c1.p":"Une agence de location de voitures à Tétouan et Tanger avait besoin d'un système de réservation en ligne complet, multilingue et multidevise pour sa clientèle internationale.",
     "c1.s":"J'ai développé un site avec un système de réservation complet : choix du lieu de prise en charge, des dates et de la catégorie de véhicule, en plusieurs langues et devises.",
@@ -1135,7 +1157,8 @@ const I18N = {
     "more4.t":"Automatisation Google Sheets","more4.d":"Vos données de commandes s'enregistrent automatiquement dans une base gratuite, sans code ni abonnement mensuel.",
     "works.title":"Mes <span>réalisations</span>",
     "works.sub":"Des exemples réels de projets livrés à mes clients — survolez les designs longs pour les parcourir.",
-    "w11.c":"Système de gestion","w11.t":"Kiraa — Gestion d'agence de location de voitures","w11.d":"Solution métier complète pour agences de location de voitures : gestion des véhicules et matricules, disponibilité, réservations, clients, contrats, facturation et paiements. Exemple intégré dans le système : l'agence Atlas Rent Cars, utilisée comme démonstration.",
+    "w12.c":"Plateforme SaaS","w12.t":"AsfarFlow — Plateforme de gestion d'agences de voyage, Hajj et Omra","w12.d":"Plateforme SaaS multi-agences : suivi clients, réservations et facturation, module complet Hajj/Omra (pèlerins, passeports et visas, répartition des chambres et bus), données de chaque agence totalement isolées, essai gratuit de 30 jours sans engagement.",
+    "w11.c":"Plateforme SaaS","w11.t":"Kiraa — Plateforme de gestion d'agences de location de voitures","w11.d":"Plateforme SaaS multi-agences pour la gestion de flotte et matricules, disponibilité, réservations, clients, cautions et dommages, avec un contrat généré automatiquement à partir d'une photo des documents du client, et un espace isolé propre à chaque agence.",
     "w1.c":"Landing page","w1.t":"Landing page — Produits piscine","w1.d":"Page de vente complète en français pour un chlore professionnel, conçue pour convertir.",
     "w2.c":"Site web","w2.t":"Site Restaurant Amira","w2.d":"Site vitrine chaleureux pour un restaurant, présentant les plats, le menu et les contacts.",
     "w3.c":"Site web","w3.t":"Site Eco Clean Tanger","w3.d":"Site vitrine pour une entreprise de nettoyage à vapeur à Tanger, présentant les services (canapés, tapis) avec réservation directe.",
