@@ -217,6 +217,7 @@ function doPost(e) {
         case 'renewService':       return renewService(p);
         case 'deleteService':      return deleteServiceRow(p);
         case 'deleteHistoryEntry': return deleteHistoryRow(p);
+        case 'commitDocNumber':    return commitDocNumberAction(p);
         default: return jsonOut({ ok: false, error: 'unknown action' });
       }
     } catch (err) {
@@ -375,6 +376,17 @@ function doGet(e) {
                            .setMimeType(ContentService.MimeType.JSON);
     }
     return ContentService.createTextOutput(JSON.stringify(getClientsData()))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (p.action === 'peekDocNumber') {
+    if (p.token !== DASH_TOKEN) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'unauthorized' }))
+                           .setMimeType(ContentService.MimeType.JSON);
+    }
+    const docType = p.docType === 'DEVIS' ? 'DEVIS' : 'FACTURE';
+    const year = parseInt(p.year, 10) || new Date().getFullYear();
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, number: peekDocNumber(docType, year) }))
                          .setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -967,6 +979,51 @@ function getClientsData() {
   const history = sheetToObjects(ss.getSheetByName(SHEET_HIST),
     ['id', 'serviceId', 'projectId', 'opDate', 'type', 'nature', 'buyPrice', 'sellPrice', 'profit', 'newDuration', 'newEndDate', 'currency', 'notes'], 'type');
   return { ok: true, generatedAt: new Date().toISOString(), clients, projects, services, history };
+}
+
+/* ═══════════════════════════════════════════════════════════
+ *  MODULE NUMÉROTATION FACTURES/DEVIS — v1
+ *  100% additif : ne touche à aucune feuille existante.
+ *  Compteur stocké dans PropertiesService (persistant, partagé
+ *  entre tous les appareils/navigateurs), incrémenté de façon
+ *  atomique via LockService pour éviter tout doublon en cas de
+ *  création simultanée de plusieurs factures/devis.
+ * ═══════════════════════════════════════════════════════════ */
+
+function docNumCounterKey_(docType, year) {
+  return 'docnum_' + docType + '_' + year;
+}
+
+/* Lecture seule : numéro suivant SANS incrémenter (aperçu en direct) */
+function peekDocNumber(docType, year) {
+  const props = PropertiesService.getScriptProperties();
+  const cur = parseInt(props.getProperty(docNumCounterKey_(docType, year)), 10) || 0;
+  return cur + 1;
+}
+
+/* Écriture atomique : fait avancer le compteur au moins jusqu'à requestedNumber
+ * (ou +1 si non fourni), et retourne la valeur finale. Protégé par un verrou
+ * pour rester sûr même si plusieurs factures sont créées en même temps. */
+function commitDocNumber(docType, year, requestedNumber) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const key = docNumCounterKey_(docType, year);
+    const cur = parseInt(props.getProperty(key), 10) || 0;
+    const req = parseInt(requestedNumber, 10);
+    const next = Math.max(cur, isNaN(req) ? cur + 1 : req);
+    props.setProperty(key, String(next));
+    return next;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function commitDocNumberAction(p) {
+  const docType = p.docType === 'DEVIS' ? 'DEVIS' : 'FACTURE';
+  const year = parseInt(p.year, 10) || new Date().getFullYear();
+  return jsonOut({ ok: true, number: commitDocNumber(docType, year, p.number) });
 }
 
 /* ─────────── Menu rapide à l'ouverture du classeur ─────────── */

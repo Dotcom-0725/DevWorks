@@ -311,12 +311,47 @@ $('lockBtn').onclick = e => { e.preventDefault(); localStorage.removeItem(GATE_K
 if (localStorage.getItem(GATE_KEY) === '1') unlock();
 else $('gatePass').focus();
 
-/* Doc number: auto-suggest FAC/DEV-YYYY-NNN using a localStorage counter */
-function suggestNum() {
-  const y = new Date().getFullYear();
-  const key = 'rdw-counter-' + docType + '-' + y;
+/* Doc number: auto-suggest FAC/DEV-YYYY-NNN
+ * Source de vérité : compteur partagé côté Apps Script (persistant, protégé contre
+ * les doublons en cas de création simultanée). En cas d'indisponibilité réseau,
+ * on retombe sur le compteur local (localStorage) pour ne jamais bloquer la page. */
+const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8h01EHOiXUYxWZgopSI74uKt-gOCxsAN_Ht0ZRgf6qrBPri7S6b70J_zt5v_zfsC3/exec';
+const DASH_TOKEN = 'PlIpOz_X0sFsY1c3Z11NWRt_OzG5yLOQ';
+
+function formatDocNum(t, y, n) {
+  return (t === 'FACTURE' ? 'FAC' : 'DEV') + '-' + y + '-' + String(n).padStart(3, '0');
+}
+function suggestNumLocal(t, y) {
+  const key = 'rdw-counter-' + t + '-' + y;
   const n = (parseInt(localStorage.getItem(key)) || 0) + 1;
-  return (docType === 'FACTURE' ? 'FAC' : 'DEV') + '-' + y + '-' + String(n).padStart(3, '0');
+  return formatDocNum(t, y, n);
+}
+async function suggestNum() {
+  const y = new Date().getFullYear();
+  try {
+    const url = WEBAPP_URL + '?action=peekDocNumber&token=' + encodeURIComponent(DASH_TOKEN) + '&docType=' + docType + '&year=' + y;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.ok && Number.isFinite(data.number)) return formatDocNum(docType, y, data.number);
+  } catch (e) {}
+  return suggestNumLocal(docType, y);
+}
+
+/* Migration unique : si un compteur local (ancien système) existe et dépasse
+ * le compteur partagé côté serveur, on fait remonter le serveur à ce niveau —
+ * garantit la continuité de la séquence sans intervention manuelle. */
+async function migrateLocalCounterOnce() {
+  if (localStorage.getItem('rdw-docnum-migrated-v1')) return;
+  const y = new Date().getFullYear();
+  for (const t of ['FACTURE', 'DEVIS']) {
+    const n = parseInt(localStorage.getItem('rdw-counter-' + t + '-' + y)) || 0;
+    if (n > 0) {
+      try {
+        await fetch(WEBAPP_URL, { method: 'POST', body: new URLSearchParams({ token: DASH_TOKEN, action: 'commitDocNumber', docType: t, year: y, number: n }) });
+      } catch (e) {}
+    }
+  }
+  localStorage.setItem('rdw-docnum-migrated-v1', '1');
 }
 
 /* ─────────── Items ─────────── */
@@ -422,33 +457,41 @@ function render(){
 }
 
 /* ─────────── Type switch ─────────── */
-function setType(t){
+async function setType(t){
   docType = t;
   $('segFac').classList.toggle('on', t==='FACTURE');
   $('segDev').classList.toggle('on', t==='DEVIS');
-  $('docNum').value = suggestNum();
+  $('docNum').value = await suggestNum();
   render();
 }
 $('segFac').onclick = () => setType('FACTURE');
 $('segDev').onclick = () => setType('DEVIS');
 
-/* Increment counter when printing, so the next number is fresh */
+/* Confirme (incrémente) le numéro utilisé après impression, pour que le prochain
+ * soit frais. Met à jour le compteur partagé (serveur) ET le compteur local
+ * (secours hors-ligne). Fonctionne aussi si le numéro a été modifié à la main. */
 addEventListener('afterprint', () => {
   const m = $('docNum').value.match(/^(FAC|DEV)-(\d{4})-(\d+)$/);
   if(m){
-    const key = 'rdw-counter-' + (m[1]==='FAC'?'FACTURE':'DEVIS') + '-' + m[2];
+    const t = m[1]==='FAC' ? 'FACTURE' : 'DEVIS', y = m[2], n = parseInt(m[3], 10);
+    const key = 'rdw-counter-' + t + '-' + y;
     const cur = parseInt(localStorage.getItem(key)) || 0;
-    localStorage.setItem(key, Math.max(cur, parseInt(m[3])));
+    localStorage.setItem(key, Math.max(cur, n));
+    fetch(WEBAPP_URL, { method: 'POST', body: new URLSearchParams({ token: DASH_TOKEN, action: 'commitDocNumber', docType: t, year: y, number: n }) }).catch(() => {});
   }
 });
 
 /* ─────────── Init ─────────── */
 $('docDate').valueAsDate = new Date();
-$('docNum').value = suggestNum();
 addRow();
 document.querySelectorAll('#docNum,#docDate,#cName,#cAddr,#cIce,#cTel,#notes').forEach(el => el.addEventListener('input', render));
 $('addItem').onclick = () => addRow();
 render();
+(async () => {
+  await migrateLocalCounterOnce();
+  $('docNum').value = await suggestNum();
+  render();
+})();
 </script>
 </body>
 </html>
