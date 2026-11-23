@@ -19,4 +19,40 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.rachiddevworks.com/fr/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.rachiddevworks.com/"/>
   </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/services/location-voitures.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/services/landing-page.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/services/systeme-gestion.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/realisations.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/creation-site-web-tanger.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.rachiddevworks.com/creation-site-web-casablanca.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
